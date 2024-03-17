@@ -4,6 +4,10 @@
 
 :root {
     --primary-color: #007bff;
+    --dark-accent: #0056b3;
+    --hover-color: #bde2ff;
+    --active-color:#2196F3;
+    --link-hover-color:#84caff;
     --soft-white: #f7f7f7;
     --soft-black: #333;
     --app-max-width: 38em;
@@ -216,7 +220,7 @@ p {
 .svg-arrow {
     outline: none; /* remove focus outline (consider accessibility) */
     cursor: pointer;
-    border: solid #0056b3 2px;
+    border: solid var(--dark-accent) 2px;
     border-radius: 10px;
     padding: 0 0px;
     margin: 4px;
@@ -238,8 +242,6 @@ p {
 
 .unit-stack li {
     border-radius:5px;
-    background-color:#f7f7f7;
-
 }
 
 .unit-toggle{
@@ -301,8 +303,8 @@ p {
     font-size: 1.4em;
     outline: none; /* remove focus outline (consider accessibility) */
     cursor: pointer;
-    border: solid #007bff 2px;
-    background-color: #ffffff;
+    border: solid var(--primary-color) 2px;
+    background-color: white;
     border-radius: 50%;
     margin: 5px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); 
@@ -375,8 +377,8 @@ p {
 .i-note {
     outline: none;
     cursor: pointer;
-    border: solid #007bff 2px;
-    background-color: #ffffff;
+    border: solid var(--primary-color) 2px;
+    background-color: white;
     font-size: 1.25rem;
     width:1.25em;
     height:1.25em;
@@ -407,55 +409,55 @@ footer a{
 /* Hover only on mice */
 @media (hover: hover) {
     .svg-arrow:hover, .pct-button:hover, .unit-toggle:hover {
-        background-color: #bde2ff;
+        background-color: var(--hover-color);
         box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.12);
     }
 
     .i-note:hover{
-        background-color: #bde2ff;
+        background-color: var(--hover-color);
         cursor:pointer;
     }
 
     .flip-button:hover {
-        color: #0056b3;
-        cursor:pointer;
+        color: var(--dark-accent);
+        cursor: pointer;
     }
     .unit-toggle:hover{
         color:black;
     }
 
     .logo-link a:hover{
-        color:#84caff;
+        color:var(--link-hover-color);
     }
 
     .menu a:hover {
-        color:#84caff;
+        color:var(--link-hover-color);
     }
 
     .material-icons.up:hover  {
-        color:#007bff;
+        color:var(--primary-color);
     }
 }
 
 /* Coloring buttons when active */
 
 .unit-toggle:active{
-    background-color: #2196F3;
+    background-color: var(--active-color);
 }
 
 .svg-arrow:active, .pct-button:active {
     /* Must be AFTER hover def! */
-    background-color: #84caff;
+    background-color: var(--link-hover-color);
     /* color: white; */
 }
 
 /* IF the to/from unit buttons are active */
 .active {
-    background-color: #2196F3;
+    background-color: var(--active-color);
     color:white;
 }
 
 .i-note:active {
     color:white;
-    border: solid #84caff 2px;
+    border: solid var(--link-hover-color) 2px;
 }
