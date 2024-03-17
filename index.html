@@ -30,11 +30,10 @@
     <main>
         <h1>Grade-adjusted pace calculator</h1>
         <div class="app-box">
+            <div class="app-inner">
             <div class="pace-box">
-                <div class="left-dummy">
-                    
-                </div>
-                <div class="test-clock">
+                <div class="left-dummy"></div>
+                <div class="clock">
                     <div class="digitbox">
                         <button class="material-icons svg-arrow" id="d1-up">expand_less</button>
                         <div class="digit" id="d1">6</div>
@@ -58,14 +57,12 @@
                     </div>
                 </div>
                 <div class="unit-stack">
-                    <button class="unit-toggle pace-toggle">/mi</button>
+                    <button class="unit-toggle pace-toggle active">/mi</button>
                     <button class="unit-toggle pace-toggle">/km</button>
                     <button class="unit-toggle pace-toggle">mph</button>
                     <button class="unit-toggle pace-toggle">km/h</button>
                 </div>
-
             </div>
-
             <div class="spacer">
                 pace on a
             </div>
@@ -92,18 +89,37 @@
             </div>
             <div class="incline-unit-box">
                 <div class="unit-row">
-                    <button class="unit-toggle">grade</button>
+                    <button class="unit-toggle active">grade</button>
                     <button class="unit-toggle">degrees</button>
                     <button class="unit-toggle">rise/run</button>
                     <button class="unit-toggle">vert speed</button>
                 </div>
             </div>
+            <!-- So when you flip this, it will not do a full switch-er-oo -->
+            <!-- But instead will swap text and maybe evven animate it -->
+            <!-- so yu get 6:00  flat-ground EFFORT will result in  [PACE] on  a...  -->
+            <div class="spacer effort-container">
+                <a href="#pace-vs-effort" class="i-note">?</a>
+                <span>is the same effort as</span>
+                <button class="material-icons flip-button" title="Reverse calculations">flip_camera_android</button>
+            </div>
+            <div class="pace-result-box">
+                <div class="left-dummy"></div>
+                <div class="pace-result-text">
+                    <span class="pace-result">7:15</span>
+                    <span class="convert-units">/mi</span>
+                </div>
+                <div class="unit-stack">
+                    <button class="unit-toggle pace-toggle active">/mi</button>
+                    <button class="unit-toggle pace-toggle">/km</button>
+                    <button class="unit-toggle pace-toggle">mph</button>
+                    <button class="unit-toggle pace-toggle">km/h</button>
+                </div>
+            </div>
             <div class="spacer">
-                equals
+                on flat ground
             </div>
-            <div class="results">
-                Results
-            </div>
+        </div>
         </div>
 
         
@@ -112,6 +128,8 @@
             <p>Instructions go here</p>
             <h2>How it works</h2>
             <p>Details go here</p>
+            <p>Don't forget the cool ggplot pics</p>
+            <p>They will be useful for validating equations too</p>
             <h2>Get updates</h2>
             <div>email script goes here</div>
             <h2>Contact</h2>
