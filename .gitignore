@@ -1,0 +1,24 @@
+# Node modules
+node_modules/
+
+# Logs
+*.log
+
+# Compiled output
+/dist
+/build
+
+# OS or Editor folders
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Temporary files
+*.tmp
+*.swp
+.sass-cache/
+
+# Dependencies
+/package-lock.json
+/yarn.lock

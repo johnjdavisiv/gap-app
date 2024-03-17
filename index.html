@@ -3,16 +3,127 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Workout Pace Percentage Calculator - from Running Writings</title>
+    <title>Grade-Adjusted Pace (GAP) Calculator for Uphills and Downhills - from Running Writings</title>
     <link rel="icon" href="images/RW-favicon.png" type="image/png">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="styles.css">
     <script src="scripts.js" defer></script>
-    <script defer data-domain="apps.runningwritings.com" src="https://plausible.io/js/script.js"></script>
-
+    <!-- <script defer data-domain="apps.runningwritings.com" src="https://plausible.io/js/script.js"></script> -->
 </head>
 <body>
+    <header>
+        <div class="header-content">
+            <div class="logo-box">
+                <a href="https://runningwritings.com">
+                    <img class="logo" id="top" src="images/RunningWritings-logo.png" href="https://www.runningwritings.com">
+                </a>
+                <div class="logo-link"><a href="https://runningwritings.com">Running Writings</a></div>
+            </div>
+            <ul class="menu">
+                <li><a href="#how-to-use">How to use</a></li>
+                <li><a href="#get-updates">Get updates</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </header>
+    <main>
+        <h1>Grade-adjusted pace calculator</h1>
+        <div class="app-box">
+            <div class="pace-box">
+                <div class="left-dummy">
+                    
+                </div>
+                <div class="test-clock">
+                    <div class="digitbox">
+                        <button class="material-icons svg-arrow" id="d1-up">expand_less</button>
+                        <div class="digit" id="d1">6</div>
+                        <button class="material-icons svg-arrow" id="d1-down">expand_more</button>
+                    </div>
+                    <div class="digitbox colon">
+                        <span class="digit">:</span>
+                    </div>
+                    <div class="digitbox">
+                        <button class="material-icons svg-arrow" id="d2-up">expand_less</button>
+                        <div class="digit" id="d2">0</div>
+                        <button class="material-icons svg-arrow" id="d2-down">expand_more</button>
+                    </div>
+                    <div class="digitbox">
+                        <button class="material-icons svg-arrow" id="d3-up">expand_less</button>
+                        <div class="digit" id="d3">0</div>
+                        <button class="material-icons svg-arrow" id="d3-down">expand_more</button>
+                    </div>
+                    <div class="unit-text">
+                        /mi
+                    </div>
+                </div>
+                <div class="unit-stack">
+                    <button class="unit-toggle pace-toggle">/mi</button>
+                    <button class="unit-toggle pace-toggle">/km</button>
+                    <button class="unit-toggle pace-toggle">mph</button>
+                    <button class="unit-toggle pace-toggle">km/h</button>
+                </div>
+
+            </div>
+
+            <div class="spacer">
+                pace on a
+            </div>
+            <div class="incline-box">
+                <div class="arrow-box">
+                    <button class="material-icons pct-button" id="pct-m5" title="-5%">keyboard_double_arrow_left</button>
+                    <button class="material-icons pct-button" id="pct-m1" title="-1%">keyboard_arrow_left</button>
+                </div>
+                <div class="incline-text">
+                    <span class="incline-digits digit">
+                        5
+                    </span>
+                    <span class="incline-pct digit">
+                        %
+                    </span>
+                    <span class="incline-label digit">
+                        &nbsp;grade
+                    </span>
+                </div>
+                <div class="arrow-box">
+                    <button class="material-icons pct-button" id="pct-p1" title="+1%">keyboard_arrow_right</button>
+                    <button class="material-icons pct-button" id="pct-p5" title="+5%">keyboard_double_arrow_right</button>
+                </div>
+            </div>
+            <div class="incline-unit-box">
+                <div class="unit-row">
+                    <button class="unit-toggle">grade</button>
+                    <button class="unit-toggle">degrees</button>
+                    <button class="unit-toggle">rise/run</button>
+                    <button class="unit-toggle">vert speed</button>
+                </div>
+            </div>
+            <div class="spacer">
+                equals
+            </div>
+            <div class="results">
+                Results
+            </div>
+        </div>
+
+        
+        <div class="explainer-text">
+            <h2>How to use</h2>
+            <p>Instructions go here</p>
+            <h2>How it works</h2>
+            <p>Details go here</p>
+            <h2>Get updates</h2>
+            <div>email script goes here</div>
+            <h2>Contact</h2>
+            <p>My contact info goes here</p>
+            <h2>Support my work</h2>
+            <p>Socials, email, and book</p>
+        </div>
+    </main>
+    <footer>
+        Made by <a class="author-link" href="https://www.runningwritings.com">John Davis</a>
+        <a href="https://github.com/johnjdavisiv/pace-percents" target="_blank"><i class="fa fa-github github-icon"></i></a>
+    </footer>
     
 </body>
 </html>

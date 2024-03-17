@@ -1,35 +1,331 @@
 @import url('https://fonts.googleapis.com/css2?family=PT+Mono&family=Roboto:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap');
 
+/* Color scheme */
+
+:root {
+    --primary-color: #007bff;
+    --soft-white: #f7f7f7;
+    --soft-black: #333;
+    --app-max-width: 42em;
+    --app-min-width: 25em;
+    --toggle-color: #e9ecef;
+}
+
 
 /* Setup main defaults */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    list-style: none;
 }
 
 html {
     scroll-behavior: smooth;
 }
 
+header, footer {
+    width: 100%; /* spans the full viewport width */
+    background-color: #333; /* a dark background for contrast */
+    color: white; /* white text for visibility against the dark background */
+    padding: 5px 0; /* some spacing around the content */
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400; /* Regular weight */
+    color: var(--soft-black);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* ensures footer stays at the bottom for short content */
+    align-items: center;
+    background-color: var(--soft-white);
+}
+
+/* Header */
+
+header {
+    display:flex;
+    justify-content: center;
+    width: 100%;
+}
+
+/* Responsiveness attempts */
+
+.header-content, main {
+    min-width: var(--app-min-width);
+    max-width: var(--app-max-width);
+    width:100%;
+}
+
+
+.logo-link {
+    display: none;
+    width: 100%
+}
+
+@media (min-width: 620px) { 
+/* Duno if I need this??     
+    .app-content {
+        width: 80%;
+    } */
+    .logo-link {
+        display: block;
+    }
+    
+}
+
+/* Header styling */
+.header-content {
+    display:flex;
+    justify-content: space-between;
+    padding: 0 1em;
+}
+
+.logo-box{
+    display:flex;
+    align-items: center;;
+}
+
+
+/* Menu styling */
+header a {
+    color: var(--soft-white);
+    text-decoration: none;
+    font-size: 1.25em;
+}
+
+.menu {
+    display:flex;
+    align-items: center;
+}
+
+.menu li{
+    list-style: none;
+    padding: 0.2em 0.5em;
+    flex-shrink:0;
+}
+
+img.logo {
+    height: 50px;
+    width: auto;
+    padding: 0 0.5em 0 0;
+}
+
+/* Main screen turn on */
+
+main {
+    flex: 1;
+    background-color: white;
+    padding: 0 1em;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* subtle shadow for depth */
+}
+
+/* Icons and typography */
 .material-icons{
-    color: #007bff;
+    color: var(--primary-color);
     background-color: white;
     font-size: 3em;
     font-weight: bold;
+}
+
+h1 {
+    text-align: center;;
+    font-size: 1.6em;
+    padding: 0.25em 0 0.5em 0;
+}
+
+h2, h3 {
+    padding: 0.25em 0;
 }
 
 p {
     padding: 0.5em 0;
 }
 
-body {
-    font-family: 'Roboto', sans-serif;
-    font-weight: 400; /* Regular weight */
-    color: #333;
-    display: flex;
+/* Apps, Apps, Apps! */
+
+/* .app-box{
+    border: solid red 2px;
+} */
+
+/* Digitbox */
+
+.digitbox {
+    background-color: white;
+    display:flex;
     flex-direction: column;
-    min-height: 100vh; /* ensures footer stays at the bottom for short content */
     align-items: center;
-    background-color: #f7f7f7; /* light gray for some minimal background */
 }
+
+.digit {
+    font-family:'PT Mono', monospace;
+    font-weight:bold;
+    font-size: 4.5em;
+}
+
+
+
+
+/* --------------- TEST STUFF */
+
+
+.pace-box {
+    display:flex;
+    flex-direction:row;
+    justify-content: center;
+    width:100%;
+}
+
+.left-dummy {
+    flex:1;
+}
+
+.clock {
+    flex:1;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.unit-stack {
+    flex: 1;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.pace-toggle {
+    width: 5.5ch;
+    flex: 0;
+}
+
+
+/* ------------------------ */
+
+.svg-arrow {
+    outline: none; /* remove focus outline (consider accessibility) */
+    cursor: pointer;
+    border: solid #0056b3 2px;
+    border-radius: 10px;
+    padding: 0 0px;
+    margin: 4px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* horizontal offset, vertical offset, blur radius, color */
+}
+
+
+.unit-text {
+    height:3em;
+    display:flex;
+    flex-direction: column;
+    justify-content: end;
+    padding: 0 0.75em 0 0;
+    font-family:'PT Mono', monospace;
+    font-weight:bold;
+}
+
+
+.unit-stack li {
+    border-radius:5px;
+    background-color:#f7f7f7;
+
+}
+
+.unit-toggle{
+    background-color: var(--toggle-color);
+    border: none;
+    font-size:1.1em;
+    border-radius:5px;
+    padding: 0.25em 0.5em;
+    margin: 0.2em 0em;
+    cursor:pointer;
+
+}
+
+
+/* Spacer */
+
+
+.spacer {
+    font-size: 1.5em;
+    width:100%;
+    display:flex;
+    justify-content: center;
+    padding: 1em;
+}
+
+
+/* Incline box */
+
+.incline-box {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.incline-pct.digit {
+    font-weight: normal;
+    font-size: 2.5em;
+}
+
+.incline-digits.digit {
+    font-size: 2.5em;
+}
+
+.incline-label.digit {
+    font-size: 2.15em;
+    font-family: 'Roboto', sans-serif;
+    font-weight: normal;
+    
+}
+
+.incline-text {
+    display:flex;
+    align-items:center;
+    padding: 0em 1em;
+}
+
+.arrow-box {
+    display:flex;
+}
+
+.pct-button {
+    font-size: 1.4em;
+    outline: none; /* remove focus outline (consider accessibility) */
+    cursor: pointer;
+    border: solid #007bff 2px;
+    background-color: #ffffff;
+    border-radius: 50%;
+    margin: 5px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); 
+    height: 2em;
+    width: 2em;
+    display: flex;
+    align-items:center;
+    justify-content: center;
+}
+
+
+
+/* Grade unit selector */
+
+.unit-row {
+    width:100%;
+    display:flex;
+    justify-content: center;
+    gap: 0.2em;
+
+}
+
+/* Footer */
+
+footer {
+    text-align: center;
+    padding: 12px 0;
+}
+
+footer a{
+    color: var(--soft-white);
+}
+
