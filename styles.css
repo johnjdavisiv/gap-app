@@ -51,7 +51,6 @@ body {
 header {
     display:flex;
     justify-content: center;
-    width: 100%;
 }
 
 /* Responsiveness attempts */
@@ -252,6 +251,7 @@ p {
     padding: 0.25em 0.5em;
     margin: 0.2em 0em;
     cursor:pointer;
+    min-width: 3ch;
 }
 
 
@@ -271,6 +271,7 @@ p {
     width: 100%;
     display: flex;
     justify-content: center;
+    border: solid blue 2px;
 }
 
 .incline-pct.digit {
@@ -321,6 +322,82 @@ p {
 
 }
 
+/* Rise over run tex tinput */
+
+
+/* Will be hidden initially,  */
+
+.hill-outer {
+    display:flex;
+    justify-content: center;
+    border: solid red 2px;
+}
+
+.input-row {
+    display:flex;
+    justify-content: center;;
+}
+
+.rise-run-row {
+    padding: 0.25em 0;
+    display:flex;
+    justify-content: space-between;
+}
+
+.slug {
+    display:flex;
+    flex-direction: row;
+}
+
+
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 24;
+  color:var(--primary-color);
+  background: transparent;
+}
+
+.up-down-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap:1em;
+    padding: 0 0 1em;
+}
+
+
+.hill-button{
+    border:none;
+    font-size:3em;
+
+    transition: transform 0.4s; /* This will make the rotation smooth */
+    transform-origin: center;
+}
+
+ /* ughh old stuff */
+
+
+.rise-unit, .rise-text {
+    font-size: 1.25em;
+    flex:0;
+    white-space: nowrap;
+}
+
+.rise-unit {
+    font-weight: bold;
+}
+
+.hill-input {
+    font-size: 1.25em;
+    width: 3em;
+    margin: 0 0.3em;
+}
+
+
+
 /* Grade unit selector */
 
 .unit-row {
@@ -328,7 +405,6 @@ p {
     display:flex;
     justify-content: center;
     gap: 0.2em;
-
 }
 
 

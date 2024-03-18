@@ -6,6 +6,7 @@
     <title>Grade-Adjusted Pace (GAP) Calculator for Uphills and Downhills - from Running Writings</title>
     <link rel="icon" href="images/RW-favicon.png" type="image/png">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="styles.css">
     <script src="scripts.js" defer></script>
@@ -65,6 +66,43 @@
             </div>
             <div class="spacer">
                 pace on a
+            </div>
+            <div class="hill-outer">
+                <div class="hill-container">
+                    <div class="input-row up-down-row">
+                        <button class="material-symbols-outlined hill-button" title="Reverse calculations">
+                            elevation
+                        </button>
+                        <div class="slug">
+                            <span class="rise-unit">uphill</span>
+                            <span class="rise-text">&nbsp;with a</span>
+                        </div>
+                    </div>
+                    <div class="input-row">
+                        <div class="slug">
+                            <input class="hill-input" id="rise" type="number" inputmode="numeric" step="1" value="100">
+                            <label for="rise" class="rise-unit">foot</label>
+                            <span class="rise-text">&nbsp;gain</span>
+                        </div>
+                        <span class="slug rise-text">&nbsp;over&nbsp;</span>
+                        <div class="slug">
+                            <input class="hill-input" id="run" type="number" inputmode="decimal" step="0.1" value="1.0">
+                            <label for="run" class="rise-unit">miles</label>
+                        </div>
+                    </div>
+                    <div class="rise-run-row">
+                        <div class="rise-run-togglebox">
+                            <span class="rise-text">Rise:</span>
+                            <button class="unit-toggle active">feet</button>
+                            <button class="unit-toggle">meters</button>
+                        </div>
+                        <div class="rise-run-togglebox">
+                            <span class="rise-text">Run:</span>
+                            <button class="unit-toggle active">mi</button>
+                            <button class="unit-toggle">km</button>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="incline-box">
                 <div class="arrow-box">

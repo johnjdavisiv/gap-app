@@ -31,8 +31,13 @@ console.log('Script loaded')
 // 7) Implement Minetti equation + gam and run console tests
 // 8) Implement alert/warning insertions when outside ranges
 
-// Consider mockup of text pop-up modal separately 
 
+// May need to detect if user inputs a negative sign in text input! 
+//Should accept that as valid and switch mode to dnegative
+// if entry is on keyboard, should expect negatives here
+
+
+// detect and change "pace on a" to "pace on an" for uphill and other a/an stuff
 
 // Asynchronously load the JSON data
 async function loadData() {
