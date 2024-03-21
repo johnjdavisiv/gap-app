@@ -2,8 +2,10 @@
 
 console.log('Script loaded')
 
-// TODO: make degrees cange with buttons
-// get rise/run and vert speed, console log
+// TODO: 
+
+// Fix the bug with reverting / inverting negatives
+// Total cluster, need to redo it from scratch and cahse sign flips
 
 // Get things to flip correct when you do uphill/downhill
 
@@ -127,7 +129,6 @@ function increment_minutes(digit_object,change){
 
 
 // Input unit selector
-
 const pace_buttons = document.querySelectorAll('.pace-toggle');
 
 pace_buttons.forEach(button => {
@@ -139,6 +140,20 @@ pace_buttons.forEach(button => {
         setPaceText(button);
     });
 });
+
+// Input unit selector
+const output_buttons = document.querySelectorAll('.output-toggle');
+
+output_buttons.forEach(button => {
+    button.addEventListener('click', (e) => {
+        // Remove active class from all buttons
+        output_buttons.forEach(btn => btn.classList.remove('active'));
+        // Toggle the active state of the clicked button
+        e.target.classList.toggle('active');
+        setOutputText(button);
+    });
+});
+
 
 
 var pace_mode = "pace"
@@ -182,32 +197,34 @@ function setPaceText(button){
         speed_units.textContent = button.textContent;
         // function like pass_speed_to_pace()
     }
-    
-    
-    // //needs a rework w/ the two!!!
-    // const from_units = document.querySelector('.pace-units')
-
-    // const pace_dials = document.querySelector('#pace-dials')
-    // const speed_dials = document.querySelector('#speed-dials')
-
-    // from_units_string = button.textContent
-    // from_units.textContent = button.textContent
-
-    // console.log(button.textContent);
-
-    // //if from units are paces and to units are speeds...
-    // if (from_units == "/mi" || from_units == "/km") {
-    //     console.log('SWITCH');   
-    // }
-
-    //button.textContent is the to-pace. from_units are, well , the from units
-
-    //Change the input pace clock
-
-
-    //if from units are paces and to units are speeds...
-
 }
+
+var output_text = document.querySelector('#output-text')
+// Use this to change otuput text directly
+
+//easy once you get inoptu as m/s and output as m/s
+
+// Chang eoutptu text
+function setOutputText(button){
+    //4 things can happen here: mi, km, mph, kmh.
+    let output_units = document.querySelector('#output-units')
+
+    // [/mi] 
+    output_units.textContent = button.textContent;
+    if (button.textContent == "/mi" || button.textContent == "/km") {
+        // UNIT CONVERTION TODO FIX HACK BUG    
+        // output_units.textContent = button.textContent;
+        // function like pass_pace_to_speed()
+    }
+    if (button.textContent == "mph" || button.textContent == "km/h") {
+        // setMode("speed");
+        // speed_units.textContent = button.textContent;
+        // function like pass_speed_to_pace()
+    }
+}
+
+
+
 
 
 // Uphill or downhill button
@@ -217,37 +234,119 @@ var uphill_or_downhill = "uphill"
 const hill_indicator = document.querySelector('.hill-button');
 const hill_text = document.querySelector('#uphill-or-downhill');
 
+// Negate Incline on button press
 hill_indicator.addEventListener('click', (e) => {
-    if (hill_text.textContent == "uphill") {
-        hill_text.textContent = "downhill"
-        hill_indicator.classList.toggle('mirrored');
-        //Call swap function to whatever mode is active to +/- it
-    } else if (hill_text.textContent == "downhill") {
-        hill_text.textContent = "uphill"
-        hill_indicator.classList.toggle('mirrored')
-        //Call swap function to whatever mode is active to +/- it
+    negateIncline()
+    // HACK ALERT
+    if (hill_mode == "vert speed") {
+        negateVertSpeed()
+    }
+    if (hill_mode == "rise/run") {
+        negateRise()
     }
 });
 
+var vert_speed_int = 1000 //hardcoded, care
+
+var vert_speed_input = document.querySelector('#vert-speed-input')
+vert_speed_input.addEventListener("change", (e) => {
+    var new_value = +e.target.value
+    var old_value = vert_speed_int
+    vert_speed_int = new_value
+
+    if (vert_speed_int < 0 && old_value >= 0){
+        negateIncline()
+    }
+    if (vert_speed_int > 0 && old_value <= 0){
+        negateIncline()
+    }
+});
+
+
+var rise_input = document.querySelector('#rise')
+var rise_int = 100
+rise_input.addEventListener("change", (e) => {
+    var new_value = +e.target.value
+    var old_value = rise_int
+    rise_int = new_value
+
+    if (rise_int < 0 && old_value >= 0 || rise_int > 0 && old_value <= 0){
+        negateIncline()
+    }
+});
+
+
+var run_input = document.querySelector('#run')
+var run_int = 100
+run_input.addEventListener("change", (e) => {
+    run_int = +e.target.value
+});
+
+
+
+// CARE CARE CARE with math, track units!!!
+var pace_post = document.querySelector('#pace-post')
+
 function negateIncline(){
-    if (uphill_or_downhill == "uphill") {
-        uphill_or_downhill = "downhill"
-        hill_indicator.textContent = "downhill"
-        //flip whatever hill mode we have to negative
+    // Maybe edit across the board? So its' ok if you sitch? 
 
+    if (hill_text.textContent == "uphill") {
+        // flip to downhill and fix grammar
+        uphill_or_downhill == "downhill"
+        hill_text.textContent = "downhill"
+        pace_post.textContent = 'pace on a'
+        hill_indicator.classList.toggle('mirrored');
+        //Call swap function to whatever mode is active to +/- it
+    } else if (hill_text.textContent == "downhill") {
+        uphill_or_downhill = "uphill"
+        hill_text.textContent = "uphill"
+        pace_post.textContent = 'pace on an'
+        hill_indicator.classList.toggle('mirrored')
+        //Call swap function to whatever mode is active to +/- it
     }
 
-    // if mode is grade... invert grade
-    if (hill_mode == "grade"){
-        
+    //grade
+    pct_int = pct_int*-1
+    incline_text.textContent = pct_int   
+
+    //angle
+    angle_int = angle_int*-1
+    angle_text.textContent = angle_int  
+    //rise run
+    negateRise()
+    var rise_post_text = document.querySelector('#rise-post-text')
+    if (rise_post_text.innerHTML == "&nbsp;of gain") {
+        rise_post_text.innerHTML = '&nbsp;of loss'
+    } else {
+        rise_post_text.innerHTML = "&nbsp;of gain"
     }
 
-    //
+    //vert speed
+    negateVertSpeed()
+    var vert_post_text = document.querySelector('#vert-speed-post-text')
+    if (vert_post_text.innerHTML == "&nbsp;gain") {
+        vert_post_text.innerHTML = '&nbsp;loss'
+    } else {
+        vert_post_text.innerHTML = "&nbsp;gain"
+    }
+}
+
+function negateVertSpeed(){
+    vert_speed_int = vert_speed_int*-1
+    vert_speed_input.value = vert_speed_int
+}
+function negateRise(){
+    console.log("FIREEEEEEEEEEEEEEEee")
+    rise_int = rise_int*-1
+    rise_input.value = rise_int
+    console.log(rise_input.value)
 }
 
 
-// grade mode selector
+uphill_post_text = document.querySelector('#uphill-post-text')
 
+
+// grade mode selector
 const hill_buttons = document.querySelectorAll('.hill-toggle');
 console.log(hill_buttons)
 
@@ -267,7 +366,6 @@ hill_buttons.forEach(button => {
 function setHillInput(button){
     console.log(button.textContent);
     // 4 options, grade, degrees, rise/run, vert speed
-
     //Hide all
     const grade_input = document.querySelector('#grade-input');
     const angle_input = document.querySelector('#angle-input');
@@ -283,18 +381,22 @@ function setHillInput(button){
     if (button.textContent == "grade") {
         hill_mode = "grade"
         grade_input.classList.remove('hidden');
+        uphill_post_text.innerHTML = '&nbsp;with a'
     }
     if (button.textContent == "degrees") {  
         hill_mode = "angle"      
         angle_input.classList.remove('hidden');
+        uphill_post_text.innerHTML = '&nbsp;with a'
     }
     if (button.textContent == "rise/run") {     
         hill_mode = "rise/run"   
         riserun_input.classList.remove('hidden');
+        uphill_post_text.innerHTML = '&nbsp;with'
     }
     if (button.textContent == "vert speed") {   
         hill_mode = "vert speed"   
         vertspeed_input.classList.remove('hidden');
+        uphill_post_text.innerHTML = '&nbsp;at a rate of'
     }
     
 }
@@ -304,7 +406,7 @@ function setHillInput(button){
 // ----- Incremnt grade ----
 
 // Percent changes
-let incline_text = document.querySelector(".incline-digits")
+let incline_text = document.querySelector("#grade-pct")
 let pct_int = parseInt(incline_text.textContent)
 
 // In order left to right...
@@ -329,22 +431,67 @@ pct_p5.addEventListener('click', () => {
 })
 
 function increment_grade(change){
-
     // postiive negative flip detection here
     if (pct_int >= 0 && pct_int + change < 0) {
         //flipping negative
-        console.log('FLIPPING TO NEGATIVE')
+        negateIncline()
     }
-
     if (pct_int <= 0 && pct_int + change > 0) {
         //flipping negative
-        console.log('FLIPPING TO POSITIVE')
+        negateIncline()
     }
 
-
+    // allow if below 50
     if (pct_int + change <= 50 && pct_int + change >= -50) {
         pct_int = pct_int + change
         incline_text.textContent = pct_int;
+    }
+
+    updateResult();
+}
+
+
+
+// Angle changes
+let angle_text = document.querySelector("#angle-pct")
+let angle_int = parseInt(incline_text.textContent)
+
+// In order left to right...
+const angle_m5 = document.querySelector("#angle-m5")
+angle_m5.addEventListener('click', () => {
+    increment_angle(-5)
+})
+
+const angle_m1 = document.querySelector("#angle-m1")
+angle_m1.addEventListener('click', () => {
+    increment_angle(-1)
+})
+
+const angle_p1 = document.querySelector("#angle-p1")
+angle_p1.addEventListener('click', () => {
+    increment_angle(1)
+})
+
+const angle_p5 = document.querySelector("#angle-p5")
+angle_p5.addEventListener('click', () => {
+    increment_angle(5)
+})
+
+
+function increment_angle(change){
+    // postiive negative flip detection here
+    if (angle_int >= 0 && angle_int + change < 0) {
+        //flipping negative
+        negateIncline()
+    }
+    if (angle_int <= 0 && angle_int + change > 0) {
+        //flipping negative
+        negateIncline()
+    }
+    // allow if below 45
+    if (angle_int + change <= 45 && angle_int + change >= -45) {
+        angle_int = angle_int + change
+        angle_text.textContent = angle_int;
     }
 
     // else if here about edge cases of 46 + 5?
@@ -355,8 +502,68 @@ function increment_grade(change){
     updateResult();
 }
 
+// ------ Adjsting rise/run stuff
+
+const rise_unit_buttons = document.querySelectorAll('.rise-toggle');
+const run_unit_buttons = document.querySelectorAll('.run-toggle');
+
+var rise_text = document.querySelector('#rise-input-unit')
+var run_text = document.querySelector('#rise-output-unit')
+
+rise_unit_buttons.forEach(button => {
+    button.addEventListener('click', (e) => {
+        rise_unit_buttons.forEach(btn => btn.classList.remove('active'));
+        e.target.classList.toggle('active');
+        setRiseText(button);
+    });
+});
+
+run_unit_buttons.forEach(button => {
+    button.addEventListener('click', (e) => {
+        run_unit_buttons.forEach(btn => btn.classList.remove('active'));
+        e.target.classList.toggle('active');
+        setRunText(button);
+    });
+});
 
 
+
+function setRiseText(button){
+    rise_text.textContent = button.textContent
+}
+
+function setRunText(button){
+    if (button.textContent == "mi"){
+        run_text.textContent = "miles"
+    }
+    if (button.textContent == "km"){
+        run_text.textContent = "kilometers"
+    }
+}
+
+
+// ---- Vert speed
+
+const vert_buttons = document.querySelectorAll('.vert-toggle');
+var vert_text = document.querySelector('#vert-unit')
+
+vert_buttons.forEach(button => {
+    button.addEventListener('click', (e) => {
+        vert_buttons.forEach(btn => btn.classList.remove('active'));
+        e.target.classList.toggle('active');
+        setVertText(button);
+    });
+});
+
+
+function setVertText(button){
+    if (button.textContent == "ft/hr"){
+        vert_text.textContent = "feet per hour"
+    }
+    if (button.textContent == "m/hr"){
+        vert_text.textContent = "meters per hour"
+    }
+}
 
 
 
