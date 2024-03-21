@@ -224,9 +224,6 @@ function setOutputText(button){
 }
 
 
-
-
-
 // Uphill or downhill button
 var hill_mode = "grade"
 var uphill_or_downhill = "uphill"
@@ -234,16 +231,10 @@ var uphill_or_downhill = "uphill"
 const hill_indicator = document.querySelector('.hill-button');
 const hill_text = document.querySelector('#uphill-or-downhill');
 
+
 // Negate Incline on button press
 hill_indicator.addEventListener('click', (e) => {
     negateIncline()
-    // HACK ALERT
-    if (hill_mode == "vert speed") {
-        negateVertSpeed()
-    }
-    if (hill_mode == "rise/run") {
-        negateRise()
-    }
 });
 
 var vert_speed_int = 1000 //hardcoded, care
@@ -288,11 +279,13 @@ run_input.addEventListener("change", (e) => {
 var pace_post = document.querySelector('#pace-post')
 
 function negateIncline(){
+    console.log('***************')
+    console.log(vert_speed_int)
     // Maybe edit across the board? So its' ok if you sitch? 
 
     if (hill_text.textContent == "uphill") {
         // flip to downhill and fix grammar
-        uphill_or_downhill == "downhill"
+        uphill_or_downhill = "downhill"
         hill_text.textContent = "downhill"
         pace_post.textContent = 'pace on a'
         hill_indicator.classList.toggle('mirrored');
@@ -313,7 +306,6 @@ function negateIncline(){
     angle_int = angle_int*-1
     angle_text.textContent = angle_int  
     //rise run
-    negateRise()
     var rise_post_text = document.querySelector('#rise-post-text')
     if (rise_post_text.innerHTML == "&nbsp;of gain") {
         rise_post_text.innerHTML = '&nbsp;of loss'
@@ -322,24 +314,39 @@ function negateIncline(){
     }
 
     //vert speed
-    negateVertSpeed()
     var vert_post_text = document.querySelector('#vert-speed-post-text')
     if (vert_post_text.innerHTML == "&nbsp;gain") {
         vert_post_text.innerHTML = '&nbsp;loss'
     } else {
         vert_post_text.innerHTML = "&nbsp;gain"
     }
+
+
+    // flip rise and vert IF NEEDED
+    if (vert_speed_int < 0 && uphill_or_downhill == "uphill" || 
+    vert_speed_int > 0 && uphill_or_downhill == "downhill") {
+        console.log(vert_speed_int)
+        negateVertSpeed() 
+    }
+
+    if (rise_int < 0 && uphill_or_downhill == "uphill" || 
+    rise_int > 0 && uphill_or_downhill == "downhill") {
+        negateRise()
+    }
+
 }
 
 function negateVertSpeed(){
+    console.log('fire negvs')
+    console.log(vert_speed_int)
     vert_speed_int = vert_speed_int*-1
     vert_speed_input.value = vert_speed_int
+    console.log(vert_speed_int)
+    console.log('-------')
 }
 function negateRise(){
-    console.log("FIREEEEEEEEEEEEEEEee")
     rise_int = rise_int*-1
     rise_input.value = rise_int
-    console.log(rise_input.value)
 }
 
 
@@ -348,11 +355,10 @@ uphill_post_text = document.querySelector('#uphill-post-text')
 
 // grade mode selector
 const hill_buttons = document.querySelectorAll('.hill-toggle');
-console.log(hill_buttons)
+
 
 hill_buttons.forEach(button => {
     button.addEventListener('click', (e) => {
-        console.log(button)
         // Remove active class from all buttons
         hill_buttons.forEach(btn => btn.classList.remove('active'));
         // // Toggle the active state of the clicked button
@@ -364,7 +370,6 @@ hill_buttons.forEach(button => {
 
 
 function setHillInput(button){
-    console.log(button.textContent);
     // 4 options, grade, degrees, rise/run, vert speed
     //Hide all
     const grade_input = document.querySelector('#grade-input');
@@ -397,8 +402,7 @@ function setHillInput(button){
         hill_mode = "vert speed"   
         vertspeed_input.classList.remove('hidden');
         uphill_post_text.innerHTML = '&nbsp;at a rate of'
-    }
-    
+    }   
 }
 
 
