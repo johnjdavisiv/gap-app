@@ -168,12 +168,26 @@ function setMode(dial_mode) {
         pace_mode = "pace"
         speed_dials.classList.add('hidden');
         pace_dials.classList.remove('hidden');
+
+        // grammar
+        if (uphill_or_downhill == "uphill") {
+            pace_post.textContent = 'pace on an'
+        } else {
+            pace_post.textContent = 'pace on a'
+        }
     }
     if (dial_mode == "speed") {
         // set global var, swap hidden states
         pace_mode = "speed"
         pace_dials.classList.add('hidden');
         speed_dials.classList.remove('hidden');
+
+        //grammar
+        if (uphill_or_downhill == "uphill") {
+            pace_post.textContent = 'speed on an'
+        } else {
+            pace_post.textContent = 'speed on a'
+        }
     }
 }
 
@@ -235,6 +249,7 @@ const hill_text = document.querySelector('#uphill-or-downhill');
 // Negate Incline on button press
 hill_indicator.addEventListener('click', (e) => {
     negateIncline()
+    updateResult()
 });
 
 var vert_speed_int = 1000 //hardcoded, care
@@ -251,6 +266,7 @@ vert_speed_input.addEventListener("change", (e) => {
     if (vert_speed_int > 0 && old_value <= 0){
         negateIncline()
     }
+    updateResult();
 });
 
 
@@ -264,13 +280,15 @@ rise_input.addEventListener("change", (e) => {
     if (rise_int < 0 && old_value >= 0 || rise_int > 0 && old_value <= 0){
         negateIncline()
     }
+    updateResult();
 });
 
 
 var run_input = document.querySelector('#run')
-var run_int = 100
+var run_int = parseInt(run_input.value)
 run_input.addEventListener("change", (e) => {
     run_int = +e.target.value
+    updateResult();
 });
 
 
@@ -287,13 +305,21 @@ function negateIncline(){
         // flip to downhill and fix grammar
         uphill_or_downhill = "downhill"
         hill_text.textContent = "downhill"
-        pace_post.textContent = 'pace on a'
+        if (pace_mode == "pace") {
+            pace_post.textContent = 'pace on a'
+        } else {
+            pace_post.textContent = 'speed on a'
+        }
         hill_indicator.classList.toggle('mirrored');
         //Call swap function to whatever mode is active to +/- it
     } else if (hill_text.textContent == "downhill") {
         uphill_or_downhill = "uphill"
         hill_text.textContent = "uphill"
-        pace_post.textContent = 'pace on an'
+        if (pace_mode == "pace") {
+            pace_post.textContent = 'pace on an'
+        } else {
+            pace_post.textContent = 'speed on an'
+        }
         hill_indicator.classList.toggle('mirrored')
         //Call swap function to whatever mode is active to +/- it
     }
@@ -403,6 +429,8 @@ function setHillInput(button){
         vertspeed_input.classList.remove('hidden');
         uphill_post_text.innerHTML = '&nbsp;at a rate of'
     }   
+    //Must update after switch to mode
+    updateResult()
 }
 
 
@@ -519,6 +547,7 @@ rise_unit_buttons.forEach(button => {
         rise_unit_buttons.forEach(btn => btn.classList.remove('active'));
         e.target.classList.toggle('active');
         setRiseText(button);
+        updateResult();
     });
 });
 
@@ -527,6 +556,7 @@ run_unit_buttons.forEach(button => {
         run_unit_buttons.forEach(btn => btn.classList.remove('active'));
         e.target.classList.toggle('active');
         setRunText(button);
+        updateResult();
     });
 });
 
@@ -567,22 +597,125 @@ function setVertText(button){
     if (button.textContent == "m/hr"){
         vert_text.textContent = "meters per hour"
     }
+    updateResult();
 }
 
 
+function readCurrentSpeed(){
+    // Pace mode
+    if (pace_mode == "pace") {
+        // read mm:ss
+        var minute_val = parseInt(d1.textContent)
+        var sec_val = 10*parseInt(d2.textContent) + parseInt(d3.textContent)
+        var dec_minutes = minute_val + sec_val/60
+        console.log(dec_minutes)
+
+        const pace_units = document.querySelector('#pace-units').textContent
+
+        if (pace_units == "/mi"){
+            //Convert to m/s
+            input_m_s = 1609.344/(60*dec_minutes)
+            console.log(input_m_s)
+        } else if (pace_units == "/km"){
+            //Convert to m/s
+            input_m_s = 1000/(60*dec_minutes)
+            console.log(input_m_s)
+        }
+
+    // Speed mode
+    } else if (pace_mode == "speed") {
+        const speed_units = document.querySelector('#speed-units').textContent
+        //speed changes
+        var dec_speed = parseInt(s1.textContent) + parseInt(s2.textContent)/10
+
+            if (speed_units == "mph"){
+            //Convert to m/s
+            input_m_s = dec_speed*1609.344/3600
+        } else if (speed_units == "km/h"){
+            //Convert to m/s
+            input_m_s = dec_speed*1000/3600
+        }
+    }
+}
+
+function readCurrentGrade(){
+    // Return current input grade as decimal grade
+    // e.g. %5 is 0.05
+    console.log('FIRE')
+
+    if (hill_mode == "grade") {
+        // easy
+        input_grade = pct_int/100.0
+        console.log(angle_int)
+    } else if (hill_mode == "angle") {
+        // Convert to rad first, then tan
+        var angle_rad = angle_int * (Math.PI / 180);
+        input_grade = Math.tan(angle_rad);
+        //..
+    } else if (hill_mode == "rise/run") {
+        // Grade is just rise divided by run
+        
+        // Care, unit conversions! convert all to meters
+        if (rise_text.textContent == "feet") {
+            var rise_meters = rise_int*0.3048
+        } else if (rise_text.textContent == "meters") {
+            var rise_meters = rise_int
+        }
+        // Convert run to meters, from km or mi
+        if (run_text.textContent == "miles"){
+            var run_meters = run_int*1609.344
+            console.log(run_meters)
+        } else if (run_text.textContent == "kilometers"){
+            var run_meters = run_int*1000
+        }
+
+        // NOW can calc
+        input_grade = rise_meters/run_meters
+        console.log(input_grade)
+
+    } else if (hill_mode == "vert speed") {
+        // vert speed is tricky because it depends on speed
+        // Also it has weird trig contraints
+        // Easier to just detect NaN and Inf and replace with ::hmm
+        // vs solving dynamically the limits
+
+        //convert vert speed to meters per second
+        if (vert_text.textContent == 'feet per hour') {
+            //convert to m/hr, then m/s
+            var vert_speed_m_s = vert_speed_int*0.3048/(60*60)
+        } else if (vert_text.textContent == 'meters per hour') {
+            //..
+            var vert_speed_m_s = vert_speed_int/(60*60)
+        }
+        //do on velocity scale, doesn't matter
+        var run_x_meters = Math.sqrt(input_m_s**2 - vert_speed_m_s**2)
+        //techncially input speed is parallel to slope, not x-axis speed
+        //only matters for extreme steep slopes
+        input_grade = vert_speed_m_s/run_x_meters
+    }
+}
 
 
-
-
-
-
-
-
-
+var input_m_s = 4.4704 //6:00 mile pace as input initail
+var input_grade = 0.05 // Keep as decimal because that's what minetti used
 
 // Update results on page
 function updateResult(){
+    console.log(hill_mode)
     //console.log("do result updates...")
+
+    //updates input_speed
+    readCurrentSpeed()
+    readCurrentGrade()
+    console.log(input_grade)
+
+    //Do minetti equations...
+    // calcOxygenCost()
+    // findEquivalentFlatSpeed()
+
+
+    //Get current input speed
+   
 
     // IMPORTANT - we need to update global speed in m/s each time a button is pressed
 

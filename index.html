@@ -53,9 +53,7 @@
                         <div class="digit" id="d3">0</div>
                         <button class="material-icons svg-arrow" id="d3-down">expand_more</button>
                     </div>
-                    <div class="unit-text" id="pace-units">
-                        /mi
-                    </div>
+                    <div class="unit-text" id="pace-units">/mi</div>
                 </div>
                 <div class="clock hidden" id="speed-dials">
                     <div class="digitbox">
@@ -71,9 +69,7 @@
                         <div class="digit" id="s2">0</div>
                         <button class="material-icons svg-arrow" id="s2-down">expand_more</button>
                     </div>
-                    <div class="unit-text" id="speed-units">
-                        mph
-                    </div>
+                    <div class="unit-text" id="speed-units">mph</div>
                 </div>
                 <div class="unit-stack">
                     <button class="unit-toggle pace-toggle active" id="mi-pace">/mi</button>
@@ -148,7 +144,7 @@
                         </div>
                         <span class="slug rise-text">&nbsp;over&nbsp;</span>
                         <div class="slug">
-                            <input class="hill-input" id="run" type="number" inputmode="decimal" step="0.1" value="1.0">
+                            <input class="hill-input" id="run" type="number" inputmode="decimal" step="0.1" value="1.0" min="0">
                             <label for="run" class="rise-unit" id="rise-output-unit">miles</label>
                         </div>
                     </div>
@@ -224,6 +220,7 @@
             <p>Instructions go here</p>
             <h2>How it works<a class="material-icons up" href="#top">arrow_upward</a></h2>
             <p>Details go here</p>
+            <p> minor note but speed is parallel with slope not flat ground - irrelevant fora ll but steepsted angles</p>
             <p>Don't forget the cool ggplot pics</p>
             <p>They will be useful for validating equations too</p>
             <h2 id="get-updates">Get updates<a class="material-icons up" href="#top">arrow_upward</a></h2>
