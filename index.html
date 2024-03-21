@@ -65,19 +65,21 @@
                 </div>
             </div>
             <div class="spacer">
-                pace on a
+                pace on an
+            </div>
+            <div class="hill-indicator">
+                <div class="input-row up-down-row">
+                    <button class="material-symbols-outlined hill-button" title="Uphill or downhill">
+                        elevation
+                    </button>
+                    <div class="slug">
+                        <span class="rise-unit">uphill</span>
+                        <span class="rise-text">&nbsp;with a</span>
+                    </div>
+                </div>
             </div>
             <div class="hill-outer">
                 <div class="hill-container">
-                    <div class="input-row up-down-row">
-                        <button class="material-symbols-outlined hill-button" title="Reverse calculations">
-                            elevation
-                        </button>
-                        <div class="slug">
-                            <span class="rise-unit">uphill</span>
-                            <span class="rise-text">&nbsp;with a</span>
-                        </div>
-                    </div>
                     <div class="input-row">
                         <div class="slug">
                             <input class="hill-input" id="rise" type="number" inputmode="numeric" step="1" value="100">
@@ -104,6 +106,23 @@
                     </div>
                 </div>
             </div>
+            <div class="hill-outer">
+                <div class="hill-container">
+                    <div class="input-row">
+                        <div class="slug">
+                            <input class="hill-input vert-input" id="vert_speed" type="number" inputmode="numeric" step="1" value="1000">
+                            <label for="vert_speed" class="rise-unit">feet per hour</label>
+                            <span class="rise-text">&nbsp;gain</span>
+                        </div>
+                    </div>
+                    <div class="vert-row">
+                        <div class="rise-run-togglebox">
+                            <button class="unit-toggle active" id="vert-speed-feet">ft/hr</button>
+                            <button class="unit-toggle" id="vert-speed-meters">m/hr</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="incline-box">
                 <div class="arrow-box">
                     <button class="material-icons pct-button" id="pct-m5" title="-5%">keyboard_double_arrow_left</button>
@@ -118,6 +137,27 @@
                     </span>
                     <span class="incline-label digit">
                         &nbsp;grade
+                    </span>
+                </div>
+                <div class="arrow-box">
+                    <button class="material-icons pct-button" id="pct-p1" title="+1%">keyboard_arrow_right</button>
+                    <button class="material-icons pct-button" id="pct-p5" title="+5%">keyboard_double_arrow_right</button>
+                </div>
+            </div>
+            <div class="incline-box grade-box">
+                <div class="arrow-box">
+                    <button class="material-icons pct-button" id="pct-m5" title="-5%">keyboard_double_arrow_left</button>
+                    <button class="material-icons pct-button" id="pct-m1" title="-1%">keyboard_arrow_left</button>
+                </div>
+                <div class="incline-text">
+                    <span class="incline-digits digit">
+                        5
+                    </span>
+                    <span class="deg-pct digit">
+                        &deg;
+                    </span>
+                    <span class="incline-label digit">
+                        &nbsp;slope
                     </span>
                 </div>
                 <div class="arrow-box">
@@ -162,17 +202,17 @@
 
         
         <div class="explainer-text">
-            <h2>How to use</h2>
+            <h2 id="how-to-use">How to use<a class="material-icons up" href="#top">arrow_upward</a></h2>
             <p>Instructions go here</p>
-            <h2>How it works</h2>
+            <h2>How it works<a class="material-icons up" href="#top">arrow_upward</a></h2>
             <p>Details go here</p>
             <p>Don't forget the cool ggplot pics</p>
             <p>They will be useful for validating equations too</p>
-            <h2>Get updates</h2>
+            <h2 id="get-updates">Get updates<a class="material-icons up" href="#top">arrow_upward</a></h2>
             <div>email script goes here</div>
-            <h2>Contact</h2>
+            <h2 id="contact">Contact<a class="material-icons up" href="#top">arrow_upward</a></h2>
             <p>My contact info goes here</p>
-            <h2>Support my work</h2>
+            <h2>Support my work<a class="material-icons up" href="#top">arrow_upward</a></h2>
             <p>Socials, email, and book</p>
         </div>
     </main>

@@ -279,6 +279,12 @@ p {
     font-size: 2.5em;
 }
 
+.deg-pct {
+    font-weight: normal;
+    font-size: 3em;
+
+}
+
 .incline-digits.digit {
     font-size: 2.5em;
 }
@@ -335,13 +341,22 @@ p {
 
 .input-row {
     display:flex;
-    justify-content: center;;
+    justify-content: center;
 }
+
+
 
 .rise-run-row {
     padding: 0.25em 0;
     display:flex;
     justify-content: space-between;
+}
+
+
+.vert-row {
+    padding: 0.25em 0;
+    display:flex;
+    justify-content: center;
 }
 
 .slug {
@@ -372,7 +387,6 @@ p {
 .hill-button{
     border:none;
     font-size:3em;
-
     transition: transform 0.4s; /* This will make the rotation smooth */
     transform-origin: center;
 }
@@ -396,6 +410,13 @@ p {
     margin: 0 0.3em;
 }
 
+.vert-input {
+    width: 4em;
+}
+
+.rise-run-togglebox {
+    border:solid red 2px;
+}
 
 
 /* Grade unit selector */
@@ -489,6 +510,12 @@ footer a{
         box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.12);
     }
 
+    .hill-button:hover {
+        cursor:pointer;
+        color: var(--dark-accent);
+    }
+
+
     .i-note:hover{
         background-color: var(--hover-color);
         cursor:pointer;
@@ -536,4 +563,12 @@ footer a{
 .i-note:active {
     color:white;
     border: solid var(--link-hover-color) 2px;
+}
+
+/* up to top arrow */
+.material-icons.up  {
+    padding: 0 0 0 0.5em;
+    font-size: 1.4rem;
+    color: gray;
+    text-decoration: none;;
 }
