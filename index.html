@@ -34,7 +34,7 @@
             <div class="app-inner">
             <div class="pace-box">
                 <div class="left-dummy"></div>
-                <div class="clock">
+                <div class="clock" id="pace-dials">
                     <div class="digitbox">
                         <button class="material-icons svg-arrow" id="d1-up">expand_less</button>
                         <div class="digit" id="d1">6</div>
@@ -53,15 +53,33 @@
                         <div class="digit" id="d3">0</div>
                         <button class="material-icons svg-arrow" id="d3-down">expand_more</button>
                     </div>
-                    <div class="unit-text">
+                    <div class="unit-text" id="pace-units">
                         /mi
                     </div>
                 </div>
+                <div class="clock hidden" id="speed-dials">
+                    <div class="digitbox">
+                        <button class="material-icons svg-arrow" id="s1-up">expand_less</button>
+                        <div class="digit" id="s1">6</div>
+                        <button class="material-icons svg-arrow" id="s1-down">expand_more</button>
+                    </div>
+                    <div class="digitbox colon">
+                        <span class="digit">.</span>
+                    </div>
+                    <div class="digitbox">
+                        <button class="material-icons svg-arrow" id="s2-up">expand_less</button>
+                        <div class="digit" id="s2">0</div>
+                        <button class="material-icons svg-arrow" id="s2-down">expand_more</button>
+                    </div>
+                    <div class="unit-text" id="speed-units">
+                        mph
+                    </div>
+                </div>
                 <div class="unit-stack">
-                    <button class="unit-toggle pace-toggle active">/mi</button>
-                    <button class="unit-toggle pace-toggle">/km</button>
-                    <button class="unit-toggle pace-toggle">mph</button>
-                    <button class="unit-toggle pace-toggle">km/h</button>
+                    <button class="unit-toggle pace-toggle active" id="mi-pace">/mi</button>
+                    <button class="unit-toggle pace-toggle" id="km-pace">/km</button>
+                    <button class="unit-toggle pace-toggle" id="mph-speed">mph</button>
+                    <button class="unit-toggle pace-toggle" id="kmh-speed">km/h</button>
                 </div>
             </div>
             <div class="spacer">
@@ -73,12 +91,71 @@
                         elevation
                     </button>
                     <div class="slug">
-                        <span class="rise-unit">uphill</span>
+                        <span class="rise-unit" id="uphill-or-downhill">uphill</span>
                         <span class="rise-text">&nbsp;with a</span>
                     </div>
                 </div>
             </div>
-            <div class="hill-outer">
+            <div class="incline-box" id="grade-input">
+                <div class="arrow-box">
+                    <button class="material-icons pct-button" id="grade-m5" title="-5%">keyboard_double_arrow_left</button>
+                    <button class="material-icons pct-button" id="grade-m1" title="-1%">keyboard_arrow_left</button>
+                </div>
+                <div class="incline-text">
+                    <span class="incline-digits digit">
+                        5
+                    </span>
+                    <span class="incline-pct digit">
+                        %
+                    </span>
+                    <span class="incline-label digit">
+                        &nbsp;grade
+                    </span>
+                </div>
+                <div class="arrow-box">
+                    <button class="material-icons pct-button" id="grade-p1" title="+1%">keyboard_arrow_right</button>
+                    <button class="material-icons pct-button" id="grade-p5" title="+5%">keyboard_double_arrow_right</button>
+                </div>
+            </div>
+            <div class="incline-box hidden" id="angle-input">
+                <div class="arrow-box">
+                    <button class="material-icons pct-button" id="angle-m5" title="-5%">keyboard_double_arrow_left</button>
+                    <button class="material-icons pct-button" id="angle-m1" title="-1%">keyboard_arrow_left</button>
+                </div>
+                <div class="incline-text">
+                    <span class="incline-digits digit">
+                        5
+                    </span>
+                    <span class="deg-pct digit">
+                        &deg;
+                    </span>
+                    <span class="incline-label digit">
+                        &nbsp;slope
+                    </span>
+                </div>
+                <div class="arrow-box">
+                    <button class="material-icons pct-button" id="pct-p1" title="+1%">keyboard_arrow_right</button>
+                    <button class="material-icons pct-button" id="pct-p5" title="+5%">keyboard_double_arrow_right</button>
+                </div>
+            </div>
+            <div class="hill-outer hidden" id="riserun-input">
+                <div class="hill-container">
+                    <div class="input-row">
+                        <div class="slug">
+                            <input class="hill-input vert-input" id="vert_speed" type="number" inputmode="numeric" step="1" value="1000">
+                            <label for="vert_speed" class="rise-unit">feet per hour</label>
+                            <span class="rise-text">&nbsp;gain</span>
+                        </div>
+                    </div>
+                    <div class="vert-row">
+                        <div class="rise-run-togglebox">
+                            <button class="unit-toggle active" id="vert-speed-feet">ft/hr</button>
+                            <button class="unit-toggle" id="vert-speed-meters">m/hr</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="hill-outer hidden" id="vertspeed-input">
                 <div class="hill-container">
                     <div class="input-row">
                         <div class="slug">
@@ -106,71 +183,12 @@
                     </div>
                 </div>
             </div>
-            <div class="hill-outer">
-                <div class="hill-container">
-                    <div class="input-row">
-                        <div class="slug">
-                            <input class="hill-input vert-input" id="vert_speed" type="number" inputmode="numeric" step="1" value="1000">
-                            <label for="vert_speed" class="rise-unit">feet per hour</label>
-                            <span class="rise-text">&nbsp;gain</span>
-                        </div>
-                    </div>
-                    <div class="vert-row">
-                        <div class="rise-run-togglebox">
-                            <button class="unit-toggle active" id="vert-speed-feet">ft/hr</button>
-                            <button class="unit-toggle" id="vert-speed-meters">m/hr</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="incline-box">
-                <div class="arrow-box">
-                    <button class="material-icons pct-button" id="pct-m5" title="-5%">keyboard_double_arrow_left</button>
-                    <button class="material-icons pct-button" id="pct-m1" title="-1%">keyboard_arrow_left</button>
-                </div>
-                <div class="incline-text">
-                    <span class="incline-digits digit">
-                        5
-                    </span>
-                    <span class="incline-pct digit">
-                        %
-                    </span>
-                    <span class="incline-label digit">
-                        &nbsp;grade
-                    </span>
-                </div>
-                <div class="arrow-box">
-                    <button class="material-icons pct-button" id="pct-p1" title="+1%">keyboard_arrow_right</button>
-                    <button class="material-icons pct-button" id="pct-p5" title="+5%">keyboard_double_arrow_right</button>
-                </div>
-            </div>
-            <div class="incline-box grade-box">
-                <div class="arrow-box">
-                    <button class="material-icons pct-button" id="pct-m5" title="-5%">keyboard_double_arrow_left</button>
-                    <button class="material-icons pct-button" id="pct-m1" title="-1%">keyboard_arrow_left</button>
-                </div>
-                <div class="incline-text">
-                    <span class="incline-digits digit">
-                        5
-                    </span>
-                    <span class="deg-pct digit">
-                        &deg;
-                    </span>
-                    <span class="incline-label digit">
-                        &nbsp;slope
-                    </span>
-                </div>
-                <div class="arrow-box">
-                    <button class="material-icons pct-button" id="pct-p1" title="+1%">keyboard_arrow_right</button>
-                    <button class="material-icons pct-button" id="pct-p5" title="+5%">keyboard_double_arrow_right</button>
-                </div>
-            </div>
             <div class="incline-unit-box">
-                <div class="unit-row">
-                    <button class="unit-toggle active">grade</button>
-                    <button class="unit-toggle">degrees</button>
-                    <button class="unit-toggle">rise/run</button>
-                    <button class="unit-toggle">vert speed</button>
+                <div class="unit-row hill-buttons">
+                    <button class="hill-toggle active">grade</button>
+                    <button class="hill-toggle">degrees</button>
+                    <button class="hill-toggle">rise/run</button>
+                    <button class="hill-toggle">vert speed</button>
                 </div>
             </div>
             <!-- So when you flip this, it will not do a full switch-er-oo -->

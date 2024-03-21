@@ -124,6 +124,9 @@ main {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* subtle shadow for depth */
 }
 
+/* Hiding stuff */
+
+
 /* Icons and typography */
 .material-icons{
     color: var(--primary-color);
@@ -175,7 +178,7 @@ p {
 
 /* Trixy */
 .colon {
-    margin: 0 -0.5em;
+    margin: 0 -0.5em 0 0em;
 }
 
 /* New formatting with true center */
@@ -243,7 +246,7 @@ p {
     border-radius:5px;
 }
 
-.unit-toggle{
+.unit-toggle, .hill-toggle{
     background-color: var(--toggle-color);
     border: none;
     font-size:1.1em;
@@ -271,7 +274,7 @@ p {
     width: 100%;
     display: flex;
     justify-content: center;
-    border: solid blue 2px;
+    align-items: center;
 }
 
 .incline-pct.digit {
@@ -336,7 +339,6 @@ p {
 .hill-outer {
     display:flex;
     justify-content: center;
-    border: solid red 2px;
 }
 
 .input-row {
@@ -387,7 +389,7 @@ p {
 .hill-button{
     border:none;
     font-size:3em;
-    transition: transform 0.4s; /* This will make the rotation smooth */
+    transition: transform 0.3s; /* This will make the rotation smooth */
     transform-origin: center;
 }
 
@@ -413,19 +415,23 @@ p {
 .vert-input {
     width: 4em;
 }
-
+/* 
 .rise-run-togglebox {
-    border:solid red 2px;
-}
+} */
 
 
 /* Grade unit selector */
 
 .unit-row {
+    white-space: nowrap;
     width:100%;
     display:flex;
     justify-content: center;
     gap: 0.2em;
+}
+
+.hill-outer, .incline-box {
+    min-height: 5em;
 }
 
 
@@ -471,6 +477,10 @@ p {
     transform: rotateZ(180deg); /* This will flip the button 180 degrees along the Y axis */
 }
 
+.mirrored {
+    transform: scaleX(-1);
+}
+
 .i-note {
     outline: none;
     cursor: pointer;
@@ -505,7 +515,7 @@ footer a{
 
 /* Hover only on mice */
 @media (hover: hover) {
-    .svg-arrow:hover, .pct-button:hover, .unit-toggle:hover {
+    .svg-arrow:hover, .pct-button:hover, .unit-toggle:hover, .hill-toggle:hover {
         background-color: var(--hover-color);
         box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.12);
     }
@@ -525,7 +535,7 @@ footer a{
         color: var(--dark-accent);
         cursor: pointer;
     }
-    .unit-toggle:hover{
+    .unit-toggle:hover, .hill-toggle:hover {
         color:black;
     }
 
@@ -571,4 +581,10 @@ footer a{
     font-size: 1.4rem;
     color: gray;
     text-decoration: none;;
+}
+
+
+
+.hidden {
+    display: none;
 }
