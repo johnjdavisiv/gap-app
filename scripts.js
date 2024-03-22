@@ -2,24 +2,101 @@
 
 console.log('Script loaded')
 
+//for flip I think
+const TRANSITION_DUR_MS = 400;
+
 // TODO: 
 
-// Fix the bug with reverting / inverting negatives
-// Total cluster, need to redo it from scratch and cahse sign flips
+// Map out actual equivalency calculations
 
-// Get things to flip correct when you do uphill/downhill
+// Solve poplynomial / invert??? 
 
-// implement unit changes on output
+// Set up appearing alerts for various "bad" situations 
+//  - walking more efficint
+//  - downhill too steep to take advantage of
+//  - outside range of reliable data
+
+// see Gdoc for notes on what %s these ssohudl be at
+
+// As interim, can just display +/- O2 as delta
+// instaed fo the real equvialent pace
 
 //Get intaneral state of input speed and output speed, m/s
 
-//tnraslte m/s to pace for output (with conversions)
+
+
+//leave output units for later, will let me 
+//fudge the text as a debug
 
 
 
-// Input pace toggles
 
-const TRANSITION_DUR_MS = 400;
+ // ------- Core calculations ------- 
+
+ // --- Load GAM from R and use async/await to query it
+ //       (gam is just exported as json for lookup table)
+let blackGam; // Placeholder for loaded data
+
+// Async function to load data
+async function loadData() {
+    const response = await fetch('data/black_data_gam.json');
+    if (!response.ok) {
+        throw new Error('Network response was not ok');
+    }
+    return response.json(); // Directly return the parsed JSON
+}
+
+// Initialize data loading and handle errors
+let dataLoadedPromise = loadData().then(data => blackGam = data)
+
+// Gam lookup table
+// Use linear interpolation to seek what we need in the gam lpmatrix
+function lookup(x, col_name) {
+   const speed = blackGam.speed_m_s;
+   const energy = blackGam[col_name];
+
+   // Check if x is outside the range of speed_m_s
+   if (x < speed[0] || x > speed[speed.length - 1]) {
+       throw new Error('x is outside of the range of the speed_m_s column');
+   } // consider modifying this to linearly extrapolate?
+
+   // Find the indices that x falls between
+   let i = 0;
+   for (; i < speed.length - 1; i++) {
+       if (x >= speed[i] && x <= speed[i + 1]) {
+           break;
+       }
+   }
+   // Linear interpolation
+   // y = y0 + (y1 - y0) * ((x - x0) / (x1 - x0))
+   const interpolatedValue = energy[i] + (energy[i + 1] - energy[i]) * ((x - speed[i]) / (speed[i + 1] - speed[i]));
+   return interpolatedValue;
+}
+
+//GPT says I should use try-catch here, ah well
+async function queryGam(xq, seek_col){
+   await dataLoadedPromise;
+   return lookup(xq, seek_col)
+}
+
+
+// Example of safely using performLookup later in the application
+queryGam(2.05, 'energy_j_kg_m').then(rr => console.log(rr))
+
+console.log('-- Minetti test -- ')
+console.log(calcDeltaO2(0.1))
+console.log('---------------')
+
+// Minetti 2002 quintic polynomial for O2 cost
+function calcDeltaO2(x_grade){
+    // input   - x_grade is gradient in decimal (0.10 for 10% grade, can be negative)
+    // returns - Cr - *added* cost of running, above level ground intensity, in J/kg/m
+
+    let Cr = 155.4*x_grade**5 - 30.4*x_grade**4 - 43.3*x_grade**3 + 46.3*x_grade**2 + 19.5*x_grade
+    // NOTE: this leaves out intercept of 3.6 which is interpretable as Cr at flat ground
+    // We use Black equation instead to account for speed effects on Cr
+    return Cr 
+}
 
 
 // --- Incrementing pace dials --- 
@@ -721,9 +798,6 @@ function updateResult(){
 
     // farm to a function so we can 
 
-
-
-
 }
 
 // Humm well... we can load the data! 
@@ -754,38 +828,4 @@ function updateResult(){
 // May need to detect if user inputs a negative sign in text input! 
 //Should accept that as valid and switch mode to dnegative
 // if entry is on keyboard, should expect negatives here
-
-
-// detect and change "pace on a" to "pace on an" for uphill and other a/an stuff
-
-// Asynchronously load the JSON data
-async function loadData() {
-try {
-    const response = await fetch('data/black_data_gam.json'); // Adjust the path to where your JSON file is located
-    if (!response.ok) {
-        throw new Error('Network response was not ok');
-    }
-    const data = await response.json();
-    return data; // Returns the loaded JSON data
-} catch (error) {
-    console.error('There was a problem loading the data:', error);
-}
-}
-
-// Example usage of loadData
-(async () => {
-const data = await loadData();
-if (data) {
-    // Works!!!!
-    // console.log(data); // Now you have your data as a variable
-
-    // // Example: Access and log the arrays
-    // console.log("Speed (m/s):", data.speed_m_s);
-    // console.log("Energy (J/kg*m):", data.energy_j_kg_m);
-    // console.log("Energy (J/kg*s):", data.energy_j_kg_s);
-
-    // Further processing of data can be done here
-}
-})();
-
 
