@@ -7,9 +7,10 @@ const TRANSITION_DUR_MS = 400;
 
 // TODO: 
 
-// Map out actual equivalency calculations
+// Continue calcs
 
-// Solve poplynomial / invert??? 
+// add m/s to calculator
+
 
 // Set up appearing alerts for various "bad" situations 
 //  - walking more efficint
@@ -92,10 +93,10 @@ function calcDeltaO2(x_grade){
     // input   - x_grade is gradient in decimal (0.10 for 10% grade, can be negative)
     // returns - Cr - *added* cost of running, above level ground intensity, in J/kg/m
 
-    let Cr = 155.4*x_grade**5 - 30.4*x_grade**4 - 43.3*x_grade**3 + 46.3*x_grade**2 + 19.5*x_grade
+    let delta_Cr = 155.4*x_grade**5 - 30.4*x_grade**4 - 43.3*x_grade**3 + 46.3*x_grade**2 + 19.5*x_grade
     // NOTE: this leaves out intercept of 3.6 which is interpretable as Cr at flat ground
     // We use Black equation instead to account for speed effects on Cr
-    return Cr 
+    return delta_Cr 
 }
 
 
@@ -781,10 +782,39 @@ function updateResult(){
     console.log(hill_mode)
     //console.log("do result updates...")
 
-    //updates input_speed
+    //updates input_m_s and input_grade
     readCurrentSpeed()
     readCurrentGrade()
+    //input_m_s
+    //input_grade
     console.log(input_grade)
+
+    //Calculate delta in Cr attributable to incline/decline
+
+    let delta_Cr = calcDeltaO2(input_grade)
+
+    // Example of safely using performLookup later in the application
+    queryGam(2.05, 'energy_j_kg_m').then(rr => console.log(rr))
+
+    // if async was not an issue
+    flat_Cr_permeter = queryGam(input_m_s,'energy_j_kg_m')
+
+    //WARNING: Only works for forward mode! 
+    //    Need to think about reverse mode converion process
+
+    //Total cost to run at input_m_s on a hill of input_grade
+    let total_Cr_permeter = flat_Cr_permeter + delta_Cr
+    let total_Cr_persec = total_Cr_permeter*input_m_s //now in W/kg
+
+    //Find the x_speed value that gives energy_j_kg_s value in blackGam that is closest to total_Cr_persec
+    // that x_speed is your GAP
+
+    // ... then convert internal m/s representation to output state (/mi, /km, mph, kmh, m/s)
+
+
+
+
+
 
     //Do minetti equations...
     // calcOxygenCost()
@@ -800,32 +830,12 @@ function updateResult(){
 
 }
 
-// Humm well... we can load the data! 
-//  
-//  Now I think next step is DOM manipulation basics
-// 
 
 // TODO:
 
-// 1) Get pace flippers working and printing pace to console
-// 2) Get unit conversion toggles changing active state
-//     (leave actual conversions of result for the end)
-// 3) Get << < > >> arrows working
-// 4) Get mph and km/h on input to change to [DD] . [D] format
-//     (i.e. one decimal place, one toggle for each, . instead of :)
-// 5) Get grade toggles working and changing text
-//    (a) degrees can still use << < DD* > >> with +1 and +5
-//    (b) rise/run will...probs need text input?
-//    (c) ditto for vert speed
-//    (d) changing units should NOT screw you over (ie lose old result)
-//        ...so track state internally, always as grade?
-//        and maybe "lift" to desired unit? 
-// 6) Implement unit conversions for results
 // 7) Implement Minetti equation + gam and run console tests
 // 8) Implement alert/warning insertions when outside ranges
 
 
-// May need to detect if user inputs a negative sign in text input! 
-//Should accept that as valid and switch mode to dnegative
-// if entry is on keyboard, should expect negatives here
+// 6) Implement unit conversions for results
 
