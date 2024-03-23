@@ -2,8 +2,172 @@
 
 console.log('Script loaded')
 
+// TODO: 
+
+// We do need to go back to using BlackGam for intecept
+// Because if oyu don't, it's not identiy-invertible! 
+
+// i.e. 0% grade cals do not give same speed as input! 
+
+// Think more carefully aobut solutions to this wiht a fresh brain
+// And maybvwe a nice cup of tea 
+
+
 //for flip I think
 const TRANSITION_DUR_MS = 400;
+
+
+// json is not that big, just load here
+// (because I don't know how to async/await!)
+
+const blackGam = {
+    "speed_m_s": [0.5, 0.65, 0.8, 0.95, 1.1, 1.25, 1.4, 1.55, 1.7, 1.85, 2, 2.15, 2.3, 2.45, 2.6, 2.75, 2.9, 3.05, 3.2, 3.35, 3.5, 3.65, 3.8, 3.95, 4.1, 4.25, 4.4, 4.55, 4.7, 4.85, 5, 5.15, 5.3, 5.45, 5.6, 5.75, 5.9, 6.05, 6.2, 6.35, 6.5, 6.65, 6.8, 6.95, 7.1, 7.25, 7.4, 7.55, 7.7, 7.85, 8],
+    "energy_j_kg_m": [5.7137, 5.5985, 5.4833, 5.3682, 5.253, 5.1378, 5.0227, 4.9075, 4.7923, 4.6771, 4.562, 4.4468, 4.3317, 4.2187, 4.1115, 4.0139, 3.9297, 3.8628, 3.816, 3.7872, 3.7732, 3.7707, 3.7763, 3.7868, 3.8002, 3.8157, 3.8329, 3.8512, 3.8701, 3.8892, 3.9082, 3.9273, 3.9463, 3.9654, 3.9844, 4.0035, 4.0225, 4.0416, 4.0606, 4.0797, 4.0987, 4.1178, 4.1368, 4.1559, 4.1749, 4.194, 4.213, 4.2321, 4.2511, 4.2702, 4.2892],
+    "energy_j_kg_s": [2.8568, 3.639, 4.3867, 5.0998, 5.7783, 6.4223, 7.0317, 7.6066, 8.1469, 8.6527, 9.1239, 9.5606, 9.9629, 10.3358, 10.6898, 11.0381, 11.3962, 11.7817, 12.2112, 12.6872, 13.2062, 13.763, 14.3499, 14.958, 15.5808, 16.2168, 16.8647, 17.523, 18.1896, 18.8625, 19.5411, 20.2255, 20.9155, 21.6113, 22.3128, 23.02, 23.7329, 24.4516, 25.1759, 25.906, 26.6418, 27.3833, 28.1305, 28.8834, 29.6421, 30.4064, 31.1765, 31.9523, 32.7338, 33.521, 34.3139]
+  }
+// Update later with denser grid  
+
+
+function getEquivFlatSpeed(W_kg) {
+    // Works!!
+    // Use blackGam to find what flat-ground speed has the metabolic power closest to a given metabolic power
+    const speed = blackGam.speed_m_s;
+    const met_power = blackGam['energy_j_kg_s'];
+    // Check if x is outside the range of speed_m_s
+    if (W_kg < met_power[0] || W_kg > met_power[met_power.length - 1]) {
+        throw new Error('W_kg is outside of the range of the energy_kg_s');
+    } 
+
+    // Luckily, W_kg as fxn of speed is monotonic! So we can start slow and go up
+    // Find the met power that input W_kg falls between
+    let i = 0;
+    for (; i < met_power.length - 1; i++) {
+        if (W_kg >= met_power[i] && W_kg <= met_power[i + 1]) {
+            break;
+        }
+    }
+
+    // Linear interpolation
+    // y = y0 + (y1 - y0) * ((x - x0) / (x1 - x0))
+    const eq_speed = speed[i] + (speed[i + 1] - speed[i]) * ((W_kg - met_power[i]) / (met_power[i + 1] - met_power[i]));
+    // f(x) approximation
+    return eq_speed;
+}
+
+// Given: speed on flat + grade
+// 1. Convert grade to gradient (may be ft/mile, meters per min, etc)
+// 2. Convert speed (in min/mi, min/km, km/hr, or mi/hr) to m/s
+// 3. Calculate expected energetic cost in J/kg/m using Black equations
+// 4. Use Minetti polynomial to calculate added energetic cost (in J/kg/min) of incline or decline
+
+// Now we have expected energetic cost for treadmill
+
+// in J/kg/meter
+// Convert to Joules per kg per minute by multiplying by speed, gives J/kg/s
+
+
+// Go back to the polynomial and solve for equivalent speed that gives you the calculated energetic cost!
+// This is the “inverting” part…
+// Will be much easier when using J/kg/s since result is monotonic
+
+
+// Update results on page
+function updateResult(){
+    console.log(hill_mode)
+    //console.log("do result updates...")
+
+    //updates input_m_s and input_grade
+    readCurrentSpeed()
+    readCurrentGrade()
+    //input_m_s
+    //input_grade
+    console.log(input_grade)
+
+    // FORWARD MODE
+
+    // 6:00/mi
+    // pace on an 
+    // uphill with a
+    // 5% grade
+    // is the same effort as
+    // 5:15/mi
+    // on flat ground
+
+    console.log('*********')
+    // Calculate expected CoT for running up this grade
+    let Cr_hill = calcHillCoT(input_grade) // in J/kg/m
+    console.log(Cr_hill)
+    console.log(`Cr on hill (J/kg/m) is: ${Cr_hill}`);
+
+    let Cr_hill_W_kg = Cr_hill*input_m_s // Multiply by speed to get metabolic power (rate of EE/kg)
+    console.log(`Cr on hill (W/kg) is: ${Cr_hill_W_kg}`);
+    
+    let eq_flat_speed = getEquivFlatSpeed(Cr_hill_W_kg)
+    console.log(`eq. flat speed (m/s) is: ${eq_flat_speed}`);
+    console.log('*****')    
+
+
+    // Now convert eq_falt_speed to output units
+
+
+    // Solve for flat speed that is equal to this Cr as a 
+    
+    // Calculate cost of running on flat ground at this speed.  
+    let flat_Cr_permeter = lookupSpeed(input_m_s,'energy_j_kg_m')
+
+
+    //WARNING: Only works for forward mode! 
+    //    Need to think about reverse mode converion process
+
+    //Total cost to run at input_m_s on a hill of input_grade
+    // let total_Cr_permeter = flat_Cr_permeter + delta_Cr
+    // let total_Cr_persec = total_Cr_permeter*input_m_s //now in W/kg
+
+    //Find the x_speed value that gives energy_j_kg_s value in blackGam that is closest to total_Cr_persec
+    // that x_speed is your GAP
+
+
+}
+
+
+// Minetti 2002 quintic polynomial for O2 cost
+function calcHillCoT(x_grade){
+    // input   - x_grade is gradient in decimal (0.10 for 10% grade, can be negative)
+    // returns - Cr - *added* cost of running, above level ground intensity, in J/kg/m
+    let Cr_hill = 155.4*x_grade**5 - 30.4*x_grade**4 - 43.3*x_grade**3 + 46.3*x_grade**2 + 19.5*x_grade + 3.6
+    return Cr_hill
+}
+
+
+
+
+
+// Get f(x_speed) for either J/kg/m or J/kg/s (=W/kg) in Black data
+// which is flat running from ~2.2-4.5
+function lookupSpeed(x, col_name) {
+    const speed = blackGam.speed_m_s;
+    const energy = blackGam[col_name];
+    // Check if x is outside the range of speed_m_s
+    if (x < speed[0] || x > speed[speed.length - 1]) {
+        throw new Error('x is outside of the range of the speed_m_s column');
+    } // consider modifying this to linearly extrapolate?
+    // Find the indices that x falls between
+    let i = 0;
+    for (; i < speed.length - 1; i++) {
+        if (x >= speed[i] && x <= speed[i + 1]) {
+            break;
+        }
+    }
+    // Linear interpolation
+    // y = y0 + (y1 - y0) * ((x - x0) / (x1 - x0))
+    const f_x = energy[i] + (energy[i + 1] - energy[i]) * ((x - speed[i]) / (speed[i + 1] - speed[i]));
+    // f(x) approximation
+    return f_x;
+ }
+
+
+
+
 
 // TODO: 
 
@@ -28,76 +192,11 @@ const TRANSITION_DUR_MS = 400;
 
 //leave output units for later, will let me 
 //fudge the text as a debug
+ 
+// console.log('-- Minetti test -- ')
+// console.log(calcDeltaO2(0.1))
+// console.log('---------------')
 
-
-
-
- // ------- Core calculations ------- 
-
- // --- Load GAM from R and use async/await to query it
- //       (gam is just exported as json for lookup table)
-let blackGam; // Placeholder for loaded data
-
-// Async function to load data
-async function loadData() {
-    const response = await fetch('data/black_data_gam.json');
-    if (!response.ok) {
-        throw new Error('Network response was not ok');
-    }
-    return response.json(); // Directly return the parsed JSON
-}
-
-// Initialize data loading and handle errors
-let dataLoadedPromise = loadData().then(data => blackGam = data)
-
-// Gam lookup table
-// Use linear interpolation to seek what we need in the gam lpmatrix
-function lookup(x, col_name) {
-   const speed = blackGam.speed_m_s;
-   const energy = blackGam[col_name];
-
-   // Check if x is outside the range of speed_m_s
-   if (x < speed[0] || x > speed[speed.length - 1]) {
-       throw new Error('x is outside of the range of the speed_m_s column');
-   } // consider modifying this to linearly extrapolate?
-
-   // Find the indices that x falls between
-   let i = 0;
-   for (; i < speed.length - 1; i++) {
-       if (x >= speed[i] && x <= speed[i + 1]) {
-           break;
-       }
-   }
-   // Linear interpolation
-   // y = y0 + (y1 - y0) * ((x - x0) / (x1 - x0))
-   const interpolatedValue = energy[i] + (energy[i + 1] - energy[i]) * ((x - speed[i]) / (speed[i + 1] - speed[i]));
-   return interpolatedValue;
-}
-
-//GPT says I should use try-catch here, ah well
-async function queryGam(xq, seek_col){
-   await dataLoadedPromise;
-   return lookup(xq, seek_col)
-}
-
-
-// Example of safely using performLookup later in the application
-queryGam(2.05, 'energy_j_kg_m').then(rr => console.log(rr))
-
-console.log('-- Minetti test -- ')
-console.log(calcDeltaO2(0.1))
-console.log('---------------')
-
-// Minetti 2002 quintic polynomial for O2 cost
-function calcDeltaO2(x_grade){
-    // input   - x_grade is gradient in decimal (0.10 for 10% grade, can be negative)
-    // returns - Cr - *added* cost of running, above level ground intensity, in J/kg/m
-
-    let delta_Cr = 155.4*x_grade**5 - 30.4*x_grade**4 - 43.3*x_grade**3 + 46.3*x_grade**2 + 19.5*x_grade
-    // NOTE: this leaves out intercept of 3.6 which is interpretable as Cr at flat ground
-    // We use Black equation instead to account for speed effects on Cr
-    return delta_Cr 
-}
 
 
 // --- Incrementing pace dials --- 
@@ -776,60 +875,6 @@ function readCurrentGrade(){
 
 var input_m_s = 4.4704 //6:00 mile pace as input initail
 var input_grade = 0.05 // Keep as decimal because that's what minetti used
-
-// Update results on page
-function updateResult(){
-    console.log(hill_mode)
-    //console.log("do result updates...")
-
-    //updates input_m_s and input_grade
-    readCurrentSpeed()
-    readCurrentGrade()
-    //input_m_s
-    //input_grade
-    console.log(input_grade)
-
-    //Calculate delta in Cr attributable to incline/decline
-
-    let delta_Cr = calcDeltaO2(input_grade)
-
-    // Example of safely using performLookup later in the application
-    queryGam(2.05, 'energy_j_kg_m').then(rr => console.log(rr))
-
-    // if async was not an issue
-    flat_Cr_permeter = queryGam(input_m_s,'energy_j_kg_m')
-
-    //WARNING: Only works for forward mode! 
-    //    Need to think about reverse mode converion process
-
-    //Total cost to run at input_m_s on a hill of input_grade
-    let total_Cr_permeter = flat_Cr_permeter + delta_Cr
-    let total_Cr_persec = total_Cr_permeter*input_m_s //now in W/kg
-
-    //Find the x_speed value that gives energy_j_kg_s value in blackGam that is closest to total_Cr_persec
-    // that x_speed is your GAP
-
-    // ... then convert internal m/s representation to output state (/mi, /km, mph, kmh, m/s)
-
-
-
-
-
-
-    //Do minetti equations...
-    // calcOxygenCost()
-    // findEquivalentFlatSpeed()
-
-
-    //Get current input speed
-   
-
-    // IMPORTANT - we need to update global speed in m/s each time a button is pressed
-
-    // farm to a function so we can 
-
-}
-
 
 // TODO:
 
