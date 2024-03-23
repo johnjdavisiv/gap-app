@@ -1,8 +1,20 @@
 
-
+console.clear();
 console.log('Script loaded')
 
 // TODO: 
+
+// Add grade percents to degrees, rise/run, and vert speed
+
+// Figure out reverse mode
+
+// Re-export GAM aat higher range and resolution
+
+// Figure out error handdin gbetter
+
+// Check in R against ground truth equations
+
+
 
 // We do need to go back to using BlackGam for intecept
 // Because if oyu don't, it's not identiy-invertible! 
@@ -11,6 +23,9 @@ console.log('Script loaded')
 
 // Think more carefully aobut solutions to this wiht a fresh brain
 // And maybvwe a nice cup of tea 
+
+// Bascially want f_eq(x_speed, 0% grade) to give x_speed
+//  (for any x_speed!!)
 
 
 //for flip I think
@@ -28,9 +43,43 @@ const blackGam = {
 // Update later with denser grid  
 
 
+
+// Minetti 2002 quintic polynomial for (change in) energy cost
+function calcDeltaEC(x_grade){
+    // input   - x_grade is gradient in decimal (0.10 for 10% grade, can be negative)
+    // returns - Cr - *added* cost of running, above level ground intensity, in J/kg/m
+    let delta_Cr = 155.4*x_grade**5 - 30.4*x_grade**4 - 43.3*x_grade**3 + 46.3*x_grade**2 + 19.5*x_grade
+    // Note we exclude the intercept - use Black data instead
+    return delta_Cr
+}
+
+// Get f(x_speed) for either J/kg/m or J/kg/s (=W/kg) in Black data
+// which is flat running data from ~2.2-4.7 m/s
+function lookupSpeed(x, col_name) {
+    const speed = blackGam.speed_m_s;
+    const energy = blackGam[col_name];
+    // Check if x is outside the range of speed_m_s
+    if (x < speed[0] || x > speed[speed.length - 1]) {
+        throw new Error('x is outside of the range of the speed_m_s column');
+    } // consider modifying this to linearly extrapolate?
+    // Find the indices that x falls between
+    let i = 0;
+    for (; i < speed.length - 1; i++) {
+        if (x >= speed[i] && x <= speed[i + 1]) {
+            break;
+        }
+    }
+    // Linear interpolation
+    // y = y0 + (y1 - y0) * ((x - x0) / (x1 - x0))
+    const f_x = energy[i] + (energy[i + 1] - energy[i]) * ((x - speed[i]) / (speed[i + 1] - speed[i]));
+    // f(x) approximation
+    return f_x;
+ }
+
+
+ // Use blackGam to find what flat-ground speed has the metabolic power closest to a given metabolic power
 function getEquivFlatSpeed(W_kg) {
     // Works!!
-    // Use blackGam to find what flat-ground speed has the metabolic power closest to a given metabolic power
     const speed = blackGam.speed_m_s;
     const met_power = blackGam['energy_j_kg_s'];
     // Check if x is outside the range of speed_m_s
@@ -71,6 +120,82 @@ function getEquivFlatSpeed(W_kg) {
 // Will be much easier when using J/kg/s since result is monotonic
 
 
+
+
+
+// -----------------------------------------------
+//
+//   Convert pace
+//
+// ----------------------------------------------
+
+let conv_dec
+
+const convert_dict = {
+    // functions to convert m/s to [output unit, as key]
+    '/mi':function (m_s){
+        // to decimal minutes per mile
+        conv_dec = 1609.344/(m_s*60)
+        console.log(conv_dec)
+        console.log(decimal_pace_to_string(conv_dec))
+        return decimal_pace_to_string(conv_dec);
+    },
+    '/km':function (m_s){
+        // to decimal minutes per mile
+        conv_dec = 1000/(m_s*60)
+        return decimal_pace_to_string(conv_dec);
+    },
+    'mph':function (m_s){
+        conv_dec = m_s*2.23694
+        return conv_dec.toFixed(1);
+    },
+    'km/h':function (m_s){
+        conv_dec = m_s*3.6
+        return conv_dec.toFixed(1);
+    },
+    'm/s':function (m_s){
+        // ez mode lol
+        return m_s.toFixed(1);
+    }
+}
+
+function decimal_pace_to_string(pace_decimal){
+    let pace_min = Math.floor(pace_decimal)
+    //Could be zero!! 
+    let pace_sec = (pace_decimal - pace_min)*60
+    //e.g. 9.50 --> 30 
+
+    //Deal with e.g. 3:59.9 --> 4:00.0
+    if (Math.round(pace_sec) === 60) {
+        pace_sec = 0
+        pace_min = pace_min+1;
+    } else {
+        pace_sec = Math.round(pace_sec);
+    }
+    //To formatted string
+    res = `${pace_min}:${pace_sec.toString().padStart(2,'0')}` 
+    return res
+}
+
+function updateOutput(eq_flat_speed){
+    let out_text = document.querySelector('#output-text')
+    let out_units = document.querySelector('#output-units')
+    let convert_text = ''
+
+    if (!Number.isFinite(eq_flat_speed) || eq_flat_speed == 0){
+        // If we get any funny business...
+        convert_text = '🤔'
+    } else {
+        console.log(out_units.textContent)
+        const convert_fxn = convert_dict[out_units.textContent]
+        convert_text = convert_fxn(eq_flat_speed)
+    }
+
+    //Update text in doc
+    out_text.textContent = convert_text
+}
+
+
 // Update results on page
 function updateResult(){
     console.log(hill_mode)
@@ -81,7 +206,6 @@ function updateResult(){
     readCurrentGrade()
     //input_m_s
     //input_grade
-    console.log(input_grade)
 
     // FORWARD MODE
 
@@ -93,77 +217,31 @@ function updateResult(){
     // 5:15/mi
     // on flat ground
 
-    console.log('*********')
-    // Calculate expected CoT for running up this grade
-    let Cr_hill = calcHillCoT(input_grade) // in J/kg/m
-    console.log(Cr_hill)
-    console.log(`Cr on hill (J/kg/m) is: ${Cr_hill}`);
+    //
 
-    let Cr_hill_W_kg = Cr_hill*input_m_s // Multiply by speed to get metabolic power (rate of EE/kg)
-    console.log(`Cr on hill (W/kg) is: ${Cr_hill_W_kg}`);
-    
-    let eq_flat_speed = getEquivFlatSpeed(Cr_hill_W_kg)
+    let flat_Cr = lookupSpeed(input_m_s, 'energy_j_kg_m')
+    let delta_Cr = calcDeltaEC(input_grade)
+    let total_Cr = flat_Cr + delta_Cr
+    // To W/kg
+    let total_Cr_W_kg = total_Cr*input_m_s
+
+    // Solve for equivalent flat speed 
+    let eq_flat_speed = getEquivFlatSpeed(total_Cr_W_kg)
     console.log(`eq. flat speed (m/s) is: ${eq_flat_speed}`);
-    console.log('*****')    
 
-
-    // Now convert eq_falt_speed to output units
-
-
+    updateOutput(eq_flat_speed);
     // Solve for flat speed that is equal to this Cr as a 
     
-    // Calculate cost of running on flat ground at this speed.  
-    let flat_Cr_permeter = lookupSpeed(input_m_s,'energy_j_kg_m')
 
 
     //WARNING: Only works for forward mode! 
     //    Need to think about reverse mode converion process
 
-    //Total cost to run at input_m_s on a hill of input_grade
-    // let total_Cr_permeter = flat_Cr_permeter + delta_Cr
-    // let total_Cr_persec = total_Cr_permeter*input_m_s //now in W/kg
-
-    //Find the x_speed value that gives energy_j_kg_s value in blackGam that is closest to total_Cr_persec
-    // that x_speed is your GAP
-
-
-}
-
-
-// Minetti 2002 quintic polynomial for O2 cost
-function calcHillCoT(x_grade){
-    // input   - x_grade is gradient in decimal (0.10 for 10% grade, can be negative)
-    // returns - Cr - *added* cost of running, above level ground intensity, in J/kg/m
-    let Cr_hill = 155.4*x_grade**5 - 30.4*x_grade**4 - 43.3*x_grade**3 + 46.3*x_grade**2 + 19.5*x_grade + 3.6
-    return Cr_hill
 }
 
 
 
 
-
-// Get f(x_speed) for either J/kg/m or J/kg/s (=W/kg) in Black data
-// which is flat running from ~2.2-4.5
-function lookupSpeed(x, col_name) {
-    const speed = blackGam.speed_m_s;
-    const energy = blackGam[col_name];
-    // Check if x is outside the range of speed_m_s
-    if (x < speed[0] || x > speed[speed.length - 1]) {
-        throw new Error('x is outside of the range of the speed_m_s column');
-    } // consider modifying this to linearly extrapolate?
-    // Find the indices that x falls between
-    let i = 0;
-    for (; i < speed.length - 1; i++) {
-        if (x >= speed[i] && x <= speed[i + 1]) {
-            break;
-        }
-    }
-    // Linear interpolation
-    // y = y0 + (y1 - y0) * ((x - x0) / (x1 - x0))
-    const f_x = energy[i] + (energy[i + 1] - energy[i]) * ((x - speed[i]) / (speed[i + 1] - speed[i]));
-    // f(x) approximation
-    return f_x;
- }
 
 
 
@@ -304,6 +382,8 @@ function increment_minutes(digit_object,change){
     }
 }
 
+// ------ Unit selectors (Input / output) -------
+
 
 // Input unit selector
 const pace_buttons = document.querySelectorAll('.pace-toggle');
@@ -318,7 +398,7 @@ pace_buttons.forEach(button => {
     });
 });
 
-// Input unit selector
+// Output unit selector
 const output_buttons = document.querySelectorAll('.output-toggle');
 
 output_buttons.forEach(button => {
@@ -328,6 +408,7 @@ output_buttons.forEach(button => {
         // Toggle the active state of the clicked button
         e.target.classList.toggle('active');
         setOutputText(button);
+        updateResult();
     });
 });
 
@@ -388,6 +469,8 @@ function setPaceText(button){
         speed_units.textContent = button.textContent;
         // function like pass_speed_to_pace()
     }
+
+    updateResult();
 }
 
 var output_text = document.querySelector('#output-text')
