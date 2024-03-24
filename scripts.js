@@ -5,6 +5,17 @@ document.addEventListener('DOMContentLoaded', (event) => {
 });
 
 
+// TODO
+
+// FIX the disaster that is vertical speed
+
+// need to avodi grade tendng to infintis
+
+// What if gridsearch occured /in [-1,1]?
+
+// have a start to it but kinda giv eup
+
+
 
 
 // Uphill or downhill button
@@ -13,6 +24,14 @@ let uphill_or_downhill = "uphill"
 let calc_mode = "pace"
 let pace_mode = "pace"
 let output_pace_mode = 'pace'
+
+
+
+let vert_speed_int = 1000 //hardcoded, care
+let vert_speed_m_s = vert_speed_int*0.3048/(60*60) //initial inptu is ft/hr
+
+let input_m_s = 3.83 //6:00 mile pace as input initail
+let input_grade = 0.05 // Keep as decimal because that's what minetti used
 
 
 // TODO: 
@@ -173,7 +192,7 @@ const convert_dict = {
     },
     'm/s':function (m_s){
         // ez mode lol
-        return m_s.toFixed(1);
+        return m_s.toFixed(2);
     }
 }
 
@@ -246,7 +265,14 @@ function updateResult(){
         console.log(`eq. flat speed (m/s) is: ${eq_flat_speed}`);
         updateOutput(eq_flat_speed);
 
-    } else if (calc_mode == 'effort'){
+    } else if (calc_mode == 'effort' && hill_mode == 'vert speed'){
+        // REVERSE MODE, hard version
+        console.log('humm')
+        let solve_speed = solveVertSpeed(input_m_s, vert_speed_m_s)
+        updateOutput(solve_speed);
+
+    } else {
+        // REVERSE MODE
         console.log('effort mode')
         let target_W_kg = lookupSpeed(input_m_s, 'energy_j_kg_s')
         let resultant_speed = target_W_kg/total_Cr
@@ -260,7 +286,7 @@ function updateResult(){
     // Solve for equivalent flat speed 
     
 
-    // REVERSE MODE
+    
 
     // Once yu have total Cr you just need to find the 
     // speed in m/s that gives speed*total_Cr = target_W_kg
@@ -495,7 +521,7 @@ function setPaceText(button){
         pace_units.textContent = button.textContent;
         // function like pass_pace_to_speed()
     }
-    if (button.textContent == "mph" || button.textContent == "km/h") {
+    if (button.textContent == "mph" || button.textContent == "km/h" || button.textContent == "m/s") {
         setMode("speed");
         speed_units.textContent = button.textContent;
         // function like pass_speed_to_pace()
@@ -523,7 +549,7 @@ function setOutputText(button){
         // function like pass_pace_to_speed()
         output_pace_mode = 'pace'
     }
-    if (button.textContent == "mph" || button.textContent == "km/h") {
+    if (button.textContent == "mph" || button.textContent == "km/h" || button.textContent == "m/s") {
         // setMode("speed");
         // speed_units.textContent = button.textContent;
         // function like pass_speed_to_pace()
@@ -543,7 +569,6 @@ hill_indicator.addEventListener('click', (e) => {
     updateResult()
 });
 
-let vert_speed_int = 1000 //hardcoded, care
 
 let vert_speed_input = document.querySelector('#vert-speed-input')
 vert_speed_input.addEventListener("change", (e) => {
@@ -640,7 +665,6 @@ function negateIncline(){
     // flip rise and vert IF NEEDED
     if (vert_speed_int < 0 && uphill_or_downhill == "uphill" || 
     vert_speed_int > 0 && uphill_or_downhill == "downhill") {
-
         negateVertSpeed() 
     }
 
@@ -972,6 +996,8 @@ function readCurrentSpeed(){
         } else if (speed_units == "km/h"){
             //Convert to m/s
             input_m_s = dec_speed*1000/3600
+        } else if (speed_units == "m/s"){
+            input_m_s = dec_speed // lol
         }
     }
 }
@@ -1015,22 +1041,144 @@ function readCurrentGrade(){
         //convert vert speed to meters per second
         if (vert_text.textContent == 'feet per hour') {
             //convert to m/hr, then m/s
-            var vert_speed_m_s = vert_speed_int*0.3048/(60*60)
+            vert_speed_m_s = vert_speed_int*0.3048/(60*60)
         } else if (vert_text.textContent == 'meters per hour') {
             //..
-            var vert_speed_m_s = vert_speed_int/(60*60)
+            vert_speed_m_s = vert_speed_int/(60*60)
         }
-        //do on velocity scale, doesn't matter
-        var run_x_meters = Math.sqrt(input_m_s**2 - vert_speed_m_s**2)
-        //techncially input speed is parallel to slope, not x-axis speed
-        //only matters for extreme steep slopes
-        input_grade = vert_speed_m_s/run_x_meters
+
+        if (calc_mode == "pace") {
+            // this one is the simpler one
+            //do on velocity scale, doesn't matter
+            var run_x_meters = Math.sqrt(input_m_s**2 - vert_speed_m_s**2)
+            //techncially input speed is parallel to slope, not x-axis speed
+            //only matters for extreme steep slopes
+            input_grade = vert_speed_m_s/run_x_meters
+        } else {
+            //solve vertSpeed(input_m_s, vert_speed_m_s)
+            console.log('pANICCCCC!!!')
+        }
     }
 }
 
+function solveVertSpeed(input_m_s, vert_spd){
+    // Need grade AND v_actual
+    // Solving effort-based vert speed is super hard actually
 
-var input_m_s = 4.4704 //6:00 mile pace as input initail
-var input_grade = 0.05 // Keep as decimal because that's what minetti used
+    // Shooting for this metabolic power, it's W/kg at input m/s onf lat groudn
+    target_W_kg = lookupSpeed(input_m_s, 'energy_j_kg_s')
+
+    //approximation for now
+    let Cr_flat = 3.81
+
+    // while candidate W_kg is less than target W/kg
+
+    // vx_candidate = 0.1
+    // vx_candidate ++
+
+    // trial W/kg = Cr_flat + calcDeltaEC(vx_candidate/vert_speed_m_x)
+
+    function try_grade(grade_trial, vy){
+        // Grade sweep should be more effective
+        trial_vx = vy/grade_trial
+        let try_soln = (Cr_flat + calcDeltaEC(grade_trial))*Math.sqrt(vx**2 + vy**2)
+        console.log(`Try soln: ${try_soln.toFixed(2)}`)
+        return try_soln
+    }
+
+
+    function try_vx(vx, vy) {
+        //returns candidate W/kg
+        // Cr * velocity = W/kg
+        console.log(`deltaEC: ${calcDeltaEC(vy/vx).toFixed(2)}`)
+        console.log(`Crflat + dEC:${(Cr_flat + calcDeltaEC(vy/vx)).toFixed(2)}`)
+        console.log(`Sqr: ${(vx**2 + vy**2).toFixed(2)} and sqrt() ${Math.sqrt(vx**2 + vy**2).toFixed(2)}`)
+        let try_soln = (Cr_flat + calcDeltaEC(vy/vx))*Math.sqrt(vx**2 + vy**2)
+        console.log(`Try soln: ${try_soln.toFixed(2)}`)
+        return try_soln
+    }
+    
+    let candidate_W_kg = 0
+    
+    let grade_i = 0
+
+    if (vy > 0) {
+        const grade_increment = 0.01
+    } else {
+        const grade_increment = -0.01
+    }
+
+    while (true) {
+        candidate_W_kg = try_grade(vx_c, vert_spd)
+        console.log(`grade_i: ${grade_i.toFixed(2)} Wpkg:${candidate_W_kg.toFixed(2)}`)
+
+        if (candidate_W_kg > target_W_kg) {
+            console.log('SOLVED!')
+            break
+        } else {
+            if (vx_c >= 10) {
+                //Bail! 
+                vx_c = NaN
+                console.log('BAIL!!!')
+                break;
+            }
+            // Increment
+            vx_c += v_increment;
+        }
+    }
+    
+
+
+
+
+
+
+
+    console.log('**************************************')
+    console.log(`Target W/kg: ${target_W_kg}`)
+    console.log(try_vx(vx_c, vert_spd))
+
+    console.log('**************************************')
+
+    while (true) {
+        candidate_W_kg = try_vx(vx_c, vert_spd)
+        console.log(`vx: ${vx_c.toFixed(2)} Wpkg:${candidate_W_kg.toFixed(2)}`)
+        console.log(vx_c)
+        if (candidate_W_kg > target_W_kg) {
+            console.log('SOLVED!')
+            break
+        } else {
+            if (vx_c >= 10) {
+                //Bail! 
+                vx_c = NaN
+                console.log('BAIL!!!')
+                break;
+            }
+            // Increment
+            vx_c += v_increment;
+        }
+    }
+
+    console.log('FIRE')
+
+    if (vx_c <= v_limit){
+        console.log('CONDITINO MET')
+        console.log(vx_c)
+        // This means we didn't escape first loop
+        vx_c = NaN
+        // so it's arbitrarily slow / impractical to do
+    }
+
+    console.log('******')
+    console.log(vx_c)
+
+    //vx and vy give v_resultant
+    let v_resultant = Math.sqrt(vx_c**2 + vert_spd**2)
+
+    return v_resultant
+}
+
+
 
 // TODO:
 

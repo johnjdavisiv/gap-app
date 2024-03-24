@@ -13,7 +13,6 @@
     --app-max-width: 38em;
     --app-min-width: 25em;
     --toggle-color: #e9ecef;
-
     --slider-width: 55px;
     --slider-height: 30px;
 }
@@ -279,6 +278,7 @@ p {
     flex: 1;
 }
 
+
 /* Incline box */
 .incline-box {
     width: 100%;
@@ -433,10 +433,6 @@ p {
 .vert-input {
     width: 4em;
 }
-/* 
-.rise-run-togglebox {
-} */
-
 
 /* Grade unit selector */
 
@@ -488,16 +484,6 @@ p {
     justify-content:center;
 }
 
-.flip-button {
-    border:none;
-    font-size:1em;
-    transition: transform 0.4s; /* This will make the rotation smooth */
-    transform-origin: center;   /* This will ensure the rotation happens from the center of the button */
-}
-
-.flipped {
-    transform: rotateZ(180deg); /* This will flip the button 180 degrees along the Y axis */
-}
 
 .mirrored {
     transform: scaleX(-1);
