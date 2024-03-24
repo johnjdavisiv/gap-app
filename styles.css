@@ -13,8 +13,12 @@
     --app-max-width: 38em;
     --app-min-width: 25em;
     --toggle-color: #e9ecef;
+
+    --slider-width: 55px;
+    --slider-height: 30px;
 }
 
+/* og slider color was XXX */
 
 /* Setup main defaults */
 * {
@@ -157,7 +161,7 @@ p {
 }
 
 .app-inner{
-    flex:0;
+    flex:1;
 }
 
 /* Digitbox */
@@ -268,6 +272,12 @@ p {
     padding: 0.5em;
 }
 
+
+.toggle-box {
+    align-items: center;
+    justify-content: space-between;
+    flex: 1;
+}
 
 /* Incline box */
 .incline-box {
@@ -455,6 +465,10 @@ p {
     padding: 0em 0.75em;
 }
 
+#pace-or-effort{
+    font-weight:bold;
+}
+
 .pace-result, .convert-result {
     font-family:'PT Mono', monospace;
     font-weight:bold;
@@ -471,7 +485,7 @@ p {
 
 .effort-container {
     display:flex;
-    justify-content:space-between
+    justify-content:center;
 }
 
 .flip-button {
@@ -596,3 +610,61 @@ footer a{
 .hidden {
     display: none;
 }
+
+
+/* Nice toggle swithc */
+
+/* Toggle slider */
+/* The switch - the box around the slider */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: var(--slider-width, 60px); /* Default width */
+    height: var(--slider-height, 34px); /* Default height */
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* The slider */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: background-color .3s;
+    border-radius: calc(var(--slider-height, 34px) / 2); /* Make the slider rounded based on height */
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: calc(var(--slider-height, 34px) - 8px); /* Adjust based on slider height */
+    width: calc(var(--slider-height, 34px) - 8px); /* Make the circle's size responsive to the slider's height */
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: transform .4s;
+    border-radius: 50%; /* Always fully rounded */
+}
+
+input:checked + .slider {
+    background-color: #2196F3;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+    transform: translateX(calc(var(--slider-width, 60px) - var(--slider-height, 34px))); /* Move circle to the right */
+}
+
+/* Optional: If you want a fixed-size circle and only the track to grow/shrink, you can set a fixed size for .slider:before and adjust the translateX value accordingly. */

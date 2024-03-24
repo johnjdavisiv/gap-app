@@ -78,8 +78,15 @@
                     <button class="unit-toggle pace-toggle" id="kmh-speed">km/h</button>
                 </div>
             </div>
-            <div class="spacer" id="pace-post">
-                pace on an
+            <div class="spacer toggle-box" id="pace-post">
+                <a href="#pace-vs-effort" class="i-note">?</a>
+                <div>
+                    <span id="pace-or-effort-pre"></span><span id="pace-or-effort">pace&nbsp;</span><span id="on-a-an">on an</span>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" checked>
+                    <span class="slider round"></span>
+                </label>
             </div>
             <div class="hill-indicator">
                 <div class="input-row up-down-row">
@@ -191,9 +198,7 @@
             <!-- But instead will swap text and maybe evven animate it -->
             <!-- so yu get 6:00  flat-ground EFFORT will result in  [PACE] on  a...  -->
             <div class="spacer effort-container">
-                <a href="#pace-vs-effort" class="i-note">?</a>
-                <span>is the same effort as</span>
-                <button class="material-icons flip-button" title="Reverse calculations">flip_camera_android</button>
+                <span id="result-pre">is the same effort as</span><span id="result-speed-or-pace"></span><span id="results-of"></span>
             </div>
             <div class="pace-result-box">
                 <div class="left-dummy"></div>
@@ -209,7 +214,7 @@
                 </div>
             </div>
             <div class="spacer">
-                on flat ground
+                <span id="post-result-text">on flat ground</span>
             </div>
         </div>
         </div>
