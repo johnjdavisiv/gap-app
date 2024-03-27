@@ -15,6 +15,7 @@
     --toggle-color: #e9ecef;
     --slider-width: 55px;
     --slider-height: 30px;
+    --alert-color:#92400e;
 }
 
 /* og slider color was XXX */
@@ -679,7 +680,6 @@ input:checked + .slider:before {
     justify-content: center;
 }
 
-
 .alert-inner {
     width: 70%;
     display:flex;
@@ -690,14 +690,19 @@ input:checked + .slider:before {
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05); 
 }
 
-.info-inner {
+.info-inner, .impossible-inner {
     width: 70%;
     display:flex;
     align-items: center;
+    justify-content: space-between;
     background-color: #a5f3fc;
     border-radius: 10px;
     padding: 0.4em;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05); 
+}
+
+.impossible-inner {
+    background-color: #fef08a;
 }
 
 .bulb-icon {
@@ -710,7 +715,7 @@ input:checked + .slider:before {
     display: flex;
     height: 1.25em;
     width: 1.25em;
-    border: solid #92400e 2px;
+    border: solid var(--alert-color) 2px;
     padding: 0.5em;
     align-items: center;
     justify-content: center;
@@ -718,7 +723,7 @@ input:checked + .slider:before {
 
 .bulb-icon a{
     text-decoration: none;
-    color: #92400e;
+    color: var(--alert-color);
 }
 
 

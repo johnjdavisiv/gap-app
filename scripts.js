@@ -173,17 +173,20 @@ function updateOutput(eq_flat_speed){
     let out_text = document.querySelector('#output-text')
     let out_units = document.querySelector('#output-units')
     let convert_text = ''
+    let impossible_box = document.querySelector('#impossible-box')
 
     if (!Number.isFinite(eq_flat_speed) || eq_flat_speed == 0){
         // If we get any funny business...hmm
         convert_text = '🤔' // hmm or scream
+        impossible_box.classList.remove('hidden')
     } else {
         const convert_fxn = convert_dict[out_units.textContent]
         convert_text = convert_fxn(eq_flat_speed)
+        impossible_box.classList.add('hidden')
     }
+    out_text.textContent = convert_text
 
     //Update text in doc
-    out_text.textContent = convert_text
 }
 
 
