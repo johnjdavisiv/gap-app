@@ -189,17 +189,12 @@ function updateOutput(eq_flat_speed){
 // call to show.hide alerts based on state of calculators
 function showAlerts(){
     let alert_box = document.querySelector('.alert-box')
-    // For now...
-    console.log("FIRE")
-    console.log(pace_mode)
-    console.log(hill_mode)
+
     // input_grade below -0.08 or whatever
     // show can't take advntage of steep downhills
-
     //input garde above 25% - may be mroe economical to walk
 
     if (calc_mode == "effort" && hill_mode == "vert speed") {
-        console.log('FOOOOO')
         alert_box.classList.remove('hidden')
     } else {
         alert_box.classList.add('hidden')
@@ -217,16 +212,6 @@ function updateResult(){
 
     //input_m_s
     //input_grade
-    
-    
-    // 6:00/mi
-    // pace on an 
-    // uphill with a
-    // 5% grade
-    // is the same effort as
-    // 5:15/mi
-    // on flat ground
-    
     // need for both
     let flat_Cr = lookupSpeed(input_m_s, 'energy_j_kg_m')
     let delta_Cr = calcDeltaEC(input_grade)
@@ -235,29 +220,19 @@ function updateResult(){
     // FORWARD MODE
 
     if (calc_mode == 'pace'){
-        console.log('pace mode')
         let total_Cr_W_kg = total_Cr*input_m_s
         let eq_flat_speed = getEquivFlatSpeed(total_Cr_W_kg)
-        console.log(`eq. flat speed (m/s) is: ${eq_flat_speed}`);
         updateOutput(eq_flat_speed);
 
     } else if (calc_mode == 'effort' && hill_mode == 'vert speed'){
         // REVERSE MODE, hard version
-        console.log('humm')
-
-        // Fir alert
-
-
         let solve_speed = solveVertSpeed(input_m_s, vert_speed_m_s)
         updateOutput(solve_speed);
-        console.log('SOLVED')
 
     } else {
         // REVERSE MODE
-        console.log('effort mode')
         let target_W_kg = lookupSpeed(input_m_s, 'energy_j_kg_s')
         let resultant_speed = target_W_kg/total_Cr
-        console.log(`resulting hill speed (m/s) is: ${resultant_speed}`);
 
         updateOutput(resultant_speed);
     }
@@ -972,8 +947,6 @@ function readCurrentGrade(){
             //only matters for extreme steep slopes
             input_grade = vert_speed_m_s/run_x_meters
         } else {
-            //solve vertSpeed(input_m_s, vert_speed_m_s)
-            //console.log('pANICCCCC!!!')
             // don't want to read grade here, let solver do it later
         }
     }
@@ -991,17 +964,32 @@ function solveVertSpeed(input_m_s, vert_spd){
 
     //if uphill mode; if uphill_or_downhill == "uphill" seek 0.01 to +1, else -0.01 to -1
 
-    for (let grade_i = 0.005;  grade_i <=0.5; grade_i +=0.005) {
-        //What is metabolic rate for input vert speed if grade is grade_i?
-        let [v_act_res, Wi_res] = calcWtrial(grade_i, vert_spd)
-        // debug...
-
-        console.log(`Grade ${grade_i.toFixed(2)} Wcalc ${Wi_res.toFixed(2)}`)
-
-        W_results.push(Wi_res)
-        vact_results.push(v_act_res)
-        //inefficeint but w/e
-        grade_trials.push(grade_i)     
+    if (uphill_or_downhill == "uphill") {
+        for (let grade_i = 0.005;  grade_i <=0.5; grade_i +=0.005) {
+            //What is metabolic rate for input vert speed if grade is grade_i?
+            let [v_act_res, Wi_res] = calcWtrial(grade_i, vert_spd)
+            // debug...
+    
+            //console.log(`Grade ${grade_i.toFixed(2)} Wcalc ${Wi_res.toFixed(2)}`)
+    
+            W_results.push(Wi_res)
+            vact_results.push(v_act_res)
+            //inefficeint but w/e
+            grade_trials.push(grade_i)     
+        }
+    } else if (uphill_or_downhill == "downhill") {
+        // seek negative
+        for (let grade_i = -0.005;  grade_i >= -0.5; grade_i -=0.005) {
+            //What is metabolic rate for input vert speed if grade is grade_i?
+            let [v_act_res, Wi_res] = calcWtrial(grade_i, vert_spd)
+            // debug...
+            //console.log(`Grade ${grade_i.toFixed(2)} Wcalc ${Wi_res.toFixed(2)}`)
+    
+            W_results.push(Wi_res)
+            vact_results.push(v_act_res)
+            //inefficeint but w/e
+            grade_trials.push(grade_i)     
+        }
     }
 
     //which entry is closest to target_W_kg?
@@ -1021,12 +1009,7 @@ function solveVertSpeed(input_m_s, vert_spd){
     let closestV = vact_results[closestIndex];
     let pct_diff = Math.abs(smallestDifference/target_W_kg)
 
-    console.log(`Target W/kg: ${target_W_kg}`);
-    console.log(`Closest W/kg: ${closestW}`);
-    console.log(`Closest grade: ${closestGrade}`);
-    console.log(`Closest V: ${closestV}`);
-    console.log(`Pct difference: ${pct_diff}`);
-
+    input_grade = closestGrade;
 
     if (pct_diff > 0.05) {
         closestV = NaN

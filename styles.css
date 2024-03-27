@@ -571,6 +571,10 @@ footer a{
     .material-icons.up:hover  {
         color:var(--primary-color);
     }
+
+    .bulb-icon:hover{
+        background-color: #fefce8;
+    }
 }
 
 /* Coloring buttons when active */
@@ -664,6 +668,7 @@ input:checked + .slider:before {
 
 /* Alert box */
 .alert-box{
+    
     display: flex;
     padding: 0.4em 0;
     justify-content: center;
@@ -673,29 +678,37 @@ input:checked + .slider:before {
 .alert-inner {
     width: 70%;
     display:flex;
-    align-items: center;;
-    background-color: #fecaca;
+    align-items: center;
+    background-color: #fef08a;
     border-radius: 10px;
     padding: 0.4em;
 }
 
 .bulb-icon {
+    text-decoration: none;
+    cursor: pointer;
     flex: 0 0 auto;
-    color: #b91c1c;
     font-weight: bold;
     font-size: 1.5em;
     border-radius: 50%;
     display: flex;
     height: 1.25em;
     width: 1.25em;
-    border: solid #b91c1c 2px;
+    border: solid #92400e 2px;
     padding: 0.5em;
     align-items: center;
     justify-content: center;
 }
+
+.bulb-icon a{
+    text-decoration: none;
+    color: #92400e;
+}
+
+
 .alert-text {
-    text-align: center;;
-    color: #991b1b;
+    text-align: center;
+    color: #92400e;
     padding: 0 1em;
 }
 
