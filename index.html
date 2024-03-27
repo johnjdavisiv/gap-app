@@ -100,6 +100,12 @@
                     </div>
                 </div>
             </div>
+            <div class="alert-box hidden">
+                <div class="alert-inner">
+                    <span class='bulb-icon'>!</span>
+                    <span class='alert-text'>Effort-based GAP using vert speed can lead to unpredictable results!</span>
+                </div>
+            </div>
             <div class="incline-box" id="grade-input">
                 <div class="arrow-box">
                     <button class="material-icons pct-button" id="grade-m5" title="-5%">keyboard_double_arrow_left</button>
@@ -207,13 +213,14 @@
                     <span class="pace-result" id="output-text">5:35</span>
                     <span class="convert-units" id="output-units">/mi</span>
                 </div>
-                <div class="unit-stack">
-                    <button class="unit-toggle output-toggle active">/mi</button>
-                    <button class="unit-toggle output-toggle">/km</button>
-                    <button class="unit-toggle output-toggle">mph</button>
-                    <button class="unit-toggle output-toggle">km/h</button>
-                    <button class="unit-toggle output-toggle">m/s</button>
-                </div>
+                <div class="left-dummy"></div>
+            </div>
+            <div class="unit-stack-horiz">
+                <button class="unit-toggle output-toggle active">/mi</button>
+                <button class="unit-toggle output-toggle">/km</button>
+                <button class="unit-toggle output-toggle">mph</button>
+                <button class="unit-toggle output-toggle">km/h</button>
+                <button class="unit-toggle output-toggle">m/s</button>
             </div>
             <div class="spacer">
                 <span id="post-result-text">on flat ground</span>

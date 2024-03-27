@@ -214,11 +214,23 @@ p {
     justify-content: center;
 }
 
-.pace-toggle, .output-toggle {
+.unit-stack-horiz {
+    flex: 1;
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 0.3em;
+}
+
+.pace-toggle {
     width: 5.5ch;
     flex: 0;
 }
 
+.output-toggle {
+    width: 5.5ch
+
+}
 
 /* ------------------------ */
 
@@ -395,12 +407,13 @@ p {
   background: transparent;
 }
 
+
 .up-down-row {
     display: flex;
     align-items: center;
     justify-content: center;
     gap:1em;
-    padding: 0 0 1em;
+    padding: 0.4em 0em;
 }
 
 
@@ -593,11 +606,6 @@ footer a{
 
 
 
-.hidden {
-    display: none;
-}
-
-
 /* Nice toggle swithc */
 
 /* Toggle slider */
@@ -653,4 +661,48 @@ input:checked + .slider:before {
     transform: translateX(calc(var(--slider-width, 60px) - var(--slider-height, 34px))); /* Move circle to the right */
 }
 
-/* Optional: If you want a fixed-size circle and only the track to grow/shrink, you can set a fixed size for .slider:before and adjust the translateX value accordingly. */
+
+/* Alert box */
+.alert-box{
+    display: flex;
+    padding: 0.4em 0;
+    justify-content: center;
+}
+
+
+.alert-inner {
+    width: 70%;
+    display:flex;
+    align-items: center;;
+    background-color: #fecaca;
+    border-radius: 10px;
+    padding: 0.4em;
+}
+
+.bulb-icon {
+    flex: 0 0 auto;
+    color: #b91c1c;
+    font-weight: bold;
+    font-size: 1.5em;
+    border-radius: 50%;
+    display: flex;
+    height: 1.25em;
+    width: 1.25em;
+    border: solid #b91c1c 2px;
+    padding: 0.5em;
+    align-items: center;
+    justify-content: center;
+}
+.alert-text {
+    text-align: center;;
+    color: #991b1b;
+    padding: 0 1em;
+}
+
+/* At the bottom I guess */
+
+.hidden {
+    display: none;
+}
+
+
