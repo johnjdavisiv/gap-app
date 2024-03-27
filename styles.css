@@ -27,6 +27,11 @@
     list-style: none;
 }
 
+
+a {
+    color: var(--primary-color)
+}
+
 html {
     scroll-behavior: smooth;
 }

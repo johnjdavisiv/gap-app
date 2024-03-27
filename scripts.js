@@ -7,6 +7,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
 // TODO
 
+// Alerts for steep downhills
+
+// Allerts for grade over 25%
+
 // Check in R against ground truth equations
 
 // Uphill or downhill button
