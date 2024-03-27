@@ -516,6 +516,7 @@ p {
     width:1.25em;
     height:1.25em;
     display:flex;
+    flex: 0 0 auto;
     border-radius: 50%;
     color: #2196F3;
     align-items: center;
@@ -672,8 +673,7 @@ input:checked + .slider:before {
 
 
 /* Alert box */
-.alert-box{
-    
+.alert-box, .info-box{
     display: flex;
     padding: 0.4em 0;
     justify-content: center;
@@ -687,6 +687,17 @@ input:checked + .slider:before {
     background-color: #fef08a;
     border-radius: 10px;
     padding: 0.4em;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05); 
+}
+
+.info-inner {
+    width: 70%;
+    display:flex;
+    align-items: center;
+    background-color: #a5f3fc;
+    border-radius: 10px;
+    padding: 0.4em;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05); 
 }
 
 .bulb-icon {
@@ -715,6 +726,10 @@ input:checked + .slider:before {
     text-align: center;
     color: #92400e;
     padding: 0 1em;
+}
+
+.info-text {
+    text-align: center;
 }
 
 /* At the bottom I guess */

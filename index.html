@@ -100,12 +100,6 @@
                     </div>
                 </div>
             </div>
-            <div class="alert-box hidden">
-                <div class="alert-inner">
-                    <span class='bulb-icon'><a href="#vert-speed-effort">!</a></span>
-                    <span class='alert-text'>Effort-based GAP using vert speed can lead to unpredictable results!</span>
-                </div>
-            </div>
             <div class="incline-box" id="grade-input">
                 <div class="arrow-box">
                     <button class="material-icons pct-button" id="grade-m5" title="-5%">keyboard_double_arrow_left</button>
@@ -201,9 +195,18 @@
                     <button class="hill-toggle">vert speed</button>
                 </div>
             </div>
-            <!-- So when you flip this, it will not do a full switch-er-oo -->
-            <!-- But instead will swap text and maybe evven animate it -->
-            <!-- so yu get 6:00  flat-ground EFFORT will result in  [PACE] on  a...  -->
+            <div class="alert-box hidden">
+                <div class="alert-inner">
+                    <span class='bulb-icon'><a href="#vert-speed-effort">!</a></span>
+                    <span class='alert-text'>Effort-based GAP using vert speed can lead to unpredictable results!</span>
+                </div>
+            </div>
+            <div class="info-box">
+                <div class="info-inner">
+                    <a class = "i-note" id="info-i" href="#vert-speed-effort">i</a>
+                    <span class='info-text'>This downhill might be too steep to gain the full energetic benefit</span>
+                </div>
+            </div>
             <div class="spacer effort-container">
                 <span id="result-pre">is the same effort as</span><span id="result-speed-or-pace"></span><span id="results-of"></span>
             </div>
@@ -227,12 +230,10 @@
             </div>
         </div>
         </div>
-
-        
         <div class="explainer-text">
             <h2 id="how-to-use">How to use<a class="material-icons up" href="#top">arrow_upward</a></h2>
             <p>Instructions go here</p>
-            <h2>How it works<a class="material-icons up" href="#top">arrow_upward</a></h2>
+            <h2 id="some-section">How it works<a class="material-icons up" href="#top">arrow_upward</a></h2>
             <p>Details go here</p>
             <p> minor note but speed is parallel with slope not flat ground - irrelevant fora ll but steepsted angles</p>
             <p>Don't forget the cool ggplot pics</p>

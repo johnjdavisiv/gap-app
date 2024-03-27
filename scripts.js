@@ -193,10 +193,31 @@ function updateOutput(eq_flat_speed){
 // call to show.hide alerts based on state of calculators
 function showAlerts(){
     let alert_box = document.querySelector('.alert-box')
-
+    let info_box = document.querySelector('.info-box')
+    let info_text = document.querySelector('.info-text')
+    let info_i = document.querySelector('#info-i')
     // input_grade below -0.08 or whatever
     // show can't take advntage of steep downhills
     //input garde above 25% - may be mroe economical to walk
+
+    if (input_grade < -0.08 && !Number.isNaN(input_grade)) {
+        // change text and i link
+        info_i.href = '#some-section'
+        info_text.textContent = 'This downhill might be too steep to gain the full energetic benefit'
+        info_box.classList.remove('hidden')
+    } else if (input_grade > 0.25) {
+        console.log('FIRE')
+        console.log(input_grade)
+        // Change text
+        info_i.href = '#walking-vs-running'
+        info_text.textContent = 'This uphill might be steep enough that walking would be more energetically efficient'
+        info_box.classList.remove('hidden')
+    } else {
+        console.log('HIDDEN')
+        info_box.classList.add('hidden')
+    }
+
+    // This uphill might be steep enough that walking is more energetically efficient than running
 
     if (calc_mode == "effort" && hill_mode == "vert speed") {
         alert_box.classList.remove('hidden')
@@ -208,6 +229,7 @@ function showAlerts(){
 
 // Update results on page
 function updateResult(){
+    console.log(input_grade)
     
     //updates input_m_s and input_grade
     readCurrentSpeed()
