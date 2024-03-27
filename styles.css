@@ -30,7 +30,14 @@
 
 
 a {
-    color: var(--primary-color)
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+
+.mountain-inline{
+    font-size:1.2em;
+    padding: 0 0.2em;
 }
 
 html {
@@ -184,6 +191,8 @@ p {
     font-weight:bold;
     font-size: 4.5em;
 }
+
+
 
 /* Trixy */
 .colon {
@@ -737,10 +746,50 @@ input:checked + .slider:before {
     text-align: center;
 }
 
+.explainer-text {
+    line-height: 1.5;
+}
+
+.explainer-text ol{
+    padding: 0 3em;
+
+}
+.explainer-text li{
+    list-style: decimal;
+
+}
+
+/* Table */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-family: Arial, sans-serif;
+  }
+  
+  th, td {
+    text-align: left;
+    padding: 8px;
+    border-bottom: 1px solid #EEE;
+  }
+  
+  th {
+    background-color: #F9F9F9;
+    color: #333;
+  }
+  
+  tbody tr:hover {
+    background-color: #f2f2f2;
+  }
+  
+
+
 /* At the bottom I guess */
 
 .hidden {
     display: none;
 }
+
 
 

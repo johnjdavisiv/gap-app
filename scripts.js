@@ -7,13 +7,22 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
 // TODO
 
-// Alerts for steep downhills
+// Change hmm alert to <a> link directly
 
-// Allerts for grade over 25%
+// remove hmm alert text
+
+// Style and move footnotes
+
+// Export Black and Minetti plots from R at reasoanble resolution
+
+// put plots into doc
 
 // Check in R against ground truth equations
 
-// Uphill or downhill button
+// Add exmaples of hills, from GOOGLE DOC
+
+
+// Global state variables
 let hill_mode = "grade"
 let uphill_or_downhill = "uphill"
 let calc_mode = "pace"
@@ -21,17 +30,18 @@ let pace_mode = "pace"
 let output_pace_mode = 'pace'
 
 
-
 let vert_speed_int = 1000 //hardcoded, care
-let vert_speed_m_s = vert_speed_int*0.3048/(60*60) //initial inptu is ft/hr
+let vert_speed_m_s = vert_speed_int*0.3048/(60*60) 
+//initial input is ft/hr
 
-let input_m_s = 3.83 //6:00 mile pace as input initail
+let input_m_s = 3.83 //7:00 mile pace as initial input
 let input_grade = 0.05 // Keep as decimal because that's what minetti used
 
 // json is not that big, just load here
 // (because I don't know how to async/await!)
 
-//Can update later with densier grid
+// Black et al 2018 data
+// lpmatrix export from mgcv gam() in R
 const blackGam = {
     "speed_m_s": [0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1, 1.05, 1.1, 1.15, 1.2, 1.25, 1.3, 1.35, 1.4, 1.45, 1.5, 1.55, 1.6, 1.65, 1.7, 1.75, 1.8, 1.85, 1.9, 1.95, 2, 2.05, 2.1, 2.15, 2.2, 2.25, 2.3, 2.35, 2.4, 2.45, 2.5, 2.55, 2.6, 2.65, 2.7, 2.75, 2.8, 2.85, 2.9, 2.95, 3, 3.05, 3.1, 3.15, 3.2, 3.25, 3.3, 3.35, 3.4, 3.45, 3.5, 3.55, 3.6, 3.65, 3.7, 3.75, 3.8, 3.85, 3.9, 3.95, 4, 4.05, 4.1, 4.15, 4.2, 4.25, 4.3, 4.35, 4.4, 4.45, 4.5, 4.55, 4.6, 4.65, 4.7, 4.75, 4.8, 4.85, 4.9, 4.95, 5, 5.05, 5.1, 5.15, 5.2, 5.25, 5.3, 5.35, 5.4, 5.45, 5.5, 5.55, 5.6, 5.65, 5.7, 5.75, 5.8, 5.85, 5.9, 5.95, 6, 6.05, 6.1, 6.15, 6.2, 6.25, 6.3, 6.35, 6.4, 6.45, 6.5, 6.55, 6.6, 6.65, 6.7, 6.75, 6.8, 6.85, 6.9, 6.95, 7, 7.05, 7.1, 7.15, 7.2, 7.25, 7.3, 7.35, 7.4, 7.45, 7.5, 7.55, 7.6, 7.65, 7.7, 7.75, 7.8, 7.85, 7.9, 7.95, 8, 8.05, 8.1, 8.15, 8.2, 8.25, 8.3, 8.35, 8.4, 8.45, 8.5, 8.55, 8.6, 8.65, 8.7, 8.75, 8.8, 8.85, 8.9, 8.95, 9, 9.05, 9.1, 9.15, 9.2, 9.25, 9.3, 9.35, 9.4, 9.45, 9.5, 9.55, 9.6, 9.65, 9.7, 9.75, 9.8, 9.85, 9.9, 9.95, 10],
     "energy_j_kg_m": [6.0976, 6.0592, 6.0208, 5.9824, 5.944, 5.9056, 5.8672, 5.8289, 5.7905, 5.7521, 5.7137, 5.6753, 5.6369, 5.5985, 5.5601, 5.5217, 5.4833, 5.4449, 5.4066, 5.3682, 5.3298, 5.2914, 5.253, 5.2146, 5.1762, 5.1378, 5.0994, 5.061, 5.0227, 4.9843, 4.9459, 4.9075, 4.8691, 4.8307, 4.7923, 4.7539, 4.7155, 4.6771, 4.6387, 4.6004, 4.562, 4.5236, 4.4852, 4.4468, 4.4084, 4.37, 4.3317, 4.2936, 4.2559, 4.2187, 4.1821, 4.1463, 4.1115, 4.0777, 4.0451, 4.0139, 3.9841, 3.956, 3.9297, 3.9053, 3.883, 3.8628, 3.845, 3.8294, 3.816, 3.8046, 3.795, 3.7872, 3.7811, 3.7764, 3.7732, 3.7713, 3.7704, 3.7707, 3.7718, 3.7737, 3.7763, 3.7794, 3.783, 3.7868, 3.791, 3.7955, 3.8002, 3.8051, 3.8103, 3.8157, 3.8213, 3.827, 3.8329, 3.8389, 3.845, 3.8512, 3.8575, 3.8638, 3.8701, 3.8765, 3.8828, 3.8892, 3.8955, 3.9019, 3.9082, 3.9146, 3.9209, 3.9273, 3.9336, 3.94, 3.9463, 3.9527, 3.959, 3.9654, 3.9717, 3.9781, 3.9844, 3.9908, 3.9971, 4.0035, 4.0098, 4.0162, 4.0225, 4.0289, 4.0352, 4.0416, 4.0479, 4.0543, 4.0606, 4.067, 4.0733, 4.0797, 4.086, 4.0924, 4.0987, 4.1051, 4.1114, 4.1178, 4.1241, 4.1305, 4.1368, 4.1432, 4.1495, 4.1559, 4.1622, 4.1686, 4.1749, 4.1813, 4.1876, 4.194, 4.2003, 4.2067, 4.213, 4.2194, 4.2257, 4.2321, 4.2384, 4.2448, 4.2511, 4.2575, 4.2638, 4.2702, 4.2765, 4.2829, 4.2892, 4.2956, 4.3019, 4.3083, 4.3146, 4.321, 4.3273, 4.3337, 4.34, 4.3464, 4.3527, 4.3591, 4.3654, 4.3718, 4.3781, 4.3845, 4.3908, 4.3972, 4.4035, 4.4099, 4.4162, 4.4226, 4.4289, 4.4353, 4.4416, 4.448, 4.4543, 4.4607, 4.467, 4.4734, 4.4797, 4.4861, 4.4924, 4.4988, 4.5051, 4.5115, 4.5178, 4.5242, 4.5305, 4.5369, 4.5432],
@@ -178,6 +188,7 @@ function updateOutput(eq_flat_speed){
     if (!Number.isFinite(eq_flat_speed) || eq_flat_speed == 0){
         // If we get any funny business...hmm
         convert_text = '🤔' // hmm or scream
+        // or out_text.innerHTML = ''<a href="#errors">hmm</a>
         impossible_box.classList.remove('hidden')
     } else {
         const convert_fxn = convert_dict[out_units.textContent]
@@ -205,14 +216,14 @@ function showAlerts(){
 
     if (input_grade < -0.08 && !Number.isNaN(input_grade)) {
         // change text and i link
-        info_i.href = '#some-section'
+        info_i.href = '#steep-downhills'
         info_text.textContent = 'This downhill might be too steep to gain the full energetic benefit'
         info_box.classList.remove('hidden')
     } else if (input_grade > 0.25) {
         console.log('FIRE')
         console.log(input_grade)
         // Change text
-        info_i.href = '#walking-vs-running'
+        info_i.href = '#walk-vs-run'
         info_text.textContent = 'This uphill might be steep enough that walking would be more energetically efficient'
         info_box.classList.remove('hidden')
     } else {

@@ -239,22 +239,193 @@
         </div>
         <div class="explainer-text">
             <h2 id="how-to-use">How to use<a class="material-icons up" href="#top">arrow_upward</a></h2>
-            <p>Instructions go here</p>
-            <h2 id="some-section">How it works<a class="material-icons up" href="#top">arrow_upward</a></h2>
-            <p>Details go here</p>
-            <p> minor note but speed is parallel with slope not flat ground - irrelevant fora ll but steepsted angles</p>
-            <p>Don't forget the cool ggplot pics</p>
-            <p>They will be useful for validating equations too</p>
+            <p>This calculator allows you to estimate the effective difficulty of uphills and downhills for road running, trail/ultra running, fell running, skyrunning, orienteering, and incline treadmill training. The grade-adjusted pace (GAP) represents an equivalent flat-ground pace for a given incline or decline.</p>
+            <p>This calculator is based on energetic expenditure data from peer-reviewed scientific research on the energetic costs of uphill and downhill running.</p>
+            <p>You only need to input two things: your running pace (or speed), and the steepness of the hill, which you can input as a grade, slope, rise over run, or vertical speed.</p>
+            <h3 id="pace-vs-effort">Hill pace and flat-ground effort (forward and reverse GAP)<a class="material-icons up" href="#top">arrow_upward</a></h3>
+            <p>This calculator has two modes to deal with the two situations where grade adjustments to pace are useful.</p>
+            <p>Forward GAP states grade adjustments as follows:</p>
+            <p>
+              <em class="bq-text">Running at 7:00/mi pace on an uphill with a 5% grade is the same effort as 5:35/mi on flat ground</em>
+            </p>
+            <p>This first mode is useful when you’ve done a workout or a race that involved some hills, and you want to calculate the effective flat-ground pace you were running when you were ascending or descending a hill.</p>
+            <p>The second mode, which I call “reverse GAP,” can be toggled by pressing the toggle switch at the top of the app. Reverse GAP states grade adjustments as follows:</p>
+            <p>
+              <em class="bq-text">Running 6:00/mi flat-ground effort on an uphill with a 5% grade results in 7:42/mi pace</em>
+            </p>
+            <p>This second mode is useful when making race plans, since you’ll typically know what flat-ground effort you should be shooting for.</p>
+            <p>For example, maybe you think you’re in 3:05 marathon shape (7:03/mi) but want to know your target splits over the first few miles at Boston. By inputting the rise over run for each of those miles, you can figure out the actual pace you should expect to see on your watch if you’re running the correct effort level.</p>
+            <h3>Incline and decline settings</h3>
+            <p>This GAP calculator supports a number of ways to select the steepness of an uphill or a downhill. You can tap the <span class='material-symbols-outlined mountain-inline'>elevation</span>button to quickly flip back and forth between an uphill and the equivalent downhill. Here are the possible ways you can specify hill steepness:</p>
+            <h4>Grade (percent gradient)</h4>
+            <p>Hill grade is the vertical gain of a hill, divided by the horizontal distance, expressed as a percent. A hill that gains 100 meters in one kilometer has a grade of 100 / 1000 = 10%.</p>
+            <p>The incline setting on treadmills is virtually always measured in grade, even if the display does not actually have a percent sign. So a treadmill incline of “7” is almost surely a grade of 7% (though whether that’s an *accurate* grade is another story!).</p>
+            <h4>Angle (degrees of slope)</h4>
+            <p>Angle, or slope, is the literal inclination of the hill, as you’d measure it if you were drawing right triangles in algebra class. The slope of a hill, measured as an angle in degrees, is commonly used in academic research on biomechanics. I hear that slope is also used by backcountry skiers—so maybe this mode could be useful if you’re running up hills in the summer at a ski resort.</p>
+            <h4>Rise over run</h4>
+            <p>When analyzing a hill from a course elevation map, often the elevation gain is in different units than the horizontal distance. Rise over run mode supports inputting the rise as feet or meters, and the run (meaning the horizontal distance) as miles or kilometers.</p>
+            <h4 id="vert-speed-info">Vertical speed / ascent rate / VAM</h4>
+            <p>GPS watches from companies like Garmin, COROS, and Suunto often display your rate of ascent as vertical speed, also known as “vert speed” or “VAM”—a cycling term that means
+              <em>velocità ascensionale media</em>
+              or “average ascent speed,” sometimes backronymed in English to “vertical ascent, meters per hour.”</p>
+            <p>Vertical speed is measured as your vertical gain per unit
+              <em>time</em> in feet per hour or meters per hour), so calculating the effective hill gradient requires knowing how fast you were going as well. This GAP calculator takes care of that under the hood.</p>
+            <p>Vertical speed is most useful when you are ascending extremely steep hills, because in these cases your vertical gain completely dominates the total energetic cost of running. When running at 24:00/mi up a 30% grade, for example, vertical speed accounts for almost 75% of your total energy cost (with the balance coming from your horizontal speed). So, on very steep ascents, you can use vert speed the same way you’d use pace on flat ground.</p>
+            <p><a href="#pace-vs-effort">Pace-based GAP calculations</a> are relatively straightforward with vertical speed.</p>
+            <p>Effort-based GAP calculations, however, are extremely complicated—do not use effort-based GAP with vertical speed unless you’re sure you know what you’re doing. See the footnote for details.</p>
+            <p>[Effort-based GAP calculations are an extremely thorny problem if you do not know your true running speed and you do not know the grade you are running on. There are three reasons why this is a difficult problem.</p>
+            <p>The first reason is that your vertical speed is a function of both the grade you are ascending (or descending) and your *actual* horizontal speed, not your flat-ground effort level.</p>
+            <p>The second reason is that there are sometimes multiple grades that can achieve the same metabolic intensity, and the same vertical gain per hour—imagine running fast up a gradual slope, or running slow up a very steep one. Both could yield the same metabolic intensity, and have the same vertical speed!</p>
+            <p>The third reason is that some rates of vertical ascent are mathematically impossible to achieve below a minimum metabolic power output, and hence put a lower boundary on the possible flat-ground equivalent pace. </p>
+            <p>To maintain a vertical speed of 1000 meters per hour, there’s a set amount of mechanical power that’s required to lift one kilogram of body weight up 1000 meters in one hour. If your target flat-ground effort requires less metabolic power than that minimum, the calculator will return an error—the flat-ground effort is too low to achieve the specified vertical speed, no matter how slow you go.</p>
+            <p>This GAP calculator uses a grid-search approximation to search across possible hill grades that provides both the specified vertical speed and matches the target metabolic effort. This approach is relatively fast, but provides no guarantees for situations where multiple possible grades match the target metabolic effort.</p>
+            <p>Again, unless you really know what you are doing, stick with pace-based GAP when using vertical speed.]</p>
+            <h3>Input and output speeds and paces</h3>
+            <p>This calculator lets you set your speed and effort using minutes per mile, minutes per kilometer, miles per hour, kilometers per hour, or meters per second. You can change the units of the output speed independently, for example to translate treadmill speed in miles per hour to overground running pace in minutes per kilometer.</p>
+            <h3>GAP for incline treadmill training</h3>
+            <p>This grade-adjusted pace calculator works just as well on treadmills as it does for running outdoors. In fact, it probably works better, since the energetics data it relies on for the GAP calculations was actually collected on treadmills!</p>
+            <p>On average, treadmill running is pretty comparable to “real” running outdoors in terms of the biomechanics. Treadmills do lack air resistance, which makes treadmill running a bit easier than outdoor running at fast speeds (below circa 7:00/mi) for a given speed and incline.</p>
+            <p>However, air resistance does not have much of an independent effect on GAP on the treadmill vs. GAP outdoors (see below). Some people advocate using a 1% incline on the treadmill to counter the lack of air resistance, <a href="https://runningwritings.com/2023/01/treadmill-workouts-guide.html">but I do not recommend it in most cases</a>.</p>
+            <p>Do be aware that different treadmill models can vary quite a lot in terms of their deck stiffness, which can affect the cost of running significantly. Not all treadmills are correctly calibrated either (both with regards to their belt speed and their incline setting).</p>
+            <h2 id="how-it-works">How running GAP calculations work<a class="material-icons up" href="#top">arrow_upward</a></h2>
+            <p>This GAP calculator estimates the effects of uphills and downhills on your running speed, assuming you are maintaining the same effort level. </p><p>The calculations are based on data from two scientific papers: <a href="https://pubmed.ncbi.nlm.nih.gov/12183501/">Minetti et al. 2002</a> and <a href="https://pubmed.ncbi.nlm.nih.gov/28459289/">Black et al. 2018.</a></p>
+            <p>The Minetti et al. data contains energetic expenditure data from ten male trail runners doing uphill and downhill running at grades from 45% to -45% on a treadmill.</p>
+            <p>The huge range of these pace grades makes it a great dataset for modeling GAP across very steep inclines and (with some limitations) declines as well.</p>
+            <p>[MINETTI PLOT]</p>
+            <p>This plot shows the potent effects of inclines and declines on the energetic cost of running. From the curve on the plot, it’s possible to calculate the change in energy expenditure when running on a given uphill or downhill.</p>
+            <p>Both the Minetti and the Black data are measured in joules of energy per kilogram of body mass per meter of distance covered (J/kg/m) so they are already normalized to body mass, which is why you do not need to input your weight into the calculator. Converting this metabolic cost of transport to metabolic power is easy; you just multiply cost per meter (J/kg/m) by running speed (m/s) to get energy output per unit time, a.k.a metabolic power: J/kg/s or equivalently W/kg.</p>
+            <p>The Black et al. data contains energy expenditure data (during flat running on a treadmill) from 24 elite and 68 recreational runners. These data, shown below, allow the calculator to incorporate the effects of speed on running economy.</p>
+            <p>[BLACK PLOT]</p>
+            <p>I’ve adjusted the Y-scales of both plots so they are the same, which helps drive home the point that steep grades, the metabolic cost of running is totally dominated by the vertical gain.</p>
+            <p>[FOOT: The recreational runners cover a much narrower range of speeds than the elite runners because it’s only possible to measure running economy below LT2, the second lactate threshold (circa 15k-HM pace). Many of recreational runners had 10k PRs of over 40 minutes.]</p>
+            <p>[FOOT: While the elite runners are, on average, more economical, as seen by the lower energetic costs across the board for the red curve vs. the blue curve, there are not meaningful differences in the
+            <em>shape
+            </em>of the economy-speed curve for recreational vs. elite runners, so it’s not necessary to incorporate these differences into the calculator— that constant offset cancels out in the calculations.]</p>
+            <p>[FOOT: The model shown in the plot is a generalized additive model (GAM) fit with mgcv in R, using weighted least squares to account for the differences in sample size between the groups and the differences in group-level variance in running economy at each speed. The fitted model is re-implemented in javascript using a lookup table so it can run locally on your browser. A GAM is a particularly good use-case for this modeling problem because we might need to extrapolate beyond the 2.2–4.7 m/s range of speeds collected by Black et al.: penalized cubic splines are linear beyond the range of the data (unlike a polynomial)]</p>
+            <h3>Calculating grade-adjusted pace</h3>
+            <p>The GAP calculation process (in forward mode, i.e. converting actual pace on a hill to its flat-ground equivalent) works as follows:</p>
+            <p>[FOOT: A more subtle point about this calculation method is that it assumes an “additive” model for metabolic cost, in that the energetic cost of a certain speed and incline combination is equal to the independent effects of speed on energy expenditure, plus the independent effects of incline—but assumes no direct interaction between the two. This is an inherent limitation of relying on separate datasets for estimating speed effects and incline effects on the metabolic cost of running, and is another reason I’d like to see a large comprehensive dataset on speed, incline, and energetics. Calculating speed-incline interactions in this situation is fully possible with modern biostatistics techniques.]</p>
+            <ol>
+                <li>Given a running speed and hill grade, calculate the metabolic cost of running that speed on flat ground</li>
+                <li>Calculate the increase or decrease in metabolic cost attributable to the hill grade</li>
+                <li>Add #1 and #2 together to get the total metabolic cost and express it as metabolic power (in W/kg)</li>
+                <li>Find the flat-ground running speed that demands the same metabolic power as #3</li>
+                <li>This flat-ground speed is the grade-adjusted pace (GAP)</li>
+            </ol>
+            <p>A similar process is used for “reverse mode,” [LINK] i.e. converting flat-ground effort to expected pace on a hill with a known grade.</p>
+            <ol>
+            <li>Given a target flat-ground effort, calculate the metabolic cost of running that speed on flat ground.</li>
+            <li>Express that target metabolic cost as metabolic power (in W/kg)</li>
+            <li>Using the hill grade, find the actual running speed on that grade that results in an equivalent metabolic power to #2</li>
+            <li>This incline speed is the effort-based grade-adjusted pace (GAP)</li>
+            </ol>
+            <h3>Experimental GAP versus data-driven GAP (Strava, COROS, etc.)</h3>
+            <p>Platforms like Strava and COROS offer their own versions of grade-adjusted pace—Strava Premium calculates GAP-adjusted pace after the fact on runs, and COROS watches can display “effort pace” in real-time, which is an individualized version of GAP. Stryd does something similar using their “power” metric.</p>
+            <p>I don’t know how these closed-source, proprietary algorithms work, nor how accurate they are, but there are not as many advantages as you might think to having massive observational datasets to develop GAP conversions.</p>
+            <p>In the real world, runners <a href="https://pubmed.ncbi.nlm.nih.gov/20010117">almost never maintain the same effective effort</a> level on hills—typically people run harder (meaning with a higher energy expenditure) on short uphills, slow down more on long uphills, and don’t take full advantage of downhills. The speed they run on a downhill is also affected by how steep of an uphill they just completed! Large databases are “polluted” by these effects, which make it hard to determine the true GAP from observational data alone.</p>
+            <p><a href="https://coros.com/stories/athlete-stories/c/effort-pace-the-journey-of-coros-metric-of-the-future">COROS’ effort pace method</a> sounds like it uses heart rate data, which is an improvement, but even heart rate data are plagued by heart rate drift and poor measurement from optical sensors, which tend to be biased in the worst possible way—less reliable the faster you go.</p>
+            <p>Heart rate drift is a problem because it represents an increase in heart rate
+            <em>for the same metabolic power</em>, meaning an increase in HR may not correspond to a real increase in metabolic rate.</p>
+            <p>The experimental data from Minetti et al. have none of these problems. Of course, this small dataset has numerous other issues, and these are the main shortcomings of this GAP calculator [LINK], but experimental studies with real energy expenditure data nevertheless have a level of control that you don’t get with observational heart rate and GPS data.</p>
+            <h3>Incorporating body weight: do heavier runners struggle more on hills?</h3>
+            <p>As noted earlier, the data used to develop this GAP calculator already have energy expenditure normalized to body mass, so you do not need to enter your weight into the calculator. However, the data used to calculate energy expenditure data on inclines and declines come from elite mountain and fell runners, who were presumably fairly lean.</p>
+            <p>Merely being heavier is not a guarantee that you’ll struggle on hills—if your extra body mass is in the form of lower-leg muscle mass, your added metabolic power output capabilities can offset the extra mechanical power required to ascend a hill (this is actually why physiologists normalize energy expenditure to body mass).</p>
+            <p>However, extra body mass on your upper body—whether in the form of fat, muscle, or a backpack—will always make uphills more challenging. Runners with a lot of extra weight in their upper body may find that the GAP predictions for steep uphills are too optimistic, i.e. the calculator predicts that you can run faster up a hill than you actually can.</p>
+            <h2>Is GAP accurate? Some test cases<a class="material-icons up" href="#top">arrow_upward</a></h2>
+            <p>There are a number of limitations to GAP calculations detailed below, but as a quick sanity check, it’s nice to run a few examples through the GAP calculator and see how they shake out.</p>
+            <h3>Vertical kilometer: Chamonix’s VK race</h3>
+            <p>The “vertical kilometer” or VK is a skyrunning event that involves gaining 1000 meters of elevation, typically over a horizontal distance of no longer than 5k. One famous
+            <em>kilométre vertical</em>
+            race is the Chamonix KV, a 3.8km course in France with a vertical gain of 1000 meters. The course record is 34:07 by François Gonon, which works out to an average pace of 8:59/km.</p>
+            <p>The GAP calculator suggests this is equivalent to 2:56/km pace on flat ground, or 29:20 10k pace. Keep in mind that this is surely an underestimate of the difficulty! The rough terrain at Chamonix adds to the challenge, beyond the metabolic cost of ascending 1000 meters in just over half an hour. But the ballpark figure seems about right: 29:20 for 10 km is national-caliber performance; add in some extra difficulty for the terrain and the final altitude of over 2,000m, and the GAP seems remarkably close for a world-caliber 10k performance.</p>
+            <h3>Pikes Peak Ascent GAP</h3>
+            <p>The Pikes Peak Ascent race gains 7800 feet over 13.3 mi. The course records are 2:00:20 (9:03/mi) for men and 2:24:58 (10:54/mi) for women, which convert to 5:23/mi and 6:04/mi GAP, respectively. These are on par with 1:10:35 and 1:19:30 half marathon times.</p>
+            <p>As with the vertical kilometer, we need to keep in mind that the terrain and switchbacks at Pikes Peak also contribute to the difficulty of the event—not to mention the finish line altitude of over 14,000 feet! Add in these factors and the GAP seems like it should correspond pretty well to elite-level fitness.</p>
+            <h3>Raleigh DownRun Downhill Mile GAP</h3>
+            <p>Raleigh, NC hosts a downhill mile race every summer that drops 131 feet over 1.0 miles. From results in the past few years, I picked two runners who were current college athletes with a TFRRS profile. Here are their race results, their predicted GAP, and their college mile PR at the time:</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Downhill mile</th>
+                        <th>GAP-adjusted</th>
+                        <th>Track PR</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Athlete A (male)</td>
+                        <td>4:03</td>
+                        <td>4:28</td>
+                        <td>4:17</td>
+                    </tr>
+                    <tr>
+                        <td>Athlete B (female)</td>
+                        <td>4:39</td>
+                        <td>5:09</td>
+                        <td>5:06</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <p>Keep in mind that this race is in August, which is not when a collegiate miler is going to be in peak shape. Likely they’re hopping into a road mile for fun as they’re gearing up for cross country.</p>
+            <p>Again, the GAP is a remarkably good ballpark estimate for the athletes’ fitness levels.</p>
+            <h2>Limitations<a class="material-icons up" href="#top">arrow_upward</a></h2>
+            <p>This calculator only gives an
+            <em>estimate
+            </em>of grade-adjusted pace. There are a number of limitations you should keep in mind when using this GAP calculator’s pace estimates for planning and analyzing workouts and competitions.</p>
+            <h3>This calculator relies on a fairly small dataset<a class="material-icons up" href="#top">arrow_upward</a></h3>
+            <p>By far the biggest limitation of this GAP calculator is its reliance on the data from Minetti et al. 2002 for incline and decline energetic costs. That study used only ten subjects, all of whom were male and all of whom were elite mountain and trail runners. Moreover, the polynomial in the Minetti study is from averaged group data, so there’s no way to calculate any estimates of uncertainty for the predicted GAP.</p>
+            <p>In an ideal world, I would base this calculator off raw data from a much larger study of male and female runners coming from a wider range of ability levels, including both experienced trail runners and pure road runners. Such a dataset would enable better GAP prediction, as well as the construction of uncertainty intervals around the predicted GAP—for example, instead of predicting a GAP of 5:55/mi, you could get a best estimate of 5:55, plus a 90% prediction interval of 5:45–6:05, meaning 90% of runners would experience an equivalent effort within that range on that specific hill.</p>
+            <p>Such a dataset would also allow the calculator to account for whether hill-climbing ability is affected by experience level, mileage, body weight, and so on. You could even model energy utilization (carbs vs. fat) at different inclines and declines, which would be useful for planning fueling for long trail races.</p>
+            <p>It would actually be pretty easy to do this study from an equipment standpoint—all you need is a metabolic cart and a high-incline treadmill. Almost any university with a physiology department could do it. The main challenges would be in the study design, and data analysis.</p>
+            <p>[FOOT: The two main challenges would be (1) the study would require several visits, and “incline-naive” runners will show significant learning effects as they become more skilled at running on steep inclines and declines; and (2) less-fit runners would not be able to complete the steeper uphill sections at below LT2, so you would not be able to get data for all speed-incline combinations for all subjects. Both problems are fully tractable with modern statistical models, though.</p>
+            <p>Nevertheless, these challenges are surmountable with the right study design and data analysis strategy. Email me if you are an academic who wants to chat about doing this kind of study and making the data publicly available; I’d be happy to help (I have done studies with similar levels of complexity as part of my PhD work).</p>
+            <h3 id="steep-downhills">It is hard to take advantage of steep downhills<a class="material-icons up" href="#top">arrow_upward</a></h3>
+            <p>Virtually no one can take full advantage of the energetic savings offered by steep downhills. Even the original Minetti et al. paper notes that there’s quite a discrepancy between predicted times for net-downhill mountain races and actual times.</p>
+            <p>In practice, it’s likely that steep downhills (especially on trails) are too dangerous and too damaging to take at “full speed”—your body prioritizes avoiding falls and avoiding excessive muscle damage. Accordingly, this GAP calculator features a pop-up warning for declines greater than -8% that will warn you that the predicted GAP is likely going to be faster than you can actually manage in the real world.</p>
+            <h3>Running economy deteriorates on long downhills<a class="material-icons up" href="#top">arrow_upward</a></h3>
+            <p>If you do a long race with a lot of downhills (even mild ones) and haven’t trained for downhills, your muscles will sustain enough damage to increase the metabolic cost of running
+            <a href="https://www.tandfonline.com/doi/abs/10.1080/02640410600718228">by 3–7%</a>.</p>
+            <p>At races like Boston, and more extreme examples like the various REVEL downhill marathons, this muscle damage will prevent you from being able to achieve the theoretical GAP, because your flat-ground effort is no longer the same.</p>
+            <h3 id='walk-vs-run'>Walking can be more efficient than running on steep hills<a class="material-icons up" href="#top">arrow_upward</a></h3>
+            <p>On grades steeper than about 20-25%, it is often more efficient to walk instead of run, as shown in <a href='https://journals.physiology.org/doi/pdf/10.1152/japplphysiol.00546.2015'>this 2016 study</a>. In practice, elite mountain, trail, and fell runners typically use a mixture of running and walking on extremely steep slopes to spread out the stress on their muscles—walking fast on steep ascents tends to quickly fatigue your calves, while running tends to fatigue your quads.</p>
+            <h3>Using poles during steep hill ascents<a class="material-icons up" href="#top">arrow_upward</a></h3>
+            <p>The trail runners in the Minetti et al. study did not use poles during their ascents, so this calculator implicitly assumes you are not using poles.</p>
+            <p><a href="https://link.springer.com/article/10.1007/s00421-019-04145-2">More recent research</a> on using poles suggests that poles <a href="https://link.springer.com/article/10.1007/s00421-023-05254-9">do not have much effect</a> on the overall metabolic cost of ascending steep hills, but they likely do “save your legs” by offloading some force (and some metabolic cost) to your upper body. In practice, trail runners tend to feel less fatigued and go faster when using poles for very steep ascents. For what it’s worth, many vertical kilometer (VK) world records are set using poles.</p>
+            <h3>Skill level will affect energetic cost on steep hills<a class="material-icons up" href="#top">arrow_upward</a></h3>
+            <p>The Minetti study used elite mountain runners with extensive experience running on steep inclines and declines. Flatlanders who have little experience with running on steep hills are likely to fare worse than these elite runners, so the GAP predicted for steep climbs and descents may be too optimistic if you are not an experienced trail, fell, or mountain runner.</p>
+            <p>Likewise, I suspect that some of the very best uphill runners in the world are the best precisely because they can run uphills more efficiently than the average trail or fell runner. As a result, their effort-based GAPs from extremely steep climbs will overestimate flat-land performance.</p>
+            <h3>Footing and terrain affect the energetic cost of running<a class="material-icons up" href="#top">arrow_upward</a></h3>
+            <p>As noted earlier, both the Minetti and Black datasets were collected on treadmills. Real trail, ultra, mountain, skyrunning, and fell races have very rough terrain that can increase the metabolic cost of running compared to an equivalent incline with good footing.</p>
+            <p>Likewise, the downhills in these types of events are also very technical, which makes it hard (not to mention risky) to take full advantage of downhill energetic savings. So, GAP predictions will be too optimistic for very rough terrain. This problem likely gets a bit less severe on very steep inclines, since the elevation gain starts to dominate the total energetic cost.</p>
+            <h3>GAP calculations do not account for air resistance<a class="material-icons up" href="#top">arrow_upward</a></h3>
+            <p>This calculator does not take changes in air resistance into account when calculating your GAP. For moderate hills and slower speeds, the effects of air resistance are pretty much negligible.</p>
+            <p>However, if you run very fast on a very steep hill, the predicted grade-adjusted pace will be a bit too pessimistic—in this situation, the force from air resistance will drop considerably on the hill, because your actual overground velocity is significantly lower than on flat ground. Air resistance forces are proportional to the square of your running velocity, which is why these effects only become relevant at very high speeds.</p>
+            <p>In general, though, changes in air resistance for moderate speeds and moderate inclines will be so slight that it’s not worth worrying about. Indeed, for GAP calculations it’s not even the
+            <em>absolute</em>
+            amount of air resistance that matters; it’s the magnitude of the
+            <em>change
+            </em>in air resistance when going from flat ground to inclines or declines. So the effects of air resistance on GAP are negligible even for fast speeds, as long as they’re on mild to moderate hills.</p>
+            <h3>GAP calculations do not account for altitude<a class="material-icons up" href="#top">arrow_upward</a></h3>
+            <p>Often, if you are ascending or descending extremely steep hills, you are at altitude. This GAP calculator does not account for the effects of altitude on performance, something we saw in our analysis of the Pikes Peak Ascent earlier.</p>
+            <p>Compensating for altitude is fundamentally different from calculating metabolic costs on inclines—at high altitudes, the true metabolic cost of running does not change. What changes is your effective fitness level! Since you cannot extract as much oxygen from the air, your effective VO2max and maximum metabolic steady-state decline, meaning you are no longer able to sustain the same metabolic power for a given duration.</p>
+            <h2 id="errors">Errors<a class="material-icons up" href="#top">arrow_upward</a></h2>
+            <p>If your calculated gap is “🤔,” that means you’ve triggered an error.</p>
+            <p>The most likely cause is GAP paces that end up above 10 meters per second (which is world-caliber sprinting speed). Some hills are so steep that a theoretically “equivalent” pace is, in practice, totally impossible on flat ground.</p>
+            <p>You can also trigger errors by attempting to calculate mathematically impossible vertical speeds. Any given vertical speed has a minimum required metabolic power that corresponds to lifting your body weight against gravity at the specified vertical ascent rate..</p>
+            <p>So, even if your horizontal velocity is zero on the hill, there is a lower limit on the flat-ground metabolic power that equates to a given vertical speed. If you attempt to calculate GAP for a flat-ground effort level that falls below this metabolic power, the result will be “🤔.” See this footnote for more details</p>
+            <p>If you are getting errors and you don’t know why, it might be a bug in the code. Please email me if this happens to you!</p>
             <h2  id="get-updates">Get updates<a class="material-icons up" href="#top">arrow_upward</a></h2>
             <p>If you want to find out when I update this app, or get notified when I build new apps and publish new running research on my website, sign up for my email list with this form!</p>
             <div class="newsletter-block">
                 <script async src="https://eomail6.com/form/187bb3d4-92e9-11ed-8dcb-9536633250ee.js" data-form="187bb3d4-92e9-11ed-8dcb-9536633250ee"></script>
             </div>
             <h2 id="contact">Contact<a class="material-icons up" href="#top">arrow_upward</a></h2>
-            <p>If you've got feedback, want to see a new feature, found a bug, or just want to chat, please reach out! I read every email I receive, and I do my best to respond. You can reach me at <strong><a class="email" href="mailto:john@runningwritings.com">john@runningwritings.com</a></strong>.</p>
+            <p>If you've got feedback, want to see a new feature, found a bug, or just want to chat, please reach out! I read every email I receive, and I do my best to respond. You can reach me at <a class="email" href="mailto:john@runningwritings.com">john@runningwritings.com</a>.</p>
             <p>I'm also on <a href="https://twitter.com/JDruns">X</a>, but the best way to follow my work is definitely my <strong><a href="https://runningwritings.eo.page/news-and-notes-signup">email list!</a></strong></p>
             <h2 id="support">Support my work<a class="material-icons up" href="#top">arrow_upward</a></h2>
-            <p>This app is 100% free and open-source. If you enjoy my work and want to help support me, be sure to check out my book, <strong><a href="https://www.amazon.com/Modern-Training-Physiology-Long-Distance-Runners/dp/0615790291">Modern Training and Physiology for Middle and Long-Distance Runners</a></strong> - it's available on Amazon as both an eBook and paperback. I also offer <strong><a href="https://runningwritings.com/coaching-and-consulting">coaching services</a></strong> for those interested.</p>
+            <p>This app is 100% free and open-source. If you enjoy my work and want to help support me, be sure to check out my book, <strong><a href="https://www.amazon.com/Modern-Training-Physiology-Long-Distance-Runners/dp/0615790291">Modern Training and Physiology </a></strong> - it's available on Amazon as both an eBook and paperback.</p> <p>I also offer <strong><a href="https://runningwritings.com/coaching-and-consulting">coaching services</a></strong> for those interested.</p>
         </div>
     </main>
     <footer>
