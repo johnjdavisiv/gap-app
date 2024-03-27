@@ -13,8 +13,11 @@
     --app-max-width: 38em;
     --app-min-width: 25em;
     --toggle-color: #e9ecef;
+    --slider-width: 55px;
+    --slider-height: 30px;
 }
 
+/* og slider color was XXX */
 
 /* Setup main defaults */
 * {
@@ -157,7 +160,7 @@ p {
 }
 
 .app-inner{
-    flex:0;
+    flex:1;
 }
 
 /* Digitbox */
@@ -211,11 +214,23 @@ p {
     justify-content: center;
 }
 
-.pace-toggle, .output-toggle {
+.unit-stack-horiz {
+    flex: 1;
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 0.3em;
+}
+
+.pace-toggle {
     width: 5.5ch;
     flex: 0;
 }
 
+.output-toggle {
+    width: 5.5ch
+
+}
 
 /* ------------------------ */
 
@@ -266,6 +281,13 @@ p {
     display:flex;
     justify-content: center;
     padding: 0.5em;
+}
+
+
+.toggle-box {
+    align-items: center;
+    justify-content: space-between;
+    flex: 1;
 }
 
 
@@ -385,12 +407,13 @@ p {
   background: transparent;
 }
 
+
 .up-down-row {
     display: flex;
     align-items: center;
     justify-content: center;
     gap:1em;
-    padding: 0 0 1em;
+    padding: 0.4em 0em;
 }
 
 
@@ -423,10 +446,6 @@ p {
 .vert-input {
     width: 4em;
 }
-/* 
-.rise-run-togglebox {
-} */
-
 
 /* Grade unit selector */
 
@@ -455,6 +474,10 @@ p {
     padding: 0em 0.75em;
 }
 
+#pace-or-effort{
+    font-weight:bold;
+}
+
 .pace-result, .convert-result {
     font-family:'PT Mono', monospace;
     font-weight:bold;
@@ -471,19 +494,9 @@ p {
 
 .effort-container {
     display:flex;
-    justify-content:space-between
+    justify-content:center;
 }
 
-.flip-button {
-    border:none;
-    font-size:1em;
-    transition: transform 0.4s; /* This will make the rotation smooth */
-    transform-origin: center;   /* This will ensure the rotation happens from the center of the button */
-}
-
-.flipped {
-    transform: rotateZ(180deg); /* This will flip the button 180 degrees along the Y axis */
-}
 
 .mirrored {
     transform: scaleX(-1);
@@ -558,6 +571,10 @@ footer a{
     .material-icons.up:hover  {
         color:var(--primary-color);
     }
+
+    .bulb-icon:hover{
+        background-color: #fefce8;
+    }
 }
 
 /* Coloring buttons when active */
@@ -593,6 +610,112 @@ footer a{
 
 
 
+/* Nice toggle swithc */
+
+/* Toggle slider */
+/* The switch - the box around the slider */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: var(--slider-width, 60px); /* Default width */
+    height: var(--slider-height, 34px); /* Default height */
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* The slider */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: background-color .3s;
+    border-radius: calc(var(--slider-height, 34px) / 2); /* Make the slider rounded based on height */
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: calc(var(--slider-height, 34px) - 8px); /* Adjust based on slider height */
+    width: calc(var(--slider-height, 34px) - 8px); /* Make the circle's size responsive to the slider's height */
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: transform .4s;
+    border-radius: 50%; /* Always fully rounded */
+}
+
+input:checked + .slider {
+    background-color: #2196F3;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+    transform: translateX(calc(var(--slider-width, 60px) - var(--slider-height, 34px))); /* Move circle to the right */
+}
+
+
+/* Alert box */
+.alert-box{
+    
+    display: flex;
+    padding: 0.4em 0;
+    justify-content: center;
+}
+
+
+.alert-inner {
+    width: 70%;
+    display:flex;
+    align-items: center;
+    background-color: #fef08a;
+    border-radius: 10px;
+    padding: 0.4em;
+}
+
+.bulb-icon {
+    text-decoration: none;
+    cursor: pointer;
+    flex: 0 0 auto;
+    font-weight: bold;
+    font-size: 1.5em;
+    border-radius: 50%;
+    display: flex;
+    height: 1.25em;
+    width: 1.25em;
+    border: solid #92400e 2px;
+    padding: 0.5em;
+    align-items: center;
+    justify-content: center;
+}
+
+.bulb-icon a{
+    text-decoration: none;
+    color: #92400e;
+}
+
+
+.alert-text {
+    text-align: center;
+    color: #92400e;
+    padding: 0 1em;
+}
+
+/* At the bottom I guess */
+
 .hidden {
     display: none;
 }
+
+

@@ -37,7 +37,7 @@
                 <div class="clock" id="pace-dials">
                     <div class="digitbox">
                         <button class="material-icons svg-arrow" id="d1-up">expand_less</button>
-                        <div class="digit" id="d1">6</div>
+                        <div class="digit" id="d1">7</div>
                         <button class="material-icons svg-arrow" id="d1-down">expand_more</button>
                     </div>
                     <div class="digitbox colon">
@@ -76,10 +76,18 @@
                     <button class="unit-toggle pace-toggle" id="km-pace">/km</button>
                     <button class="unit-toggle pace-toggle" id="mph-speed">mph</button>
                     <button class="unit-toggle pace-toggle" id="kmh-speed">km/h</button>
+                    <button class="unit-toggle pace-toggle" id="kmh-speed">m/s</button>
                 </div>
             </div>
-            <div class="spacer" id="pace-post">
-                pace on an
+            <div class="spacer toggle-box" id="pace-post">
+                <a href="#pace-vs-effort" class="i-note">?</a>
+                <div>
+                    <span id="pace-or-effort-pre"></span><span id="pace-or-effort">pace&nbsp;</span><span id="on-a-an">on an</span>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" checked>
+                    <span class="slider round"></span>
+                </label>
             </div>
             <div class="hill-indicator">
                 <div class="input-row up-down-row">
@@ -90,6 +98,12 @@
                         <span class="rise-unit" id="uphill-or-downhill">uphill</span>
                         <span class="rise-text" id="uphill-post-text">&nbsp;with a</span>
                     </div>
+                </div>
+            </div>
+            <div class="alert-box hidden">
+                <div class="alert-inner">
+                    <span class='bulb-icon'><a href="#vert-speed-effort">!</a></span>
+                    <span class='alert-text'>Effort-based GAP using vert speed can lead to unpredictable results!</span>
                 </div>
             </div>
             <div class="incline-box" id="grade-input">
@@ -191,25 +205,25 @@
             <!-- But instead will swap text and maybe evven animate it -->
             <!-- so yu get 6:00  flat-ground EFFORT will result in  [PACE] on  a...  -->
             <div class="spacer effort-container">
-                <a href="#pace-vs-effort" class="i-note">?</a>
-                <span>is the same effort as</span>
-                <button class="material-icons flip-button" title="Reverse calculations">flip_camera_android</button>
+                <span id="result-pre">is the same effort as</span><span id="result-speed-or-pace"></span><span id="results-of"></span>
             </div>
             <div class="pace-result-box">
                 <div class="left-dummy"></div>
                 <div class="pace-result-text">
-                    <span class="pace-result" id="output-text">7:15</span>
+                    <span class="pace-result" id="output-text">5:35</span>
                     <span class="convert-units" id="output-units">/mi</span>
                 </div>
-                <div class="unit-stack">
-                    <button class="unit-toggle output-toggle active">/mi</button>
-                    <button class="unit-toggle output-toggle">/km</button>
-                    <button class="unit-toggle output-toggle">mph</button>
-                    <button class="unit-toggle output-toggle">km/h</button>
-                </div>
+                <div class="left-dummy"></div>
+            </div>
+            <div class="unit-stack-horiz">
+                <button class="unit-toggle output-toggle active">/mi</button>
+                <button class="unit-toggle output-toggle">/km</button>
+                <button class="unit-toggle output-toggle">mph</button>
+                <button class="unit-toggle output-toggle">km/h</button>
+                <button class="unit-toggle output-toggle">m/s</button>
             </div>
             <div class="spacer">
-                on flat ground
+                <span id="post-result-text">on flat ground</span>
             </div>
         </div>
         </div>
@@ -226,8 +240,10 @@
             <h2 id="get-updates">Get updates<a class="material-icons up" href="#top">arrow_upward</a></h2>
             <div>email script goes here</div>
             <h2 id="contact">Contact<a class="material-icons up" href="#top">arrow_upward</a></h2>
-            <p>My contact info goes here</p>
-            <h2>Support my work<a class="material-icons up" href="#top">arrow_upward</a></h2>
+            <p>If you've got feedback, want to see a new feature, found a bug, or just want to chat, please reach out! I read every email I receive, and I do my best to respond. You can reach me at <strong><a class="email" href="mailto:john@runningwritings.com">john@runningwritings.com</a></strong>.</p>
+            <p>I'm also on <a href="https://twitter.com/JDruns">Twitter/X</a>, but the best way to follow my work is definitely my <strong><a href="https://runningwritings.eo.page/news-and-notes-signup">email list!</a></strong></p>
+            <h2 id="support">Support my work<a class="material-icons up" href="#top">arrow_upward</a></h2>
+            <p>This app is 100% free and open-source. If you enjoy my work and want to help support me, be sure to check out my book, <strong><a href="https://www.amazon.com/Modern-Training-Physiology-Long-Distance-Runners/dp/0615790291">Modern Training and Physiology for Middle and Long-Distance Runners</a></strong> - it's available on Amazon as both an eBook and paperback. I also offer <strong><a href="https://runningwritings.com/coaching-and-consulting">coaching services</a></strong> for those interested.</p>
             <p>Socials, email, and book</p>
         </div>
     </main>

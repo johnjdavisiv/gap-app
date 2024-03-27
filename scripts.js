@@ -1,16 +1,245 @@
+document.addEventListener('DOMContentLoaded', (event) => {
+    console.clear();
+    console.log('Script loaded')
+    updateResult();
+});
 
 
-console.log('Script loaded')
+// TODO
 
-//for flip I think
-const TRANSITION_DUR_MS = 400;
+// Check in R against ground truth equations
 
-// TODO: 
+// Uphill or downhill button
+let hill_mode = "grade"
+let uphill_or_downhill = "uphill"
+let calc_mode = "pace"
+let pace_mode = "pace"
+let output_pace_mode = 'pace'
 
-// Continue calcs
 
-// add m/s to calculator
 
+let vert_speed_int = 1000 //hardcoded, care
+let vert_speed_m_s = vert_speed_int*0.3048/(60*60) //initial inptu is ft/hr
+
+let input_m_s = 3.83 //6:00 mile pace as input initail
+let input_grade = 0.05 // Keep as decimal because that's what minetti used
+
+// json is not that big, just load here
+// (because I don't know how to async/await!)
+
+//Can update later with densier grid
+const blackGam = {
+    "speed_m_s": [0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1, 1.05, 1.1, 1.15, 1.2, 1.25, 1.3, 1.35, 1.4, 1.45, 1.5, 1.55, 1.6, 1.65, 1.7, 1.75, 1.8, 1.85, 1.9, 1.95, 2, 2.05, 2.1, 2.15, 2.2, 2.25, 2.3, 2.35, 2.4, 2.45, 2.5, 2.55, 2.6, 2.65, 2.7, 2.75, 2.8, 2.85, 2.9, 2.95, 3, 3.05, 3.1, 3.15, 3.2, 3.25, 3.3, 3.35, 3.4, 3.45, 3.5, 3.55, 3.6, 3.65, 3.7, 3.75, 3.8, 3.85, 3.9, 3.95, 4, 4.05, 4.1, 4.15, 4.2, 4.25, 4.3, 4.35, 4.4, 4.45, 4.5, 4.55, 4.6, 4.65, 4.7, 4.75, 4.8, 4.85, 4.9, 4.95, 5, 5.05, 5.1, 5.15, 5.2, 5.25, 5.3, 5.35, 5.4, 5.45, 5.5, 5.55, 5.6, 5.65, 5.7, 5.75, 5.8, 5.85, 5.9, 5.95, 6, 6.05, 6.1, 6.15, 6.2, 6.25, 6.3, 6.35, 6.4, 6.45, 6.5, 6.55, 6.6, 6.65, 6.7, 6.75, 6.8, 6.85, 6.9, 6.95, 7, 7.05, 7.1, 7.15, 7.2, 7.25, 7.3, 7.35, 7.4, 7.45, 7.5, 7.55, 7.6, 7.65, 7.7, 7.75, 7.8, 7.85, 7.9, 7.95, 8, 8.05, 8.1, 8.15, 8.2, 8.25, 8.3, 8.35, 8.4, 8.45, 8.5, 8.55, 8.6, 8.65, 8.7, 8.75, 8.8, 8.85, 8.9, 8.95, 9, 9.05, 9.1, 9.15, 9.2, 9.25, 9.3, 9.35, 9.4, 9.45, 9.5, 9.55, 9.6, 9.65, 9.7, 9.75, 9.8, 9.85, 9.9, 9.95, 10],
+    "energy_j_kg_m": [6.0976, 6.0592, 6.0208, 5.9824, 5.944, 5.9056, 5.8672, 5.8289, 5.7905, 5.7521, 5.7137, 5.6753, 5.6369, 5.5985, 5.5601, 5.5217, 5.4833, 5.4449, 5.4066, 5.3682, 5.3298, 5.2914, 5.253, 5.2146, 5.1762, 5.1378, 5.0994, 5.061, 5.0227, 4.9843, 4.9459, 4.9075, 4.8691, 4.8307, 4.7923, 4.7539, 4.7155, 4.6771, 4.6387, 4.6004, 4.562, 4.5236, 4.4852, 4.4468, 4.4084, 4.37, 4.3317, 4.2936, 4.2559, 4.2187, 4.1821, 4.1463, 4.1115, 4.0777, 4.0451, 4.0139, 3.9841, 3.956, 3.9297, 3.9053, 3.883, 3.8628, 3.845, 3.8294, 3.816, 3.8046, 3.795, 3.7872, 3.7811, 3.7764, 3.7732, 3.7713, 3.7704, 3.7707, 3.7718, 3.7737, 3.7763, 3.7794, 3.783, 3.7868, 3.791, 3.7955, 3.8002, 3.8051, 3.8103, 3.8157, 3.8213, 3.827, 3.8329, 3.8389, 3.845, 3.8512, 3.8575, 3.8638, 3.8701, 3.8765, 3.8828, 3.8892, 3.8955, 3.9019, 3.9082, 3.9146, 3.9209, 3.9273, 3.9336, 3.94, 3.9463, 3.9527, 3.959, 3.9654, 3.9717, 3.9781, 3.9844, 3.9908, 3.9971, 4.0035, 4.0098, 4.0162, 4.0225, 4.0289, 4.0352, 4.0416, 4.0479, 4.0543, 4.0606, 4.067, 4.0733, 4.0797, 4.086, 4.0924, 4.0987, 4.1051, 4.1114, 4.1178, 4.1241, 4.1305, 4.1368, 4.1432, 4.1495, 4.1559, 4.1622, 4.1686, 4.1749, 4.1813, 4.1876, 4.194, 4.2003, 4.2067, 4.213, 4.2194, 4.2257, 4.2321, 4.2384, 4.2448, 4.2511, 4.2575, 4.2638, 4.2702, 4.2765, 4.2829, 4.2892, 4.2956, 4.3019, 4.3083, 4.3146, 4.321, 4.3273, 4.3337, 4.34, 4.3464, 4.3527, 4.3591, 4.3654, 4.3718, 4.3781, 4.3845, 4.3908, 4.3972, 4.4035, 4.4099, 4.4162, 4.4226, 4.4289, 4.4353, 4.4416, 4.448, 4.4543, 4.4607, 4.467, 4.4734, 4.4797, 4.4861, 4.4924, 4.4988, 4.5051, 4.5115, 4.5178, 4.5242, 4.5305, 4.5369, 4.5432],
+    "energy_j_kg_s": [0, 0.303, 0.6021, 0.8974, 1.1888, 1.4764, 1.7602, 2.0401, 2.3162, 2.5884, 2.8568, 3.1214, 3.3821, 3.639, 3.8921, 4.1413, 4.3867, 4.6282, 4.8659, 5.0998, 5.3298, 5.556, 5.7783, 5.9968, 6.2115, 6.4223, 6.6293, 6.8324, 7.0317, 7.2272, 7.4188, 7.6066, 7.7905, 7.9707, 8.1469, 8.3194, 8.488, 8.6527, 8.8136, 8.9707, 9.1239, 9.2733, 9.4189, 9.5606, 9.6985, 9.8325, 9.9629, 10.09, 10.2142, 10.3358, 10.4553, 10.5731, 10.6898, 10.8058, 10.9217, 11.0381, 11.1556, 11.2747, 11.3962, 11.5207, 11.6489, 11.7817, 11.9196, 12.0628, 12.2112, 12.3648, 12.5235, 12.6872, 12.8557, 13.0287, 13.2062, 13.388, 13.5736, 13.763, 13.9557, 14.1515, 14.3499, 14.5508, 14.7536, 14.958, 15.1641, 15.3717, 15.5808, 15.7914, 16.0034, 16.2168, 16.4315, 16.6475, 16.8647, 17.0831, 17.3026, 17.523, 17.7444, 17.9666, 18.1896, 18.4133, 18.6376, 18.8625, 19.0881, 19.3143, 19.5411, 19.7686, 19.9967, 20.2255, 20.4549, 20.6849, 20.9155, 21.1468, 21.3788, 21.6113, 21.8445, 22.0783, 22.3128, 22.5479, 22.7837, 23.02, 23.257, 23.4947, 23.7329, 23.9719, 24.2114, 24.4516, 24.6924, 24.9338, 25.1759, 25.4186, 25.662, 25.906, 26.1506, 26.3959, 26.6418, 26.8883, 27.1355, 27.3833, 27.6317, 27.8808, 28.1305, 28.3808, 28.6318, 28.8834, 29.1357, 29.3885, 29.6421, 29.8962, 30.151, 30.4064, 30.6625, 30.9192, 31.1765, 31.4344, 31.693, 31.9523, 32.2121, 32.4726, 32.7338, 32.9955, 33.2579, 33.521, 33.7847, 34.049, 34.3139, 34.5795, 34.8457, 35.1126, 35.3801, 35.6482, 35.9169, 36.1863, 36.4563, 36.727, 36.9983, 37.2702, 37.5428, 37.816, 38.0898, 38.3643, 38.6394, 38.9152, 39.1915, 39.4685, 39.7462, 40.0245, 40.3034, 40.5829, 40.8631, 41.1439, 41.4254, 41.7075, 41.9902, 42.2736, 42.5576, 42.8422, 43.1275, 43.4134, 43.6999, 43.9871, 44.2749, 44.5633, 44.8524, 45.1421, 45.4325]
+  }
+  
+
+// Minetti 2002 quintic polynomial for (change in) energy cost
+function calcDeltaEC(x_grade){
+    // input   - x_grade is gradient in decimal (0.10 for 10% grade, can be negative)
+    // returns - Cr - *added* cost of running, above level ground intensity, in J/kg/m
+    let delta_Cr = 155.4*x_grade**5 - 30.4*x_grade**4 - 43.3*x_grade**3 + 46.3*x_grade**2 + 19.5*x_grade
+    // Note we exclude the intercept - use Black data instead
+    return delta_Cr
+}
+
+// Get f(x_speed) for either J/kg/m or J/kg/s (=W/kg) in Black data
+// which is flat running data from ~2.2-4.7 m/s
+function lookupSpeed(x, col_name) {
+    // col anme is energy_j_kg_m or energy_j_kg_s aka W/kg
+    const speed = blackGam.speed_m_s;
+    const energy = blackGam[col_name];
+    let f_x;
+    // Check if x is outside the range of speed_m_s
+    if (x < speed[0] || x > speed[speed.length - 1]) {
+        //throw new Error('x is outside of the range of the speed_m_s column');
+        f_x = NaN;
+    } else {
+        // Find the indices that x falls between
+        let i = 0;
+        for (; i < speed.length - 1; i++) {
+            if (x >= speed[i] && x <= speed[i + 1]) {
+                break;
+            }
+        }
+        // Linear interpolation
+        // y = y0 + (y1 - y0) * ((x - x0) / (x1 - x0))
+        f_x = energy[i] + (energy[i + 1] - energy[i]) * ((x - speed[i]) / (speed[i + 1] - speed[i]));
+        // f(x) approximation
+    }
+    return f_x;
+ }
+
+ // Use blackGam to find what flat-ground speed has the metabolic power closest to a given metabolic power
+function getEquivFlatSpeed(W_kg) {
+    // Works!!
+    let eq_speed;
+    const speed = blackGam.speed_m_s;
+    const met_power = blackGam['energy_j_kg_s'];
+    // Check if x is outside the range of speed_m_s
+    if (W_kg < met_power[0] || W_kg > met_power[met_power.length - 1]) {
+        //throw new Error('W_kg is outside of the range of the energy_kg_s');
+        eq_speed = NaN;
+    } else {
+        // Luckily, W_kg as fxn of speed is monotonic! So we can start slow and go up
+        // Find the met power that input W_kg falls between
+        let i = 0;
+        for (; i < met_power.length - 1; i++) {
+            if (W_kg >= met_power[i] && W_kg <= met_power[i + 1]) {
+                break;
+            }
+        }
+        // Linear interpolation
+        // y = y0 + (y1 - y0) * ((x - x0) / (x1 - x0))
+        eq_speed = speed[i] + (speed[i + 1] - speed[i]) * ((W_kg - met_power[i]) / (met_power[i + 1] - met_power[i]));
+        // f(x) approximation
+    }
+
+    return eq_speed;
+}
+
+// Given: speed on flat + grade
+// 1. Convert grade to gradient (may be ft/mile, meters per min, etc)
+// 2. Convert speed (in min/mi, min/km, km/hr, or mi/hr) to m/s
+// 3. Calculate expected energetic cost in J/kg/m using Black equations
+// 4. Use Minetti polynomial to calculate added energetic cost (in J/kg/min) of incline or decline
+
+// Now we have expected energetic cost for treadmill
+
+// in J/kg/meter
+// Convert to Joules per kg per minute by multiplying by speed, gives J/kg/s
+
+// Go back to the polynomial and solve for equivalent speed that gives you the calculated energetic cost!
+// Will be much easier when using J/kg/s since result is monotonic
+
+// -----------------------------------------------
+//
+//   Convert pace
+//
+// ----------------------------------------------
+
+let conv_dec
+
+const convert_dict = {
+    // functions to convert m/s to [output unit, as key]
+    '/mi':function (m_s){
+        // to decimal minutes per mile
+        conv_dec = 1609.344/(m_s*60)
+        return decimal_pace_to_string(conv_dec);
+    },
+    '/km':function (m_s){
+        // to decimal minutes per mile
+        conv_dec = 1000/(m_s*60)
+        return decimal_pace_to_string(conv_dec);
+    },
+    'mph':function (m_s){
+        conv_dec = m_s*2.23694
+        return conv_dec.toFixed(1);
+    },
+    'km/h':function (m_s){
+        conv_dec = m_s*3.6
+        return conv_dec.toFixed(1);
+    },
+    'm/s':function (m_s){
+        // ez mode lol
+        return m_s.toFixed(2);
+    }
+}
+
+function decimal_pace_to_string(pace_decimal){
+    let pace_min = Math.floor(pace_decimal)
+    //Could be zero!! 
+    let pace_sec = (pace_decimal - pace_min)*60
+    //e.g. 9.50 --> 30 
+
+    //Deal with e.g. 3:59.9 --> 4:00.0
+    if (Math.round(pace_sec) === 60) {
+        pace_sec = 0
+        pace_min = pace_min+1;
+    } else {
+        pace_sec = Math.round(pace_sec);
+    }
+    //To formatted string
+    res = `${pace_min}:${pace_sec.toString().padStart(2,'0')}` 
+    return res
+}
+
+function updateOutput(eq_flat_speed){
+    let out_text = document.querySelector('#output-text')
+    let out_units = document.querySelector('#output-units')
+    let convert_text = ''
+
+    if (!Number.isFinite(eq_flat_speed) || eq_flat_speed == 0){
+        // If we get any funny business...hmm
+        convert_text = '🤔' // hmm or scream
+    } else {
+        const convert_fxn = convert_dict[out_units.textContent]
+        convert_text = convert_fxn(eq_flat_speed)
+    }
+
+    //Update text in doc
+    out_text.textContent = convert_text
+}
+
+
+// [lightbulb] At grades steeper than 25%, it may be more
+// efficient to walk instead of run and bulb links to section
+
+// call to show.hide alerts based on state of calculators
+function showAlerts(){
+    let alert_box = document.querySelector('.alert-box')
+
+    // input_grade below -0.08 or whatever
+    // show can't take advntage of steep downhills
+    //input garde above 25% - may be mroe economical to walk
+
+    if (calc_mode == "effort" && hill_mode == "vert speed") {
+        alert_box.classList.remove('hidden')
+    } else {
+        alert_box.classList.add('hidden')
+    }
+}
+
+
+// Update results on page
+function updateResult(){
+    
+    //updates input_m_s and input_grade
+    readCurrentSpeed()
+    readCurrentGrade()
+    flip_pace_effort_text();
+
+    //input_m_s
+    //input_grade
+    // need for both
+    let flat_Cr = lookupSpeed(input_m_s, 'energy_j_kg_m')
+    let delta_Cr = calcDeltaEC(input_grade)
+    let total_Cr = flat_Cr + delta_Cr
+    
+    // FORWARD MODE
+
+    if (calc_mode == 'pace'){
+        let total_Cr_W_kg = total_Cr*input_m_s
+        let eq_flat_speed = getEquivFlatSpeed(total_Cr_W_kg)
+        updateOutput(eq_flat_speed);
+
+    } else if (calc_mode == 'effort' && hill_mode == 'vert speed'){
+        // REVERSE MODE, hard version
+        let solve_speed = solveVertSpeed(input_m_s, vert_speed_m_s)
+        updateOutput(solve_speed);
+
+    } else {
+        // REVERSE MODE
+        let target_W_kg = lookupSpeed(input_m_s, 'energy_j_kg_s')
+        let resultant_speed = target_W_kg/total_Cr
+
+        updateOutput(resultant_speed);
+    }
+
+    showAlerts();
+
+}
 
 // Set up appearing alerts for various "bad" situations 
 //  - walking more efficint
@@ -21,83 +250,6 @@ const TRANSITION_DUR_MS = 400;
 
 // As interim, can just display +/- O2 as delta
 // instaed fo the real equvialent pace
-
-//Get intaneral state of input speed and output speed, m/s
-
-
-
-//leave output units for later, will let me 
-//fudge the text as a debug
-
-
-
-
- // ------- Core calculations ------- 
-
- // --- Load GAM from R and use async/await to query it
- //       (gam is just exported as json for lookup table)
-let blackGam; // Placeholder for loaded data
-
-// Async function to load data
-async function loadData() {
-    const response = await fetch('data/black_data_gam.json');
-    if (!response.ok) {
-        throw new Error('Network response was not ok');
-    }
-    return response.json(); // Directly return the parsed JSON
-}
-
-// Initialize data loading and handle errors
-let dataLoadedPromise = loadData().then(data => blackGam = data)
-
-// Gam lookup table
-// Use linear interpolation to seek what we need in the gam lpmatrix
-function lookup(x, col_name) {
-   const speed = blackGam.speed_m_s;
-   const energy = blackGam[col_name];
-
-   // Check if x is outside the range of speed_m_s
-   if (x < speed[0] || x > speed[speed.length - 1]) {
-       throw new Error('x is outside of the range of the speed_m_s column');
-   } // consider modifying this to linearly extrapolate?
-
-   // Find the indices that x falls between
-   let i = 0;
-   for (; i < speed.length - 1; i++) {
-       if (x >= speed[i] && x <= speed[i + 1]) {
-           break;
-       }
-   }
-   // Linear interpolation
-   // y = y0 + (y1 - y0) * ((x - x0) / (x1 - x0))
-   const interpolatedValue = energy[i] + (energy[i + 1] - energy[i]) * ((x - speed[i]) / (speed[i + 1] - speed[i]));
-   return interpolatedValue;
-}
-
-//GPT says I should use try-catch here, ah well
-async function queryGam(xq, seek_col){
-   await dataLoadedPromise;
-   return lookup(xq, seek_col)
-}
-
-
-// Example of safely using performLookup later in the application
-queryGam(2.05, 'energy_j_kg_m').then(rr => console.log(rr))
-
-console.log('-- Minetti test -- ')
-console.log(calcDeltaO2(0.1))
-console.log('---------------')
-
-// Minetti 2002 quintic polynomial for O2 cost
-function calcDeltaO2(x_grade){
-    // input   - x_grade is gradient in decimal (0.10 for 10% grade, can be negative)
-    // returns - Cr - *added* cost of running, above level ground intensity, in J/kg/m
-
-    let delta_Cr = 155.4*x_grade**5 - 30.4*x_grade**4 - 43.3*x_grade**3 + 46.3*x_grade**2 + 19.5*x_grade
-    // NOTE: this leaves out intercept of 3.6 which is interpretable as Cr at flat ground
-    // We use Black equation instead to account for speed effects on Cr
-    return delta_Cr 
-}
 
 
 // --- Incrementing pace dials --- 
@@ -205,6 +357,8 @@ function increment_minutes(digit_object,change){
     }
 }
 
+// ------ Unit selectors (Input / output) -------
+
 
 // Input unit selector
 const pace_buttons = document.querySelectorAll('.pace-toggle');
@@ -219,7 +373,7 @@ pace_buttons.forEach(button => {
     });
 });
 
-// Input unit selector
+// Output unit selector
 const output_buttons = document.querySelectorAll('.output-toggle');
 
 output_buttons.forEach(button => {
@@ -229,12 +383,9 @@ output_buttons.forEach(button => {
         // Toggle the active state of the clicked button
         e.target.classList.toggle('active');
         setOutputText(button);
+        updateResult();
     });
 });
-
-
-
-var pace_mode = "pace"
 
 
 var speed_dials = document.querySelector('#speed-dials')
@@ -249,9 +400,9 @@ function setMode(dial_mode) {
 
         // grammar
         if (uphill_or_downhill == "uphill") {
-            pace_post.textContent = 'pace on an'
+            pace_post.textContent = 'on an'
         } else {
-            pace_post.textContent = 'pace on a'
+            pace_post.textContent = 'on a'
         }
     }
     if (dial_mode == "speed") {
@@ -262,9 +413,9 @@ function setMode(dial_mode) {
 
         //grammar
         if (uphill_or_downhill == "uphill") {
-            pace_post.textContent = 'speed on an'
+            pace_post.textContent = 'on an'
         } else {
-            pace_post.textContent = 'speed on a'
+            pace_post.textContent = 'on a'
         }
     }
 }
@@ -276,19 +427,19 @@ function setPaceText(button){
     let pace_units = document.querySelector('#pace-units')
     let speed_units = document.querySelector('#speed-units')
 
-    console.log('setPaceDetxt FIRE')
-
     // [/mi] 
     if (button.textContent == "/mi" || button.textContent == "/km") {
         setMode("pace");        
         pace_units.textContent = button.textContent;
         // function like pass_pace_to_speed()
     }
-    if (button.textContent == "mph" || button.textContent == "km/h") {
+    if (button.textContent == "mph" || button.textContent == "km/h" || button.textContent == "m/s") {
         setMode("speed");
         speed_units.textContent = button.textContent;
         // function like pass_speed_to_pace()
     }
+
+    updateResult();
 }
 
 var output_text = document.querySelector('#output-text')
@@ -300,29 +451,24 @@ var output_text = document.querySelector('#output-text')
 function setOutputText(button){
     //4 things can happen here: mi, km, mph, kmh.
     let output_units = document.querySelector('#output-units')
-
     // [/mi] 
     output_units.textContent = button.textContent;
     if (button.textContent == "/mi" || button.textContent == "/km") {
         // UNIT CONVERTION TODO FIX HACK BUG    
         // output_units.textContent = button.textContent;
         // function like pass_pace_to_speed()
+        output_pace_mode = 'pace'
     }
-    if (button.textContent == "mph" || button.textContent == "km/h") {
+    if (button.textContent == "mph" || button.textContent == "km/h" || button.textContent == "m/s") {
         // setMode("speed");
         // speed_units.textContent = button.textContent;
         // function like pass_speed_to_pace()
+        output_pace_mode = 'speed'
     }
 }
 
-
-// Uphill or downhill button
-var hill_mode = "grade"
-var uphill_or_downhill = "uphill"
-
 const hill_indicator = document.querySelector('.hill-button');
 const hill_text = document.querySelector('#uphill-or-downhill');
-
 
 // Negate Incline on button press
 hill_indicator.addEventListener('click', (e) => {
@@ -330,12 +476,11 @@ hill_indicator.addEventListener('click', (e) => {
     updateResult()
 });
 
-var vert_speed_int = 1000 //hardcoded, care
 
-var vert_speed_input = document.querySelector('#vert-speed-input')
+let vert_speed_input = document.querySelector('#vert-speed-input')
 vert_speed_input.addEventListener("change", (e) => {
-    var new_value = +e.target.value
-    var old_value = vert_speed_int
+    let new_value = +e.target.value
+    let old_value = vert_speed_int
     vert_speed_int = new_value
 
     if (vert_speed_int < 0 && old_value >= 0){
@@ -348,11 +493,11 @@ vert_speed_input.addEventListener("change", (e) => {
 });
 
 
-var rise_input = document.querySelector('#rise')
-var rise_int = 100
+let rise_input = document.querySelector('#rise')
+let rise_int = 100
 rise_input.addEventListener("change", (e) => {
-    var new_value = +e.target.value
-    var old_value = rise_int
+    let new_value = +e.target.value
+    let old_value = rise_int
     rise_int = new_value
 
     if (rise_int < 0 && old_value >= 0 || rise_int > 0 && old_value <= 0){
@@ -362,8 +507,8 @@ rise_input.addEventListener("change", (e) => {
 });
 
 
-var run_input = document.querySelector('#run')
-var run_int = parseInt(run_input.value)
+let run_input = document.querySelector('#run')
+let run_int = parseInt(run_input.value)
 run_input.addEventListener("change", (e) => {
     run_int = +e.target.value
     updateResult();
@@ -372,11 +517,9 @@ run_input.addEventListener("change", (e) => {
 
 
 // CARE CARE CARE with math, track units!!!
-var pace_post = document.querySelector('#pace-post')
+let pace_post = document.querySelector('#on-a-an')
 
 function negateIncline(){
-    console.log('***************')
-    console.log(vert_speed_int)
     // Maybe edit across the board? So its' ok if you sitch? 
 
     if (hill_text.textContent == "uphill") {
@@ -384,9 +527,9 @@ function negateIncline(){
         uphill_or_downhill = "downhill"
         hill_text.textContent = "downhill"
         if (pace_mode == "pace") {
-            pace_post.textContent = 'pace on a'
+            pace_post.textContent = 'on a'
         } else {
-            pace_post.textContent = 'speed on a'
+            pace_post.textContent = 'on a'
         }
         hill_indicator.classList.toggle('mirrored');
         //Call swap function to whatever mode is active to +/- it
@@ -394,9 +537,9 @@ function negateIncline(){
         uphill_or_downhill = "uphill"
         hill_text.textContent = "uphill"
         if (pace_mode == "pace") {
-            pace_post.textContent = 'pace on an'
+            pace_post.textContent = 'on an'
         } else {
-            pace_post.textContent = 'speed on an'
+            pace_post.textContent = 'on an'
         }
         hill_indicator.classList.toggle('mirrored')
         //Call swap function to whatever mode is active to +/- it
@@ -410,7 +553,7 @@ function negateIncline(){
     angle_int = angle_int*-1
     angle_text.textContent = angle_int  
     //rise run
-    var rise_post_text = document.querySelector('#rise-post-text')
+    let rise_post_text = document.querySelector('#rise-post-text')
     if (rise_post_text.innerHTML == "&nbsp;of gain") {
         rise_post_text.innerHTML = '&nbsp;of loss'
     } else {
@@ -418,7 +561,7 @@ function negateIncline(){
     }
 
     //vert speed
-    var vert_post_text = document.querySelector('#vert-speed-post-text')
+    let vert_post_text = document.querySelector('#vert-speed-post-text')
     if (vert_post_text.innerHTML == "&nbsp;gain") {
         vert_post_text.innerHTML = '&nbsp;loss'
     } else {
@@ -429,7 +572,6 @@ function negateIncline(){
     // flip rise and vert IF NEEDED
     if (vert_speed_int < 0 && uphill_or_downhill == "uphill" || 
     vert_speed_int > 0 && uphill_or_downhill == "downhill") {
-        console.log(vert_speed_int)
         negateVertSpeed() 
     }
 
@@ -441,12 +583,8 @@ function negateIncline(){
 }
 
 function negateVertSpeed(){
-    console.log('fire negvs')
-    console.log(vert_speed_int)
     vert_speed_int = vert_speed_int*-1
     vert_speed_input.value = vert_speed_int
-    console.log(vert_speed_int)
-    console.log('-------')
 }
 function negateRise(){
     rise_int = rise_int*-1
@@ -550,7 +688,6 @@ function increment_grade(change){
         //flipping negative
         negateIncline()
     }
-
     // allow if below 50
     if (pct_int + change <= 50 && pct_int + change >= -50) {
         pct_int = pct_int + change
@@ -603,17 +740,10 @@ function increment_angle(change){
         angle_int = angle_int + change
         angle_text.textContent = angle_int;
     }
-
-    // else if here about edge cases of 46 + 5?
-
-    // if we go from zero to negative, or vv. 
-    // .,... DO SOMETHING???
-
     updateResult();
 }
 
 // ------ Adjsting rise/run stuff
-
 const rise_unit_buttons = document.querySelectorAll('.rise-toggle');
 const run_unit_buttons = document.querySelectorAll('.run-toggle');
 
@@ -638,8 +768,6 @@ run_unit_buttons.forEach(button => {
     });
 });
 
-
-
 function setRiseText(button){
     rise_text.textContent = button.textContent
 }
@@ -655,7 +783,6 @@ function setRunText(button){
 
 
 // ---- Vert speed
-
 const vert_buttons = document.querySelectorAll('.vert-toggle');
 var vert_text = document.querySelector('#vert-unit')
 
@@ -679,6 +806,58 @@ function setVertText(button){
 }
 
 
+// ----- Toggle switch reading and cahnigng text
+
+// Change the percent / speed text
+let pace_or_effort_pre_text = document.querySelector('#pace-or-effort-pre')
+let pace_or_effort_text = document.querySelector('#pace-or-effort');
+let result_pre_text = document.querySelector('#result-pre')
+let post_results_text = document.querySelector('#post-result-text')
+const checkbox = document.querySelector('.switch input[type="checkbox"]');
+
+let result_pace_speed_text = document.querySelector('#result-speed-or-pace')
+let result_of_text = document.querySelector('#results-of')
+
+//result-speed-or-pace
+checkbox.addEventListener('change', () => {
+    updateResult()
+})
+
+function flip_pace_effort_text(){
+    if (checkbox.checked) {
+        //percent of pace
+        calc_mode = 'pace'
+        pace_or_effort_pre_text.innerHTML = ''
+        if (pace_mode == 'pace'){
+            pace_or_effort_text.innerHTML = 'pace&nbsp;'
+        } else if (pace_mode == 'speed') {
+            pace_or_effort_text.innerHTML = 'pace&nbsp;'
+        }
+        result_pre_text.textContent = 'is the same effort as'
+        post_results_text.textContent = 'on flat ground'
+        result_pace_speed_text.textContent = ''
+        result_of_text.innerHTML = ''
+    } else {
+        pace_or_effort_pre_text.innerHTML = 'flat-ground&nbsp;'
+        pace_or_effort_text.innerHTML = 'effort&nbsp;'
+        calc_mode = 'effort'
+        result_pre_text.innerHTML = 'results in a&nbsp;'
+        if (output_pace_mode == "pace"){
+            post_results_text.textContent = 'on the hill'
+            result_pace_speed_text.textContent = 'pace'
+        } else if (output_pace_mode == "speed"){
+            post_results_text.textContent = 'on the hill'
+            result_pace_speed_text.textContent = 'speed'
+        }
+
+        // after grammar
+        result_of_text.innerHTML = '&nbsp;of'
+    }
+}
+
+
+// ----- Reading speed from digits
+
 function readCurrentSpeed(){
     // Pace mode
     if (pace_mode == "pace") {
@@ -686,18 +865,15 @@ function readCurrentSpeed(){
         var minute_val = parseInt(d1.textContent)
         var sec_val = 10*parseInt(d2.textContent) + parseInt(d3.textContent)
         var dec_minutes = minute_val + sec_val/60
-        console.log(dec_minutes)
 
         const pace_units = document.querySelector('#pace-units').textContent
 
         if (pace_units == "/mi"){
             //Convert to m/s
             input_m_s = 1609.344/(60*dec_minutes)
-            console.log(input_m_s)
         } else if (pace_units == "/km"){
             //Convert to m/s
             input_m_s = 1000/(60*dec_minutes)
-            console.log(input_m_s)
         }
 
     // Speed mode
@@ -712,6 +888,8 @@ function readCurrentSpeed(){
         } else if (speed_units == "km/h"){
             //Convert to m/s
             input_m_s = dec_speed*1000/3600
+        } else if (speed_units == "m/s"){
+            input_m_s = dec_speed // lol
         }
     }
 }
@@ -719,12 +897,9 @@ function readCurrentSpeed(){
 function readCurrentGrade(){
     // Return current input grade as decimal grade
     // e.g. %5 is 0.05
-    console.log('FIRE')
-
     if (hill_mode == "grade") {
         // easy
         input_grade = pct_int/100.0
-        console.log(angle_int)
     } else if (hill_mode == "angle") {
         // Convert to rad first, then tan
         var angle_rad = angle_int * (Math.PI / 180);
@@ -742,14 +917,12 @@ function readCurrentGrade(){
         // Convert run to meters, from km or mi
         if (run_text.textContent == "miles"){
             var run_meters = run_int*1609.344
-            console.log(run_meters)
         } else if (run_text.textContent == "kilometers"){
             var run_meters = run_int*1000
         }
 
         // NOW can calc
         input_grade = rise_meters/run_meters
-        console.log(input_grade)
 
     } else if (hill_mode == "vert speed") {
         // vert speed is tricky because it depends on speed
@@ -760,82 +933,105 @@ function readCurrentGrade(){
         //convert vert speed to meters per second
         if (vert_text.textContent == 'feet per hour') {
             //convert to m/hr, then m/s
-            var vert_speed_m_s = vert_speed_int*0.3048/(60*60)
+            vert_speed_m_s = vert_speed_int*0.3048/(60*60)
         } else if (vert_text.textContent == 'meters per hour') {
             //..
-            var vert_speed_m_s = vert_speed_int/(60*60)
+            vert_speed_m_s = vert_speed_int/(60*60)
         }
-        //do on velocity scale, doesn't matter
-        var run_x_meters = Math.sqrt(input_m_s**2 - vert_speed_m_s**2)
-        //techncially input speed is parallel to slope, not x-axis speed
-        //only matters for extreme steep slopes
-        input_grade = vert_speed_m_s/run_x_meters
+
+        if (calc_mode == "pace") {
+            // this one is the simpler one
+            //do on velocity scale, doesn't matter
+            var run_x_meters = Math.sqrt(input_m_s**2 - vert_speed_m_s**2)
+            //techncially input speed is parallel to slope, not x-axis speed
+            //only matters for extreme steep slopes
+            input_grade = vert_speed_m_s/run_x_meters
+        } else {
+            // don't want to read grade here, let solver do it later
+        }
     }
 }
 
+function solveVertSpeed(input_m_s, vert_spd){
+    // Solving effort-based vert speed is super hard actually
 
-var input_m_s = 4.4704 //6:00 mile pace as input initail
-var input_grade = 0.05 // Keep as decimal because that's what minetti used
+    // Shooting for this metabolic power, it's W/kg at input m/s onf lat groudn
+    target_W_kg = lookupSpeed(input_m_s, 'energy_j_kg_s')
 
-// Update results on page
-function updateResult(){
-    console.log(hill_mode)
-    //console.log("do result updates...")
+    let W_results = []
+    let grade_trials = []
+    let vact_results = []
 
-    //updates input_m_s and input_grade
-    readCurrentSpeed()
-    readCurrentGrade()
-    //input_m_s
-    //input_grade
-    console.log(input_grade)
+    //if uphill mode; if uphill_or_downhill == "uphill" seek 0.01 to +1, else -0.01 to -1
 
-    //Calculate delta in Cr attributable to incline/decline
+    if (uphill_or_downhill == "uphill") {
+        for (let grade_i = 0.005;  grade_i <=0.5; grade_i +=0.005) {
+            //What is metabolic rate for input vert speed if grade is grade_i?
+            let [v_act_res, Wi_res] = calcWtrial(grade_i, vert_spd)
+            // debug...
+    
+            //console.log(`Grade ${grade_i.toFixed(2)} Wcalc ${Wi_res.toFixed(2)}`)
+    
+            W_results.push(Wi_res)
+            vact_results.push(v_act_res)
+            //inefficeint but w/e
+            grade_trials.push(grade_i)     
+        }
+    } else if (uphill_or_downhill == "downhill") {
+        // seek negative
+        for (let grade_i = -0.005;  grade_i >= -0.5; grade_i -=0.005) {
+            //What is metabolic rate for input vert speed if grade is grade_i?
+            let [v_act_res, Wi_res] = calcWtrial(grade_i, vert_spd)
+            // debug...
+            //console.log(`Grade ${grade_i.toFixed(2)} Wcalc ${Wi_res.toFixed(2)}`)
+    
+            W_results.push(Wi_res)
+            vact_results.push(v_act_res)
+            //inefficeint but w/e
+            grade_trials.push(grade_i)     
+        }
+    }
 
-    let delta_Cr = calcDeltaO2(input_grade)
+    //which entry is closest to target_W_kg?
+    let closestIndex = 0;
+    let smallestDifference = Infinity;
 
-    // Example of safely using performLookup later in the application
-    queryGam(2.05, 'energy_j_kg_m').then(rr => console.log(rr))
+    for (let i = 0; i < W_results.length; i++) {
+        let difference = Math.abs(W_results[i] - target_W_kg);
+        if (difference < smallestDifference) {
+            smallestDifference = difference;
+            closestIndex = i;
+        }
+    }
+    // Now closestIndex holds the index of the closest value
+    let closestGrade = grade_trials[closestIndex];
+    let closestW = W_results[closestIndex];
+    let closestV = vact_results[closestIndex];
+    let pct_diff = Math.abs(smallestDifference/target_W_kg)
 
-    // if async was not an issue
-    flat_Cr_permeter = queryGam(input_m_s,'energy_j_kg_m')
+    input_grade = closestGrade;
 
-    //WARNING: Only works for forward mode! 
-    //    Need to think about reverse mode converion process
+    if (pct_diff > 0.05) {
+        closestV = NaN
+    }
 
-    //Total cost to run at input_m_s on a hill of input_grade
-    let total_Cr_permeter = flat_Cr_permeter + delta_Cr
-    let total_Cr_persec = total_Cr_permeter*input_m_s //now in W/kg
-
-    //Find the x_speed value that gives energy_j_kg_s value in blackGam that is closest to total_Cr_persec
-    // that x_speed is your GAP
-
-    // ... then convert internal m/s representation to output state (/mi, /km, mph, kmh, m/s)
-
-
-
-
-
-
-    //Do minetti equations...
-    // calcOxygenCost()
-    // findEquivalentFlatSpeed()
-
-
-    //Get current input speed
-   
-
-    // IMPORTANT - we need to update global speed in m/s each time a button is pressed
-
-    // farm to a function so we can 
+    return closestV
 
 }
 
-
-// TODO:
-
-// 7) Implement Minetti equation + gam and run console tests
-// 8) Implement alert/warning insertions when outside ranges
-
-
-// 6) Implement unit conversions for results
-
+// Utility for the grade grisearch
+function calcWtrial(grade_i, vy) {
+    if (grade_i == 0) throw new Error("x should not be 0");
+    const vx = vy/grade_i
+    // do not worry about negative vy, squares take care of it
+    const v_act = Math.sqrt(vx**2 + vy**2)
+    
+    // TOTAL Cost of running for this trial guess is flat cost + incline cost
+    const Cr_i = lookupSpeed(v_act, 'energy_j_kg_m') + calcDeltaEC(grade_i)
+    // Metabolic power = cost of running * speed along direction of treadmill belt
+    // in practice in's only like 3% diff even for 25% grade but w/e
+    let W_i = Cr_i*v_act
+    // outside range or error? call W/kg infinitely high
+    if (Number.isNaN(W_i)) W_i = Infinity
+    return [v_act, W_i]
+}
