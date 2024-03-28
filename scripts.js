@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', (event) => {
-    console.clear();
-    console.log('Script loaded')
+    //console.clear();
+    //console.log('Script loaded')
     updateResult();
 });
 
@@ -11,15 +11,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
 // remove hmm alert text
 
-// Style and move footnotes
-
 // Export Black and Minetti plots from R at reasoanble resolution
 
 // put plots into doc
 
 // Check in R against ground truth equations
-
-// Add exmaples of hills, from GOOGLE DOC
 
 
 // Global state variables
@@ -220,14 +216,12 @@ function showAlerts(){
         info_text.textContent = 'This downhill might be too steep to gain the full energetic benefit'
         info_box.classList.remove('hidden')
     } else if (input_grade > 0.25) {
-        console.log('FIRE')
         console.log(input_grade)
         // Change text
         info_i.href = '#walk-vs-run'
         info_text.textContent = 'This uphill might be steep enough that walking would be more energetically efficient'
         info_box.classList.remove('hidden')
     } else {
-        console.log('HIDDEN')
         info_box.classList.add('hidden')
     }
 
@@ -242,9 +236,7 @@ function showAlerts(){
 
 
 // Update results on page
-function updateResult(){
-    console.log(input_grade)
-    
+function updateResult(){    
     //updates input_m_s and input_grade
     readCurrentSpeed()
     readCurrentGrade()
@@ -871,7 +863,7 @@ function flip_pace_effort_text(){
         if (pace_mode == 'pace'){
             pace_or_effort_text.innerHTML = 'pace&nbsp;'
         } else if (pace_mode == 'speed') {
-            pace_or_effort_text.innerHTML = 'pace&nbsp;'
+            pace_or_effort_text.innerHTML = 'speed&nbsp;'
         }
         result_pre_text.textContent = 'is the same effort as'
         post_results_text.textContent = 'on flat ground'

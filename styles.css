@@ -753,6 +753,7 @@ input:checked + .slider:before {
 
 .explainer-text {
     line-height: 1.5;
+    padding: 0 0.5em;
 }
 
 .explainer-text ol {
@@ -792,7 +793,13 @@ table {
   font-weight: bold; /* Keeping the bold styling as per your previous request */
 }
 
-
+.bq-text {
+    margin: 0em 1em;
+    padding: 1em;
+    background-color: #eaf6ff;
+    border-left: 5px solid var(--hover-color); /* Adds a solid line on the left */
+    font-style: italic; /* Optionally, italicize the text to further mimic a blockquote */
+}
 
 /* At the bottom I guess */
 
