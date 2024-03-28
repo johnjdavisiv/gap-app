@@ -591,6 +591,11 @@ footer a{
     .bulb-icon:hover{
         background-color: #fefce8;
     }
+
+      
+    tbody tr:hover {
+        background-color: #f2f2f2;
+    }
 }
 
 /* Coloring buttons when active */
@@ -750,7 +755,7 @@ input:checked + .slider:before {
     line-height: 1.5;
 }
 
-.explainer-text ol{
+.explainer-text ol {
     padding: 0 3em;
 
 }
@@ -758,6 +763,7 @@ input:checked + .slider:before {
     list-style: decimal;
 
 }
+
 
 /* Table */
 
@@ -778,11 +784,14 @@ table {
     background-color: #F9F9F9;
     color: #333;
   }
+
   
-  tbody tr:hover {
-    background-color: #f2f2f2;
-  }
-  
+
+.famous-hills tbody tr td:last-child {
+  white-space: nowrap;
+  font-weight: bold; /* Keeping the bold styling as per your previous request */
+}
+
 
 
 /* At the bottom I guess */
