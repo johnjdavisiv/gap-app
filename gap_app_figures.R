@@ -63,9 +63,9 @@ kipp_alf <- 0.8
 jt_2 <- 0.03
 
 #Text
-fnt <- 10
-title_fnt <- 10
-subtitle_fnt <- 8
+fnt <- 11
+title_fnt <- 12
+subtitle_fnt <- 10
 wm_fnt <- 10
 
 
@@ -211,6 +211,7 @@ grad_breaks <- seq(-0.5,0.5,by=0.1)
 grad_labs <- sprintf("%.0f", grad_breaks*100)
 
 
+
 minetti_plot <- df_incline_plot %>%
   ggplot(aes(x=slope, y=Cr)) + 
   geom_vline(xintercept=0, linetype="dotted", color="#e5e7eb") + 
@@ -261,8 +262,8 @@ ggsave("images/02 - Energetic cost of running on inclines and declines.png",
 lwd <- 1
 alf <- 0.8
 
-title_fnt <- 10
-fnt <- 6
+title_fnt <- 12
+fnt <- 10
 
 
 pace_labs <- c("14:00","10:00","8:00", "5:00")
@@ -270,18 +271,18 @@ pace_labs <- c("14:00","10:00","8:00", "5:00")
 
 plt_1 <- df_speed_plot %>%  
   filter(category == "Elite") %>%
-  ggplot(aes(x=pace_min_mi, y=energy_j_kg_m, color=category)) +
+  ggplot(aes(x=pace_min_mi, y=energy_j_kg_m)) +
   geom_line(aes(x=pace_min_mi, y=cr_hat, color=category),
             linetype="solid",
-            alpha = 0.6,
-            linewidth = lwd) +
-  scale_color_brewer(palette="Set1", name="Category") + 
+            color = "#377eb8",
+            alpha = alf,
+            linewidth = lwd) + 
   scale_x_reverse(limits = c(15,5), breaks = c(14,10,8,5),
                   labels = pace_labs,
                   expand = c(0,0),
                   name = "Pace (min/mi)") + 
   scale_y_continuous(limits = c(0,25), breaks = seq(0,25,by=5),
-                     name = NULL,
+                     name = "Energetic cost (J/kg/m)",
                      expand = c(0,0)) + 
   ggtitle("Flat-ground running") + 
   theme_bw() + 
@@ -297,7 +298,8 @@ plt_1 <- df_speed_plot %>%
         axis.ticks = element_line(color="black"),
         panel.border = element_blank(),
         panel.grid = element_blank(),
-        panel.grid.major.y = element_line(linewidth=0.2, color= "#e5e7eb")
+        panel.grid.major.y = element_line(linewidth=0.2, color= "#e5e7eb"),
+        plot.margin = unit(c(10,10,10,10), "pt")
   ) + 
   coord_cartesian(clip = "off")
 
@@ -335,7 +337,8 @@ plt_2 <- df_incline_plot %>%
         axis.ticks = element_line(color="black"),
         panel.border = element_blank(),
         panel.grid = element_blank(),
-        panel.grid.major.y = element_line(linewidth=0.2, color= "#e5e7eb")
+        panel.grid.major.y = element_line(linewidth=0.2, color= "#e5e7eb"),
+        plot.margin = unit(c(10,10,10,10), "pt")
   ) + 
   coord_cartesian(clip = "off")
 
