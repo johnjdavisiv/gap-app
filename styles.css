@@ -306,6 +306,7 @@ p {
 }
 
 
+
 /* Incline box */
 .incline-box {
     width: 100%;
@@ -348,6 +349,7 @@ p {
 .arrow-box {
     display:flex;
 }
+
 
 .pct-button {
     font-size: 1.4em;
