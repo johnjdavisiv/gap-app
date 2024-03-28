@@ -801,6 +801,11 @@ table {
     font-style: italic; /* Optionally, italicize the text to further mimic a blockquote */
 }
 
+.explainer-image {
+    width:100%;
+    height:auto;
+}
+
 /* At the bottom I guess */
 
 .hidden {
