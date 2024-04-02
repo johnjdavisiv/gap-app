@@ -1,6 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=PT+Mono&family=Roboto:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap');
 
 
+/* TODO: looks good so far but need to iteratively add the other stuff */
+
 :root {
     --primary-color: #007bff;
     --dark-accent: #0056b3;
@@ -136,6 +138,7 @@ main {
 /* Pace input dials */
 
 .digitbox {
+    font-size: 2em;
     background-color: white;
     display:flex;
     flex-direction: column;
@@ -187,6 +190,7 @@ main {
 
 
 .svg-arrow {
+    font-size: 1.5em;
     outline: none; /* remove focus outline (consider accessibility) */
     cursor: pointer;
     border: solid var(--dark-accent) 2px;
@@ -204,7 +208,6 @@ main {
     justify-content: end;
     padding: 0 0.75em 0 0;
     font-family:'PT Mono', monospace;
-    font-size: 1.25em;
     font-weight:bold;
 }
 
@@ -216,8 +219,8 @@ main {
 .unit-toggle, .hill-toggle{
     background-color: var(--toggle-color);
     border: none;
-    font-size:1.1em;
     border-radius:5px;
+    font-size:1.0em;
     padding: 0.25em 0.5em;
     margin: 0.2em 0em;
     cursor:pointer;
@@ -228,7 +231,6 @@ main {
 /* Spacer */
 
 .spacer {
-    font-size: 1.5em;
     width:100%;
     display:flex;
     justify-content: center;
@@ -250,9 +252,11 @@ main {
 }
 
 /*  >> and > button styling */
+* {
+    border: solid blue 1px;
+}
 
 .pct-button {
-    font-size: 1.3em;
     outline: none; /* remove focus outline (consider accessibility) */
     cursor: pointer;
     border: solid var(--primary-color) 2px;
@@ -274,13 +278,12 @@ main {
 .digit {
     font-family:'PT Mono', monospace;
     font-weight:bold;
-    font-size: 4em;
+    font-size: 2em;
 }
 
 
 .incline-text {
     font-family: 'Roboto', sans-serif;
-    font-size: 2em;
     display:flex;
     align-items: center;
 }
@@ -312,6 +315,14 @@ main {
 
 /* Responsive stuff, tweak as needed */
 
+
+@media (max-width: 500px) {
+
+    h1 {
+        font-size: 1.0em;
+    }
+}
+
 @media (max-width: 400px) {
     .header-content, .header-content a, nav a {
         font-size: 1em; /* Reduce font size */
@@ -321,10 +332,17 @@ main {
         padding: 5px; /* Reduce padding for more space */
     }
 
-    .incline-text {
-        font-size: 1em;
+    .svg-arrow {
+        font-size: 1.0em;
     }
+
+
+    .digit {
+        font-size: 1.5em;
+    }
+
     
+   
 
     .pct-button {
         font-size: 1.0em;
