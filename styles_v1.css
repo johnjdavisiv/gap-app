@@ -14,7 +14,7 @@
     --app-max-width: 800px;
     --app-min-width: 25em;
     --toggle-color: #e9ecef;
-    --slider-width: 55px;
+    --slider-width: 54px;
     --slider-height: 30px;
     --alert-color:#92400e;
 }
@@ -220,7 +220,7 @@ main {
     background-color: var(--toggle-color);
     border: none;
     border-radius:5px;
-    font-size:1.0em;
+    font-size:1.1em;
     padding: 0.25em 0.5em;
     margin: 0.2em 0em;
     cursor:pointer;
@@ -228,14 +228,24 @@ main {
 }
 
 
-/* Spacer */
+/* Spacer and within spacer text styling */
 
 .spacer {
+    font-size: 1.5em;
     width:100%;
     display:flex;
     justify-content: center;
     padding: 0.5em;
 }
+
+#pace-or-effort, .rise-unit{
+    font-weight:bold;
+}
+
+* {
+    border: solid blue 1px;
+}
+
 
 
 .toggle-box {
@@ -244,6 +254,10 @@ main {
     flex: 1;
 }
 
+.incline-unit-box {
+    padding: 0.5em 0;
+
+}
 
 /* Incline box */
 .incline-box {
@@ -252,10 +266,6 @@ main {
 }
 
 /*  >> and > button styling */
-* {
-    border: solid blue 1px;
-}
-
 .pct-button {
     outline: none; /* remove focus outline (consider accessibility) */
     cursor: pointer;
@@ -289,9 +299,111 @@ main {
 }
 
 
+.incline-label {
+    font-size: 1.5em;
+    font-family: 'Roboto', sans-serif;
+    font-weight: normal;
+    
+}
+
+/* Uphill / downhill indicator */
+
+.up-down-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap:1em;
+    padding: 0.4em 0em;
+    font-size:1.5em;
+}
+
+#uphill-or-downhill {
+    font-weight: bold;
+}
+
+.hill-button{
+    font-size:2em;
+    border:none;
+    transition: transform 0.3s; /* This will make the rotation smooth */
+    transform-origin: center;
+}
+
+
+.hill-outer, .incline-box {
+    min-height: 5em;
+}
+
+.hill-outer {
+    display:flex;
+    justify-content: center;
+}
+
+.input-row {
+    display:flex;
+    justify-content: center;
+}
+
+
+#rise {
+    width: 7ch;
+}
 
 
 
+.rise-run-row {
+    padding: 0.25em 0;
+    display:flex;
+    justify-content: space-between;
+}
+
+
+.vert-row {
+    padding: 0.25em 0;
+    display:flex;
+    justify-content: center;
+}
+
+.slug {
+    display:flex;
+    flex-direction: row;
+}
+
+
+.rise-unit, .rise-text {
+    font-size: 1.25em;
+    flex:0;
+    white-space: nowrap;
+}
+
+
+.hill-input {
+    font-size: 1.25em;
+    width: 3em;
+    margin: 0 0.3em;
+}
+
+.vert-input {
+    width: 4em;
+}
+
+/* Grade unit selector */
+
+.unit-row {
+    white-space: nowrap;
+    width:100%;
+    display:flex;
+    justify-content: center;
+    gap: 0.2em;
+}
+
+
+/* Results */
+
+.pace-result, .convert-result {
+    font-family:'PT Mono', monospace;
+    font-weight:bold;
+    font-size: 4.5em;
+}
 
 
 /* Material icons */
@@ -313,13 +425,195 @@ main {
     font-weight: bold;
 }
 
+
+/* Toggle switch */
+
+
+/* Toggle slider */
+/* The switch - the box around the slider */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: var(--slider-width, 60px); /* Default width */
+    height: var(--slider-height, 34px); /* Default height */
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* The slider */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: background-color .3s;
+    border-radius: calc(var(--slider-height, 34px) / 2); /* Make the slider rounded based on height */
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: calc(var(--slider-height, 34px) - 8px); /* Adjust based on slider height */
+    width: calc(var(--slider-height, 34px) - 8px); /* Make the circle's size responsive to the slider's height */
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: transform .4s;
+    border-radius: 50%; /* Always fully rounded */
+}
+
+input:checked + .slider {
+    background-color: #2196F3;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+    transform: translateX(calc(var(--slider-width, 60px) - var(--slider-height, 34px))); /* Move circle to the right */
+}
+
+
+
+/* Affecting things that are active */
+
+/* Coloring buttons when active */
+.unit-toggle:active{
+    background-color: var(--active-color);
+}
+
+.svg-arrow:active, .pct-button:active {
+    /* Must be AFTER hover def! */
+    background-color: var(--link-hover-color);
+    /* color: white; */
+}
+
+/* IF the to/from unit buttons are active */
+.active {
+    background-color: var(--active-color);
+    color:white;
+}
+
+.i-note:active {
+    color:white;
+    border: solid var(--link-hover-color) 2px;
+}
+
+/* up to top arrow */
+.material-icons.up  {
+    padding: 0 0 0 0.5em;
+    font-size: 1.4rem;
+    color: gray;
+    text-decoration: none;;
+}
+
+
+
+.mirrored {
+    transform: scaleX(-1);
+}
+
+.i-note {
+    outline: none;
+    cursor: pointer;
+    border: solid var(--primary-color) 2px;
+    background-color: white;
+    font-size: 1.25rem;
+    width:1.25em;
+    height:1.25em;
+    display:flex;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    color: #2196F3;
+    align-items: center;
+    justify-content: center; 
+    text-decoration: none;
+}
+
+
+
+
+
+
+
+/* Hover only on mice */
+@media (hover: hover) {
+    .svg-arrow:hover, .pct-button:hover, .unit-toggle:hover, .hill-toggle:hover {
+        background-color: var(--hover-color);
+        box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.12);
+    }
+    
+    .hill-button:hover {
+        cursor:pointer;
+        color: var(--dark-accent);
+    }
+    
+    
+    .i-note:hover{
+        background-color: var(--hover-color);
+        cursor:pointer;
+    }
+    
+    .flip-button:hover {
+        color: var(--dark-accent);
+        cursor: pointer;
+    }
+    .unit-toggle:hover, .hill-toggle:hover {
+        color:black;
+    }
+    
+    .logo-link a:hover{
+        color:var(--link-hover-color);
+    }
+    
+    .menu a:hover {
+        color:var(--link-hover-color);
+    }
+    
+    .material-icons.up:hover  {
+        color:var(--primary-color);
+    }
+    
+    .bulb-icon:hover{
+        background-color: #fefce8;
+    }
+    
+    
+    tbody tr:hover {
+        background-color: #f2f2f2;
+    }
+}
+
+
+
 /* Responsive stuff, tweak as needed */
 
 
+/* Some downsizing for mobile usibility */
 @media (max-width: 500px) {
 
     h1 {
         font-size: 1.0em;
+    }
+
+    .hill-outer {
+        font-size:0.8em;
+    }
+    .unit-toggle, .hill-toggle{
+        font-size:1em;
+        padding: 0.25em 0.25em;
+        margin: 0.2em 0em;
+        cursor:pointer;
+        min-width: 3ch;
     }
 }
 
@@ -341,9 +635,6 @@ main {
         font-size: 1.5em;
     }
 
-    
-   
-
     .pct-button {
         font-size: 1.0em;
         margin: 2px;
@@ -354,7 +645,10 @@ main {
         align-items:center;
         justify-content: center;
     }
+
+
 }
+
 
 /* At the bottom I guess */
 
