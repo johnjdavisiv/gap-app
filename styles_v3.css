@@ -640,6 +640,11 @@ input:checked + .slider:before {
 }
 
 
+.newsletter-block {
+    display: flex;
+    justify-content: center;
+}
+
 /* Table */
 
 table {
