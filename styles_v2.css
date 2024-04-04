@@ -135,8 +135,10 @@ main {
 
 .arrow-container{
     width: 100%;
+    min-height: 5em;
+    max-width: 540px;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
 }
 
@@ -733,32 +735,26 @@ table {
 
 /* Responsive stuff, tweak as needed */
 
-
-/* Some downsizing for mobile usibility */
 @media (max-width: 500px) {
 
     h1 {
-        font-size: 1.0em;
+        font-size: 1.33em;
     }
 
-    .hill-outer {
-        font-size:0.8em;
-    }
-    .unit-toggle, .hill-toggle{
-        font-size:1em;
-        padding: 0.25em 0.25em;
-        margin: 0.2em 0em;
-        cursor:pointer;
-        min-width: 3ch;
-    }
-
-    .pct-button {
-        font-size: 1.25em;
+    main {
+        padding: 0.25em 0.25em; 
     }
 
 }
 
+
+
 @media (max-width: 400px) {
+
+    h1 {
+        font-size: 1.1em;
+    }
+
     .header-content, .header-content a, nav a {
         font-size: 1em; /* Reduce font size */
     }
@@ -768,15 +764,15 @@ table {
     }
 
     .svg-arrow {
-        font-size: 1.0em;
+        font-size: 1.25em;
     }
-
 
     .digit {
-        font-size: 1.5em;
+        font-size: 1.4em;
     }
     .pct-button {
-        font-size: 1.0em;
+        font-size: 1.25em;
+        margin: 2px;
     }
 
     .pace-result {
@@ -784,10 +780,20 @@ table {
     }
 
     .spacer {
-        font-size: 1em;
+        font-size: 1.25em;
     }
-    .hill-unit, .hill-text {
-        font-size: 0.75em;
+
+    .unit-toggle, .hill-toggle{
+        font-size: 0.9em;
+        padding: 0.25em 0.25em;
+        margin: 0.2em 0em;
+    }
+
+
+
+
+    .hill-unit, .hill-text, .unit-text {
+        font-size: 0.8em;
     }
 
 
