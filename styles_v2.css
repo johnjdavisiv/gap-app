@@ -627,6 +627,7 @@ input:checked + .slider:before {
 .explainer-text {
     line-height: 1.5;
     padding: 0 0.5em;
+    font-size: 1.3em;;
 }
 
 .explainer-text ol {
