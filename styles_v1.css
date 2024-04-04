@@ -47,6 +47,18 @@ h1 {
     font-size: 1.5em;
 }
 
+h2, h3, h4, h5, h6 {
+    color:var(--soft-black);
+    padding: 0.75em 0 0.25em 0;
+}
+
+
+p {
+    padding: 0.5em 0;
+}
+
+
+
 header {
     width: 100%;
     display: flex;
@@ -107,7 +119,7 @@ main {
     max-width: var(--app-max-width);
     background-color: white;
     margin: 0 auto;
-    padding: 0.5em 1.5em;
+    padding: 0.5em 1em;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* subtle shadow for depth */
 }
 
@@ -122,7 +134,6 @@ main {
 
 
 .arrow-container{
-    background-color: beige;
     width: 100%;
     display: flex;
     justify-content: center;
@@ -242,11 +253,6 @@ main {
     font-weight:bold;
 }
 
-* {
-    border: solid blue 1px;
-}
-
-
 
 .toggle-box {
     align-items: center;
@@ -267,6 +273,7 @@ main {
 
 /*  >> and > button styling */
 .pct-button {
+    font-size: 1.5em;
     outline: none; /* remove focus outline (consider accessibility) */
     cursor: pointer;
     border: solid var(--primary-color) 2px;
@@ -405,6 +412,11 @@ main {
     font-size: 4.5em;
 }
 
+.convert-units {
+    font-family:'PT Mono', monospace;
+    font-weight: bold;
+}
+
 
 /* Material icons */
 
@@ -539,8 +551,130 @@ input:checked + .slider:before {
     text-decoration: none;
 }
 
+/* Alerts and warnings and info boxes */
 
 
+/* Alert box */
+.alert-box, .info-box{
+    width: 100%;
+    display: flex;
+    padding: 0.4em 0;
+    justify-content: center;
+}
+
+.alert-inner {
+    width: 90%;
+    display:flex;
+    align-items: center;
+    background-color: #fef08a;
+    border-radius: 10px;
+    padding: 0.4em;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05); 
+}
+
+.info-inner, .impossible-inner {
+    width: 90%;
+    display:flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #a5f3fc;
+    border-radius: 10px;
+    padding: 0.4em;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05); 
+}
+
+.impossible-inner {
+    background-color: #fef08a;
+}
+
+.bulb-icon {
+    text-decoration: none;
+    background-color: white;;
+    cursor: pointer;
+    flex: 0 0 auto;
+    font-weight: bold;
+    font-size: 1.25em;
+    border-radius: 50%;
+    display: flex;
+    height: 1.25em;
+    width: 1.25em;
+    border: solid var(--alert-color) 2px;
+    padding: 0.5em;
+    align-items: center;
+    justify-content: center;
+}
+
+.bulb-icon a{
+    text-decoration: none;
+    color: var(--alert-color);
+}
+
+
+.alert-text {
+    text-align: center;
+    color: #92400e;
+    padding: 0 1em;
+}
+
+.info-text {
+    text-align: center;
+}
+
+
+.explainer-text {
+    line-height: 1.5;
+    padding: 0 0.5em;
+}
+
+.explainer-text ol {
+    padding: 0 3em;
+
+}
+.explainer-text li{
+    list-style: decimal;
+
+}
+
+
+/* Table */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-family: Arial, sans-serif;
+  }
+  
+  th, td {
+    text-align: left;
+    padding: 8px;
+    border-bottom: 1px solid #EEE;
+  }
+  
+  th {
+    background-color: #F9F9F9;
+    color: #333;
+  }
+
+  
+
+.famous-hills tbody tr td:last-child {
+  white-space: nowrap;
+  font-weight: bold; /* Keeping the bold styling as per your previous request */
+}
+
+.bq-text {
+    margin: 0em 1em;
+    padding: 1em;
+    background-color: #eaf6ff;
+    border-left: 5px solid var(--hover-color); /* Adds a solid line on the left */
+    font-style: italic; /* Optionally, italicize the text to further mimic a blockquote */
+}
+
+.explainer-image {
+    width:100%;
+    height:auto;
+}
 
 
 
@@ -615,6 +749,11 @@ input:checked + .slider:before {
         cursor:pointer;
         min-width: 3ch;
     }
+
+    .pct-button {
+        font-size: 1.25em;
+    }
+
 }
 
 @media (max-width: 400px) {
@@ -634,16 +773,19 @@ input:checked + .slider:before {
     .digit {
         font-size: 1.5em;
     }
-
     .pct-button {
         font-size: 1.0em;
-        margin: 2px;
-        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); 
-        height: 2em;
-        width: 2em;
-        display: flex;
-        align-items:center;
-        justify-content: center;
+    }
+
+    .pace-result {
+        font-size: 3em;
+    }
+
+    .spacer {
+        font-size: 1em;
+    }
+    .hill-unit, .hill-text {
+        font-size: 0.75em;
     }
 
 
