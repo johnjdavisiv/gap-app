@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', (event) => {
-    //console.clear();
-    //console.log('Script loaded')
+    console.clear();
+    console.log('Script loaded')
     updateResult();
 });
 
@@ -24,6 +24,14 @@ let uphill_or_downhill = "uphill"
 let calc_mode = "pace"
 let pace_mode = "pace"
 let output_pace_mode = 'pace'
+
+function dumpState(){
+    console.log(`Hill mode: ${hill_mode}`)
+    console.log(`Uphill or downhill: ${uphill_or_downhill}`)
+    console.log(`Calc mode: ${calc_mode}`)
+    console.log(`Pace mode: ${pace_mode}`)
+    console.log(`Output pace mode: ${output_pace_mode}`)
+}
 
 
 let vert_speed_int = 1000 //hardcoded, care
@@ -216,7 +224,6 @@ function showAlerts(){
         info_text.textContent = 'This downhill might be too steep to gain the full energetic benefit'
         info_box.classList.remove('hidden')
     } else if (input_grade > 0.25) {
-        console.log(input_grade)
         // Change text
         info_i.href = '#walk-vs-run'
         info_text.textContent = 'This uphill might be steep enough that walking would be more energetically efficient'
@@ -238,6 +245,9 @@ function showAlerts(){
 // Update results on page
 function updateResult(){    
     //updates input_m_s and input_grade
+    console.log('------- Before calling UpdateResult -------')
+    dumpState()
+
     readCurrentSpeed()
     readCurrentGrade()
     flip_pace_effort_text();
@@ -270,6 +280,10 @@ function updateResult(){
     }
 
     showAlerts();
+
+    console.log('------- After calling UpdateResult -------')
+    dumpState()
+    console.log('------- End cycle -------')
 
 }
 

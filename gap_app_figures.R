@@ -63,10 +63,13 @@ kipp_alf <- 0.8
 jt_2 <- 0.03
 
 #Text
-fnt <- 11
-title_fnt <- 12
-subtitle_fnt <- 10
-wm_fnt <- 10
+fnt <- 12
+title_fnt <- 14
+subtitle_fnt <- 12
+wm_fnt <- 12
+
+#M<argin
+plt_marg <- c(5,20,5,5)
 
 
 
@@ -121,6 +124,7 @@ black_plt_cr <- black_df %>%
         plot.subtitle = element_text(hjust = 0.5, size=subtitle_fnt),
         plot.caption = element_text(face = "bold", size = wm_fnt, vjust=0),
         legend.position = "bottom",
+        legend.text = element_text(size = fnt),
         plot.caption.position = "plot",
         axis.title = element_text(size = fnt, color = "black"),
         axis.text = element_text(size = fnt, color = "black"),
@@ -128,7 +132,7 @@ black_plt_cr <- black_df %>%
                                  lineend = "square"),
         axis.ticks = element_line(color="black"),
         panel.border = element_blank(),
-        plot.margin = unit(c(10,10,10,10), "pt")
+        plot.margin = unit(plt_marg, "pt")
   )
 
 
@@ -178,6 +182,7 @@ black_pace_plt <- black_df %>%
         #LETENGD
         legend.position = c(0.05,0.2),
         legend.justification = "left",
+        legend.text = element_text(size = fnt),
         legend.background = element_rect(color = "black", linewidth=0.3),
         plot.caption.position = "plot",
         #NOT LEGEND
@@ -190,7 +195,7 @@ black_pace_plt <- black_df %>%
         panel.grid = element_blank(),
         panel.grid.major.y = element_line(linewidth=0.4, color= "#e5e7eb"),
         panel.border = element_blank(),
-        plot.margin = unit(c(10,10,10,10), "pt")
+        plot.margin = unit(plt_marg, "pt")
   ) + 
   coord_cartesian(clip = "off") #Avoid clip of grid line
 
@@ -234,6 +239,7 @@ minetti_plot <- df_incline_plot %>%
         plot.subtitle = element_text(hjust = 0.5, size=subtitle_fnt),
         plot.caption = element_text(face = "bold", size = wm_fnt, vjust=0),
         legend.position = "bottom",
+        legend.text = element_text(size = fnt),
         legend.justification = "left",
         plot.caption.position = "plot",
         axis.title = element_text(size = fnt, color = "black"),
@@ -244,7 +250,7 @@ minetti_plot <- df_incline_plot %>%
         panel.border = element_blank(),
         panel.grid = element_blank(),
         panel.grid.major.y = element_line(linewidth=0.4, color= "#e5e7eb"),
-        plot.margin = unit(c(10,10,10,10), "pt")
+        plot.margin = unit(plt_marg, "pt")
   ) + 
   coord_cartesian(clip = "off")
 

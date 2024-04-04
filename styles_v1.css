@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=PT+Mono&family=Roboto:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap');
 
-/* Color scheme */
+
+/* TODO: looks good so far but need to iteratively add the other stuff */
 
 :root {
     --primary-color: #007bff;
@@ -10,198 +11,150 @@
     --link-hover-color:#84caff;
     --soft-white: #f7f7f7;
     --soft-black: #333;
-    --app-max-width: 38em;
+    --app-max-width: 800px;
     --app-min-width: 25em;
     --toggle-color: #e9ecef;
-    --slider-width: 55px;
+    --slider-width: 54px;
     --slider-height: 30px;
     --alert-color:#92400e;
 }
 
-/* og slider color was XXX */
-
-/* Setup main defaults */
 * {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-    list-style: none;
 }
 
+body, html {
+    font-family: 'Roboto', sans-serif;
+    min-width: 320px;
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: var(--soft-white);
+}
+
+/* Generic text settings */
 
 a {
     color: var(--primary-color);
     text-decoration: none;
 }
 
-
-.mountain-inline{
-    font-size:1.2em;
-    padding: 0 0.2em;
-}
-
-html {
-    scroll-behavior: smooth;
-}
-
-header, footer {
-    width: 100%; /* spans the full viewport width */
-    background-color: #333; /* a dark background for contrast */
-    color: white; /* white text for visibility against the dark background */
-    padding: 5px 0; /* some spacing around the content */
-}
-
-body {
-    font-family: 'Roboto', sans-serif;
-    font-weight: 400; /* Regular weight */
-    color: var(--soft-black);
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh; /* ensures footer stays at the bottom for short content */
-    align-items: center;
-    background-color: var(--soft-white);
-}
-
-/* Header */
-
-header {
-    display:flex;
-    justify-content: center;
-}
-
-/* Responsiveness attempts */
-
-.header-content, main {
-    min-width: var(--app-min-width);
-    max-width: var(--app-max-width);
-    width:100%;
-}
-
-
-.logo-link {
-    display: none;
-    width: 100%
-}
-
-@media (min-width: 620px) { 
-/* Duno if I need this??     
-    .app-content {
-        width: 80%;
-    } */
-    .logo-link {
-        display: block;
-    }
-    
-}
-
-/* Header styling */
-.header-content {
-    display:flex;
-    justify-content: space-between;
-    padding: 0 1em;
-}
-
-.logo-box{
-    display:flex;
-    align-items: center;
-}
-
-
-/* Menu styling */
-header a {
-    color: var(--soft-white);
-    text-decoration: none;
-    font-size: 1.25em;
-}
-
-.menu {
-    display:flex;
-    align-items: center;
-}
-
-.menu li{
-    list-style: none;
-    padding: 0.2em 0.5em;
-    flex-shrink:0;
-}
-
-img.logo {
-    height: 50px;
-    width: auto;
-    padding: 0 0.5em 0 0;
-}
-
-/* Main screen turn on */
-
-main {
-    flex: 1;
-    background-color: white;
-    padding: 0 1em;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* subtle shadow for depth */
-}
-
-/* Hiding stuff */
-
-
-/* Icons and typography */
-.material-icons{
-    color: var(--primary-color);
-    background-color: white;
-    font-size: 3em;
-    font-weight: bold;
-}
-
 h1 {
-    text-align: center;;
-    font-size: 1.6em;
-    padding: 0.25em 0 0.5em 0;
+    text-align: center;
+    font-size: 1.5em;
 }
 
-h2, h3 {
-    padding: 0.25em 0;
+h2, h3, h4, h5, h6 {
+    color:var(--soft-black);
+    padding: 0.75em 0 0.25em 0;
 }
+
 
 p {
     padding: 0.5em 0;
 }
 
-/* Apps, Apps, Apps! */
 
-.app-box{
-    display:flex;
+
+header {
+    width: 100%;
+    display: flex;
+    align-items: center;
     justify-content: center;
+    padding: 10px;
+    background-color: #f3f3f3;
+    height: 4em;
 }
 
-.app-inner{
-    flex:1;
+header img.logo {
+    height: 50px; /* Adjust logo size */
 }
 
-/* Digitbox */
+header .home-link {
+    white-space: nowrap;
+    text-decoration: none;
+    font-size: 1.5em;
+    color: black;
+    margin: 0 10px; /* Gives some space around the site name */
+}
 
+.header-content{
+    max-width: var(--app-max-width); /* Sets the maximum width of the header content */
+    width: 100%; /* Ensures the content fills the container until it reaches max-width */
+    display: flex; /* Enables flexbox layout */
+    justify-content: space-between; /* Distributes space between items */
+    align-items: center; /* Aligns items vertically */
+    padding: 5px; /* Adds some spacing inside the header content */
+}
+
+/* Header/footer formatting */
+.header-content a, footer a{
+    color: var(--soft-white);
+}
+
+nav a {
+    text-decoration: none;
+    white-space: nowrap;
+    margin: 0 10px;
+}
+
+header, footer {
+    background-color: var(--soft-black); /* a dark background for contrast */
+    color: var(--soft-white); /* white text for visibility against the dark background */
+}
+
+footer {
+    text-align: center;
+    padding: 10px;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
+
+/* Main content */
+main {
+    max-width: var(--app-max-width);
+    background-color: white;
+    margin: 0 auto;
+    padding: 0.5em 1em;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* subtle shadow for depth */
+}
+
+
+/* So as-is the padding is set by the <main> left/right padding */
+/* And I think that's what we wnat */
+.app-box  {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.arrow-container{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.arrow-box {
+    display:flex;
+}
+
+
+/* Pace input dials */
 
 .digitbox {
+    font-size: 2em;
     background-color: white;
     display:flex;
     flex-direction: column;
     align-items: center;
 }
-
-.digit {
-    font-family:'PT Mono', monospace;
-    font-weight:bold;
-    font-size: 4.5em;
-}
-
-
-
-/* Trixy */
-.colon {
-    margin: 0 -0.5em 0 0em;
-}
-
-/* New formatting with true center */
-
-/* (via a dummy div) */
 
 .pace-box {
     display:flex;
@@ -244,12 +197,11 @@ p {
 
 .output-toggle {
     width: 5.5ch
-
 }
 
-/* ------------------------ */
 
 .svg-arrow {
+    font-size: 1.5em;
     outline: none; /* remove focus outline (consider accessibility) */
     cursor: pointer;
     border: solid var(--dark-accent) 2px;
@@ -267,7 +219,6 @@ p {
     justify-content: end;
     padding: 0 0.75em 0 0;
     font-family:'PT Mono', monospace;
-    font-size: 1.25em;
     font-weight:bold;
 }
 
@@ -279,8 +230,8 @@ p {
 .unit-toggle, .hill-toggle{
     background-color: var(--toggle-color);
     border: none;
-    font-size:1.1em;
     border-radius:5px;
+    font-size:1.1em;
     padding: 0.25em 0.5em;
     margin: 0.2em 0em;
     cursor:pointer;
@@ -288,7 +239,7 @@ p {
 }
 
 
-/* Spacer */
+/* Spacer and within spacer text styling */
 
 .spacer {
     font-size: 1.5em;
@@ -298,61 +249,32 @@ p {
     padding: 0.5em;
 }
 
+#pace-or-effort, .rise-unit{
+    font-weight:bold;
+}
+
 
 .toggle-box {
+    max-width: 600px;
     align-items: center;
     justify-content: space-between;
     flex: 1;
 }
 
+.incline-unit-box {
+    padding: 0.5em 0;
 
+}
 
 /* Incline box */
 .incline-box {
     width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.incline-pct.digit {
-    font-weight: normal;
-    font-size: 2.5em;
-}
-
-.deg-pct {
-    font-weight: normal;
-    font-size: 3em;
 
 }
 
-.incline-digits.digit {
-    font-size: 2.5em;
-    width: 2.25ch;
-    display:flex;
-    justify-content: right;
-}
-
-.incline-label.digit {
-    font-size: 2.15em;
-    font-family: 'Roboto', sans-serif;
-    font-weight: normal;
-    
-}
-
-.incline-text {
-    display:flex;
-    align-items:center;
-    padding: 0em 1em;
-}
-
-.arrow-box {
-    display:flex;
-}
-
-
+/*  >> and > button styling */
 .pct-button {
-    font-size: 1.4em;
+    font-size: 1.5em;
     outline: none; /* remove focus outline (consider accessibility) */
     cursor: pointer;
     border: solid var(--primary-color) 2px;
@@ -367,16 +289,57 @@ p {
     justify-content: center;
 }
 
-
-.incline-unit-box {
-    padding: 0.5em 0;
-
+.incline-pct.digit {
+    font-weight: normal;
 }
 
-/* Rise over run tex tinput */
+.digit {
+    font-family:'PT Mono', monospace;
+    font-weight:bold;
+    font-size: 2em;
+}
 
 
-/* Will be hidden initially,  */
+.incline-text {
+    font-family: 'Roboto', sans-serif;
+    display:flex;
+    align-items: center;
+}
+
+
+.incline-label {
+    font-size: 1.5em;
+    font-family: 'Roboto', sans-serif;
+    font-weight: normal;
+    
+}
+
+/* Uphill / downhill indicator */
+
+.up-down-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap:1em;
+    padding: 0.4em 0em;
+    font-size:1.5em;
+}
+
+#uphill-or-downhill {
+    font-weight: bold;
+}
+
+.hill-button{
+    font-size:2em;
+    border:none;
+    transition: transform 0.3s; /* This will make the rotation smooth */
+    transform-origin: center;
+}
+
+
+.hill-outer, .incline-box {
+    min-height: 5em;
+}
 
 .hill-outer {
     display:flex;
@@ -414,45 +377,12 @@ p {
 }
 
 
-.material-symbols-outlined {
-  font-variation-settings:
-  'FILL' 0,
-  'wght' 400,
-  'GRAD' 0,
-  'opsz' 24;
-  color:var(--primary-color);
-  background: transparent;
-}
-
-
-.up-down-row {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap:1em;
-    padding: 0.4em 0em;
-}
-
-
-.hill-button{
-    border:none;
-    font-size:3em;
-    transition: transform 0.3s; /* This will make the rotation smooth */
-    transform-origin: center;
-}
-
- /* ughh old stuff */
-
-
 .rise-unit, .rise-text {
     font-size: 1.25em;
     flex:0;
     white-space: nowrap;
 }
 
-.rise-unit {
-    font-weight: bold;
-}
 
 .hill-input {
     font-size: 1.25em;
@@ -474,26 +404,8 @@ p {
     gap: 0.2em;
 }
 
-.hill-outer, .incline-box {
-    min-height: 5em;
-}
 
-
-/* Calculation results */
-
-.pace-result-box {
-    display:flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.pace-result-text{
-    padding: 0em 0.75em;
-}
-
-#pace-or-effort{
-    font-weight:bold;
-}
+/* Results */
 
 .pace-result, .convert-result {
     font-family:'PT Mono', monospace;
@@ -501,139 +413,34 @@ p {
     font-size: 4.5em;
 }
 
-.convert-units, .result-units {
+.convert-units {
     font-family:'PT Mono', monospace;
-    font-weight:bold;
-    font-size: 1.25em;
-}
-
-/* Effort and flipper */
-
-.effort-container {
-    display:flex;
-    justify-content:center;
+    font-weight: bold;
 }
 
 
-.mirrored {
-    transform: scaleX(-1);
+/* Material icons */
+
+
+.material-symbols-outlined {
+    font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24;
+    color:var(--primary-color);
+    background: transparent;
 }
 
-.i-note {
-    outline: none;
-    cursor: pointer;
-    border: solid var(--primary-color) 2px;
+.material-icons{
+    color: var(--primary-color);
     background-color: white;
-    font-size: 1.25rem;
-    width:1.25em;
-    height:1.25em;
-    display:flex;
-    flex: 0 0 auto;
-    border-radius: 50%;
-    color: #2196F3;
-    align-items: center;
-    justify-content: center; 
-    text-decoration: none;
+    font-weight: bold;
 }
 
 
-/* Unit conversions */
+/* Toggle switch */
 
-/* Footer */
-
-footer {
-    text-align: center;
-    padding: 12px 0;
-}
-
-footer a{
-    color: var(--soft-white);
-}
-
-/* Hover on mice not phones */
-
-/* Hover only on mice */
-@media (hover: hover) {
-    .svg-arrow:hover, .pct-button:hover, .unit-toggle:hover, .hill-toggle:hover {
-        background-color: var(--hover-color);
-        box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.12);
-    }
-
-    .hill-button:hover {
-        cursor:pointer;
-        color: var(--dark-accent);
-    }
-
-
-    .i-note:hover{
-        background-color: var(--hover-color);
-        cursor:pointer;
-    }
-
-    .flip-button:hover {
-        color: var(--dark-accent);
-        cursor: pointer;
-    }
-    .unit-toggle:hover, .hill-toggle:hover {
-        color:black;
-    }
-
-    .logo-link a:hover{
-        color:var(--link-hover-color);
-    }
-
-    .menu a:hover {
-        color:var(--link-hover-color);
-    }
-
-    .material-icons.up:hover  {
-        color:var(--primary-color);
-    }
-
-    .bulb-icon:hover{
-        background-color: #fefce8;
-    }
-
-      
-    tbody tr:hover {
-        background-color: #f2f2f2;
-    }
-}
-
-/* Coloring buttons when active */
-
-.unit-toggle:active{
-    background-color: var(--active-color);
-}
-
-.svg-arrow:active, .pct-button:active {
-    /* Must be AFTER hover def! */
-    background-color: var(--link-hover-color);
-    /* color: white; */
-}
-
-/* IF the to/from unit buttons are active */
-.active {
-    background-color: var(--active-color);
-    color:white;
-}
-
-.i-note:active {
-    color:white;
-    border: solid var(--link-hover-color) 2px;
-}
-
-/* up to top arrow */
-.material-icons.up  {
-    padding: 0 0 0 0.5em;
-    font-size: 1.4rem;
-    color: gray;
-    text-decoration: none;;
-}
-
-
-
-/* Nice toggle swithc */
 
 /* Toggle slider */
 /* The switch - the box around the slider */
@@ -689,15 +496,75 @@ input:checked + .slider:before {
 }
 
 
+
+/* Affecting things that are active */
+
+/* Coloring buttons when active */
+.unit-toggle:active{
+    background-color: var(--active-color);
+}
+
+.svg-arrow:active, .pct-button:active {
+    /* Must be AFTER hover def! */
+    background-color: var(--link-hover-color);
+    /* color: white; */
+}
+
+/* IF the to/from unit buttons are active */
+.active {
+    background-color: var(--active-color);
+    color:white;
+}
+
+.i-note:active {
+    color:white;
+    border: solid var(--link-hover-color) 2px;
+}
+
+/* up to top arrow */
+.material-icons.up  {
+    padding: 0 0 0 0.5em;
+    font-size: 1.4rem;
+    color: gray;
+    text-decoration: none;;
+}
+
+
+
+.mirrored {
+    transform: scaleX(-1);
+}
+
+.i-note {
+    outline: none;
+    cursor: pointer;
+    border: solid var(--primary-color) 2px;
+    background-color: white;
+    font-size: 1.25rem;
+    width:1.25em;
+    height:1.25em;
+    display:flex;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    color: #2196F3;
+    align-items: center;
+    justify-content: center; 
+    text-decoration: none;
+}
+
+/* Alerts and warnings and info boxes */
+
+
 /* Alert box */
 .alert-box, .info-box{
+    width: 100%;
     display: flex;
     padding: 0.4em 0;
     justify-content: center;
 }
 
 .alert-inner {
-    width: 70%;
+    width: 90%;
     display:flex;
     align-items: center;
     background-color: #fef08a;
@@ -707,7 +574,7 @@ input:checked + .slider:before {
 }
 
 .info-inner, .impossible-inner {
-    width: 70%;
+    width: 90%;
     display:flex;
     align-items: center;
     justify-content: space-between;
@@ -723,10 +590,11 @@ input:checked + .slider:before {
 
 .bulb-icon {
     text-decoration: none;
+    background-color: white;;
     cursor: pointer;
     flex: 0 0 auto;
     font-weight: bold;
-    font-size: 1.5em;
+    font-size: 1.25em;
     border-radius: 50%;
     display: flex;
     height: 1.25em;
@@ -752,6 +620,7 @@ input:checked + .slider:before {
 .info-text {
     text-align: center;
 }
+
 
 .explainer-text {
     line-height: 1.5;
@@ -801,6 +670,7 @@ table {
     background-color: #eaf6ff;
     border-left: 5px solid var(--hover-color); /* Adds a solid line on the left */
     font-style: italic; /* Optionally, italicize the text to further mimic a blockquote */
+    border-radius: 5px 10px 10px 5px;
 }
 
 .explainer-image {
@@ -808,11 +678,126 @@ table {
     height:auto;
 }
 
+
+
+
+/* Hover only on mice */
+@media (hover: hover) {
+    .svg-arrow:hover, .pct-button:hover, .unit-toggle:hover, .hill-toggle:hover {
+        background-color: var(--hover-color);
+        box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.12);
+    }
+    
+    .hill-button:hover {
+        cursor:pointer;
+        color: var(--dark-accent);
+    }
+    
+    
+    .i-note:hover{
+        background-color: var(--hover-color);
+        cursor:pointer;
+    }
+    
+    .flip-button:hover {
+        color: var(--dark-accent);
+        cursor: pointer;
+    }
+    .unit-toggle:hover, .hill-toggle:hover {
+        color:black;
+    }
+    
+    .logo-link a:hover{
+        color:var(--link-hover-color);
+    }
+    
+    .menu a:hover {
+        color:var(--link-hover-color);
+    }
+    
+    .material-icons.up:hover  {
+        color:var(--primary-color);
+    }
+    
+    .bulb-icon:hover{
+        background-color: #fefce8;
+    }
+    
+    
+    tbody tr:hover {
+        background-color: #f2f2f2;
+    }
+}
+
+
+
+/* Responsive stuff, tweak as needed */
+
+
+/* Some downsizing for mobile usibility */
+@media (max-width: 500px) {
+
+    h1 {
+        font-size: 1.0em;
+    }
+
+    .hill-outer {
+        font-size:0.8em;
+    }
+    .unit-toggle, .hill-toggle{
+        font-size:1em;
+        padding: 0.25em 0.25em;
+        margin: 0.2em 0em;
+        cursor:pointer;
+        min-width: 3ch;
+    }
+
+    .pct-button {
+        font-size: 1.25em;
+    }
+
+}
+
+@media (max-width: 400px) {
+    .header-content, .header-content a, nav a {
+        font-size: 1em; /* Reduce font size */
+    }
+
+    .header-content {
+        padding: 5px; /* Reduce padding for more space */
+    }
+
+    .svg-arrow {
+        font-size: 1.0em;
+    }
+
+
+    .digit {
+        font-size: 1.5em;
+    }
+    .pct-button {
+        font-size: 1.0em;
+    }
+
+    .pace-result {
+        font-size: 3em;
+    }
+
+    .spacer {
+        font-size: 1em;
+    }
+    .hill-unit, .hill-text {
+        font-size: 0.75em;
+    }
+
+
+}
+
+
 /* At the bottom I guess */
 
 .hidden {
     display: none;
 }
-
 
 
