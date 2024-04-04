@@ -224,7 +224,6 @@ function showAlerts(){
         info_text.textContent = 'This downhill might be too steep to gain the full energetic benefit'
         info_box.classList.remove('hidden')
     } else if (input_grade > 0.25) {
-        console.log(input_grade)
         // Change text
         info_i.href = '#walk-vs-run'
         info_text.textContent = 'This uphill might be steep enough that walking would be more energetically efficient'
