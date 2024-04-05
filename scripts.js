@@ -31,6 +31,7 @@ function dumpState(){
     console.log(`Calc mode: ${calc_mode}`)
     console.log(`Pace mode: ${pace_mode}`)
     console.log(`Output pace mode: ${output_pace_mode}`)
+    console.log(`pct_int: ${pct_int}`)
 }
 
 
@@ -565,9 +566,9 @@ run_input.addEventListener("change", (e) => {
 // CARE CARE CARE with math, track units!!!
 let pace_post = document.querySelector('#on-a-an')
 
-function negateIncline(){
-    // Maybe edit across the board? So its' ok if you sitch? 
+function negateIncline(ignore = null){
 
+    // This happens input mode agnostic
     if (hill_text.textContent == "uphill") {
         // flip to downhill and fix grammar
         uphill_or_downhill = "downhill"
@@ -591,13 +592,21 @@ function negateIncline(){
         //Call swap function to whatever mode is active to +/- it
     }
 
-    //grade
-    pct_int = pct_int*-1
-    incline_text.textContent = pct_int   
+    // ignore means "if I passed this option, do not change it"
+    if (ignore != "grade") {
+        //grade
+        pct_int = pct_int*-1
+        incline_text.textContent = pct_int   
+    }
+
+    if (ignore != "angle") {
+        angle_int = angle_int*-1
+        angle_text.textContent = angle_int  
+    }
+
+        
 
     //angle
-    angle_int = angle_int*-1
-    angle_text.textContent = angle_int  
     //rise run
     let rise_post_text = document.querySelector('#rise-post-text')
     if (rise_post_text.innerHTML == "&nbsp;of gain") {
@@ -725,22 +734,37 @@ pct_p5.addEventListener('click', () => {
 })
 
 function increment_grade(change){
-    // postiive negative flip detection here
-    if (pct_int >= 0 && pct_int + change < 0) {
-        //flipping negative
-        negateIncline()
-    }
-    if (pct_int <= 0 && pct_int + change > 0) {
-        //flipping negative
-        negateIncline()
-    }
-    // allow if below 50
-    if (pct_int + change <= 50 && pct_int + change >= -50) {
-        pct_int = pct_int + change
-        incline_text.textContent = pct_int;
-    }
 
-    updateResult();
+    let proposed_int = pct_int + change
+    // First, check if proposed change is allowed
+    if (proposed_int <= 50 && proposed_int >= -50) {
+        //Do everything. Else do nothing! 
+        if (uphill_or_downhill == "uphill") {
+            if (pct_int >= 0 && proposed_int < 0){
+                // flip and update
+                negateIncline("grade")
+                pct_int = proposed_int
+            }  else {
+                //just update
+                pct_int = proposed_int
+            }
+        } else if (uphill_or_downhill == "downhill") {
+            if (pct_int <= 0 && proposed_int > 0) {
+                // flip and update
+                negateIncline("grade")
+                pct_int = proposed_int
+            } else {
+                //just update
+                pct_int = proposed_int
+            }
+        }
+        // Update text on page
+        incline_text.textContent = pct_int;
+        //angle_text.textContent = angle_int;
+
+        //Need to modify negateIncline to NOT flip what we just changed!
+        updateResult();
+    }
 }
 
 
@@ -772,21 +796,36 @@ angle_p5.addEventListener('click', () => {
 
 
 function increment_angle(change){
-    // postiive negative flip detection here
-    if (angle_int >= 0 && angle_int + change < 0) {
-        //flipping negative
-        negateIncline()
-    }
-    if (angle_int <= 0 && angle_int + change > 0) {
-        //flipping negative
-        negateIncline()
-    }
-    // allow if below 45
-    if (angle_int + change <= 45 && angle_int + change >= -45) {
-        angle_int = angle_int + change
+    let proposed_int = angle_int + change
+    // First, check if proposed change is allowed
+    if (proposed_int <= 27 && proposed_int >= -27) {
+        //Do everything. Else do nothing! 
+        if (uphill_or_downhill == "uphill") {
+            if (angle_int >= 0 && proposed_int < 0){
+                // flip and update
+                negateIncline("angle")
+                angle_int = proposed_int
+            }  else {
+                //just update
+                angle_int = proposed_int
+            }
+        } else if (uphill_or_downhill == "downhill") {
+            if (angle_int <= 0 && proposed_int > 0) {
+                // flip and update
+                negateIncline("angle")
+                angle_int = proposed_int
+            } else {
+                //just update
+                angle_int = proposed_int
+            }
+        }
+
+        // Update text on page
         angle_text.textContent = angle_int;
+
+        //Need to modify negateIncline to NOT flip what we just changed!
+        updateResult();
     }
-    updateResult();
 }
 
 // ------ Adjsting rise/run stuff
