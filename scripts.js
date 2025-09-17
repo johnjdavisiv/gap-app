@@ -1,8 +1,78 @@
+// Global variables for GPX workflow
+let gpxParser = null;
+let goalPaceSolver = null;
+let lapCalculator = null;
+let currentResults = null;
+
+// Current active calculator mode
+let activeCalculator = 'gap';
+
 document.addEventListener('DOMContentLoaded', (event) => {
     console.clear();
-    console.log('Script loaded')
-    updateResult();
+    console.log('Running Calculators loaded')
+
+    // Initialize calculator mode switching
+    setupCalculatorToggle();
+
+    // Initialize both calculators
+    initializeGAPCalculator();
+    initializeGPXCalculator();
+
+    // Set initial active calculator
+    setActiveCalculator('gap');
 });
+
+function setupCalculatorToggle() {
+    const toggleButtons = document.querySelectorAll('.calc-toggle-btn');
+
+    toggleButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const calculatorType = button.dataset.calculator;
+            setActiveCalculator(calculatorType);
+
+            // Update button states
+            toggleButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+        });
+    });
+}
+
+function setActiveCalculator(type) {
+    activeCalculator = type;
+
+    const gapCalculator = document.getElementById('gap-calculator');
+    const gpxCalculator = document.getElementById('gpx-calculator');
+
+    if (type === 'gap') {
+        gapCalculator.classList.remove('hidden');
+        gpxCalculator.classList.add('hidden');
+    } else if (type === 'gpx') {
+        gapCalculator.classList.add('hidden');
+        gpxCalculator.classList.remove('hidden');
+    }
+}
+
+function initializeGAPCalculator() {
+    // Initialize GAP calculator event listeners and setup
+    setupGAPEventListeners();
+
+    // Run initial calculation
+    updateResult();
+}
+
+function setupGAPEventListeners() {
+    // GAP calculator event listeners will be moved here
+}
+
+function initializeGPXCalculator() {
+    // Initialize GPX modules
+    gpxParser = new GPXParser();
+    goalPaceSolver = new GoalPaceSolver();
+    lapCalculator = new LapCalculator(goalPaceSolver);
+
+    // Setup event listeners for GPX UI
+    setupGPXInterface();
+}
 
 
 // TODO
@@ -297,6 +367,300 @@ function updateResult(){
 
 // As interim, can just display +/- O2 as delta
 // instaed fo the real equvialent pace
+
+// ===============================================
+// GPX INTERFACE FUNCTIONS
+// ===============================================
+
+function setupGPXInterface() {
+    // File upload handler
+    const fileInput = document.getElementById('gpx-file');
+    const fileLabel = document.querySelector('.file-label');
+    const fileStatus = document.getElementById('file-status');
+    const calculateBtn = document.getElementById('calculate-btn');
+
+    fileInput.addEventListener('change', handleFileUpload);
+
+    // Lap interval selection
+    const lapToggles = document.querySelectorAll('.lap-toggle');
+    lapToggles.forEach(toggle => {
+        toggle.addEventListener('click', () => {
+            lapToggles.forEach(t => t.classList.remove('active'));
+            toggle.classList.add('active');
+        });
+    });
+
+    // Calculate button
+    calculateBtn.addEventListener('click', calculateLapSplits);
+
+    // Export button
+    const exportBtn = document.getElementById('export-csv');
+    if (exportBtn) {
+        exportBtn.addEventListener('click', exportResults);
+    }
+}
+
+async function handleFileUpload(event) {
+    const file = event.target.files[0];
+    const fileStatus = document.getElementById('file-status');
+    const calculateBtn = document.getElementById('calculate-btn');
+
+    if (!file) {
+        fileStatus.textContent = '';
+        fileStatus.className = 'file-status hidden';
+        calculateBtn.disabled = true;
+        return;
+    }
+
+    // Show file status
+    fileStatus.className = 'file-status';
+    fileStatus.textContent = 'Loading GPX file...';
+
+    try {
+        const fileContent = await readFileAsText(file);
+        await gpxParser.parseGPX(fileContent);
+
+        const stats = gpxParser.getRouteStats();
+
+        fileStatus.className = 'file-status success';
+        fileStatus.innerHTML = `
+            <strong>✓ File loaded successfully</strong><br>
+            Distance: ${(stats.totalDistance / 1000).toFixed(2)} km<br>
+            Elevation gain: ${stats.totalElevationGain.toFixed(0)}m
+        `;
+
+        calculateBtn.disabled = false;
+
+    } catch (error) {
+        console.error('Error parsing GPX:', error);
+        fileStatus.className = 'file-status error';
+        fileStatus.textContent = `Error: ${error.message}`;
+        calculateBtn.disabled = true;
+    }
+}
+
+function readFileAsText(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = e => resolve(e.target.result);
+        reader.onerror = e => reject(e);
+        reader.readAsText(file);
+    });
+}
+
+function calculateLapSplits() {
+    const goalTimeInput = document.getElementById('goal-time');
+    const activeLapToggle = document.querySelector('.lap-toggle.active');
+    const resultsSection = document.getElementById('results-section');
+    const statusMessages = document.getElementById('status-messages');
+
+    // Clear previous messages
+    statusMessages.innerHTML = '';
+
+    try {
+        // Parse goal time
+        const goalTimeString = goalTimeInput.value.trim();
+        if (!goalTimeString) {
+            throw new Error('Please enter a goal time');
+        }
+
+        const goalTimeSeconds = goalPaceSolver.parseTime(goalTimeString);
+        const lapInterval = activeLapToggle.dataset.interval;
+
+        // Show calculating message
+        addStatusMessage('info', 'Calculating lap splits...');
+
+        // Calculate splits
+        currentResults = lapCalculator.calculateLapSplits(
+            gpxParser,
+            goalTimeSeconds,
+            lapInterval
+        );
+
+        // Display results
+        displayResults(currentResults);
+
+        // Clear status messages
+        statusMessages.innerHTML = '';
+
+    } catch (error) {
+        console.error('Calculation error:', error);
+        addStatusMessage('error', `Error: ${error.message}`);
+    }
+}
+
+function displayResults(results) {
+    const resultsSection = document.getElementById('results-section');
+    resultsSection.classList.remove('hidden');
+
+    // Route summary
+    displayRouteSummary(results.routeStats);
+
+    // Solver results
+    displaySolverResults(results.solverResult);
+
+    // Lap splits
+    displayLapSplits(results.lapSplits);
+
+    // Scroll to results
+    resultsSection.scrollIntoView({ behavior: 'smooth' });
+}
+
+function displayRouteSummary(routeStats) {
+    const routeStatsDiv = document.getElementById('route-stats');
+
+    routeStatsDiv.innerHTML = `
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+            <div>
+                <strong>Total Distance:</strong><br>
+                ${(routeStats.totalDistance / 1000).toFixed(2)} km
+            </div>
+            <div>
+                <strong>Elevation Gain:</strong><br>
+                ${routeStats.totalElevationGain.toFixed(0)}m
+            </div>
+            <div>
+                <strong>Elevation Loss:</strong><br>
+                ${routeStats.totalElevationLoss.toFixed(0)}m
+            </div>
+            <div>
+                <strong>Net Elevation:</strong><br>
+                ${routeStats.netElevationChange >= 0 ? '+' : ''}${routeStats.netElevationChange.toFixed(0)}m
+            </div>
+            <div>
+                <strong>Max Grade (100m):</strong><br>
+                ${(routeStats.smoothedMaxGrade * 100).toFixed(1)}%
+            </div>
+            <div>
+                <strong>Min Grade (100m):</strong><br>
+                ${(routeStats.smoothedMinGrade * 100).toFixed(1)}%
+            </div>
+        </div>
+    `;
+}
+
+function displaySolverResults(solverResult) {
+    const solverResultsDiv = document.getElementById('solver-results');
+
+    const convergenceStatus = solverResult.converged ?
+        '<span style="color: green;">✓ Converged</span>' :
+        '<span style="color: orange;">⚠ Did not fully converge</span>';
+
+    // Check if there are downhill adjustments to report
+    const downhillInfo = solverResult.downhillAdjustments && solverResult.downhillAdjustments.length > 0 ?
+        `<div style="margin-top: 10px; padding: 8px; background-color: #fff9c4; border-left: 4px solid #ffc107; font-size: 0.9em;">
+            ⚠️ <strong>Downhill Speed Limitations Applied:</strong><br>
+            ${solverResult.downhillAdjustments.length} segment(s) with steep downhills (>8% decline) had speed
+            capped for safety. Theoretical GAP speeds on these segments are often too dangerous to achieve in practice.
+        </div>` : '';
+
+    solverResultsDiv.innerHTML = `
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+            <div>
+                <strong>Base Pace Required:</strong><br>
+                ${solverResult.basePaceMinPerKm.toFixed(2)} min/km
+            </div>
+            <div>
+                <strong>Final Error:</strong><br>
+                ${Math.abs(solverResult.finalError).toFixed(1)} seconds
+            </div>
+            <div>
+                <strong>Solver Status:</strong><br>
+                ${convergenceStatus}
+            </div>
+            <div>
+                <strong>Iterations:</strong><br>
+                ${solverResult.iterations}
+            </div>
+        </div>
+        <div style="margin-top: 10px; font-size: 0.9em; color: #666;">
+            This base pace, when adjusted for elevation changes, will achieve your goal time.
+        </div>
+        ${downhillInfo}
+    `;
+}
+
+function displayLapSplits(lapSplits) {
+    const tbody = document.getElementById('splits-tbody');
+    tbody.innerHTML = '';
+
+    lapSplits.forEach(split => {
+        const row = tbody.insertRow();
+
+        // Format distance
+        const distanceText = split.endDistance >= 1000 ?
+            `${(split.endDistance / 1000).toFixed(1)}km` :
+            `${split.endDistance.toFixed(0)}m`;
+
+        // Format elevation change
+        const elevationText = split.elevationChange >= 0 ?
+            `+${split.elevationChange.toFixed(0)}m` :
+            `${split.elevationChange.toFixed(0)}m`;
+
+        // Add downhill speed cap indicator if applicable
+        const effortText = split.hasDownhillSpeedCap ?
+            `${split.effortLevel} ⚠️` :
+            split.effortLevel;
+
+        row.innerHTML = `
+            <td>${split.lapNumber}</td>
+            <td>${distanceText}</td>
+            <td>${lapCalculator.formatTime(split.lapTime)}</td>
+            <td>${lapCalculator.formatCumulativeTime(split.cumulativeTime)}</td>
+            <td>${split.averagePace.toFixed(2)}</td>
+            <td>${elevationText}</td>
+            <td>${(split.averageGrade * 100).toFixed(1)}%</td>
+            <td>${effortText}</td>
+        `;
+
+        // Color code by effort and special indicators
+        if (split.hasDownhillSpeedCap) {
+            row.style.backgroundColor = '#fff9c4'; // Light yellow for downhill speed cap
+            row.title = 'This segment has steep downhills where speed was limited for safety';
+        } else if (split.effortLevel === 'Very Hard') {
+            row.style.backgroundColor = '#ffebee';
+        } else if (split.effortLevel === 'Hard') {
+            row.style.backgroundColor = '#fff3e0';
+        } else if (split.effortLevel === 'Very Fast') {
+            row.style.backgroundColor = '#e8f5e8';
+        }
+    });
+}
+
+function addStatusMessage(type, message) {
+    const statusMessages = document.getElementById('status-messages');
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `status-message ${type}`;
+    messageDiv.textContent = message;
+    statusMessages.appendChild(messageDiv);
+}
+
+function exportResults() {
+    if (!currentResults) {
+        addStatusMessage('error', 'No results to export');
+        return;
+    }
+
+    try {
+        const csv = lapCalculator.generateCSV(currentResults.lapSplits);
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'lap_splits.csv';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+
+        addStatusMessage('success', 'CSV exported successfully');
+
+    } catch (error) {
+        console.error('Export error:', error);
+        addStatusMessage('error', 'Failed to export CSV');
+    }
+}
 
 
 // --- Incrementing pace dials --- 
