@@ -546,6 +546,14 @@ function displaySolverResults(solverResult) {
         '<span style="color: green;">✓ Converged</span>' :
         '<span style="color: orange;">⚠ Did not fully converge</span>';
 
+    // Check if there are downhill adjustments to report
+    const downhillInfo = solverResult.downhillAdjustments && solverResult.downhillAdjustments.length > 0 ?
+        `<div style="margin-top: 10px; padding: 8px; background-color: #fff9c4; border-left: 4px solid #ffc107; font-size: 0.9em;">
+            ⚠️ <strong>Downhill Speed Limitations Applied:</strong><br>
+            ${solverResult.downhillAdjustments.length} segment(s) with steep downhills (>8% decline) had speed
+            capped for safety. Theoretical GAP speeds on these segments are often too dangerous to achieve in practice.
+        </div>` : '';
+
     solverResultsDiv.innerHTML = `
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
             <div>
@@ -568,6 +576,7 @@ function displaySolverResults(solverResult) {
         <div style="margin-top: 10px; font-size: 0.9em; color: #666;">
             This base pace, when adjusted for elevation changes, will achieve your goal time.
         </div>
+        ${downhillInfo}
     `;
 }
 
@@ -588,6 +597,11 @@ function displayLapSplits(lapSplits) {
             `+${split.elevationChange.toFixed(0)}m` :
             `${split.elevationChange.toFixed(0)}m`;
 
+        // Add downhill speed cap indicator if applicable
+        const effortText = split.hasDownhillSpeedCap ?
+            `${split.effortLevel} ⚠️` :
+            split.effortLevel;
+
         row.innerHTML = `
             <td>${split.lapNumber}</td>
             <td>${distanceText}</td>
@@ -596,11 +610,14 @@ function displayLapSplits(lapSplits) {
             <td>${split.averagePace.toFixed(2)}</td>
             <td>${elevationText}</td>
             <td>${(split.averageGrade * 100).toFixed(1)}%</td>
-            <td>${split.effortLevel}</td>
+            <td>${effortText}</td>
         `;
 
-        // Color code by effort
-        if (split.effortLevel === 'Very Hard') {
+        // Color code by effort and special indicators
+        if (split.hasDownhillSpeedCap) {
+            row.style.backgroundColor = '#fff9c4'; // Light yellow for downhill speed cap
+            row.title = 'This segment has steep downhills where speed was limited for safety';
+        } else if (split.effortLevel === 'Very Hard') {
             row.style.backgroundColor = '#ffebee';
         } else if (split.effortLevel === 'Hard') {
             row.style.backgroundColor = '#fff3e0';

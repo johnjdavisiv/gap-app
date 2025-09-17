@@ -9,6 +9,7 @@ class GoalPaceSolver {
         this.gapCalculator = gapCalculator;
         this.maxIterations = 20;
         this.tolerance = 1.0; // seconds tolerance
+        this.downhillAdjustments = []; // Track segments where downhill speed capping was applied
     }
 
     /**
@@ -20,6 +21,9 @@ class GoalPaceSolver {
      */
     findBasePaceForGoalTime(gpxParser, goalTimeSeconds, segmentLength = 50) {
         console.log(`Solving for goal time: ${this.formatTime(goalTimeSeconds)}`);
+
+        // Reset downhill adjustments tracking for new calculation
+        this.downhillAdjustments = [];
 
         const totalDistance = gpxParser.totalDistance;
 
@@ -93,7 +97,8 @@ class GoalPaceSolver {
             converged: Math.abs(finalPredictedTime - goalTimeSeconds) <= this.tolerance,
             iterations: iteration,
             convergenceHistory: convergenceHistory,
-            predictedTime: finalPredictedTime
+            predictedTime: finalPredictedTime,
+            downhillAdjustments: this.downhillAdjustments
         };
     }
 
@@ -119,7 +124,7 @@ class GoalPaceSolver {
             const averageGrade = gpxParser.getAverageGrade(currentDistance, segmentEnd);
 
             // Apply GAP adjustment to get actual pace for this segment
-            const adjustedSpeed = this.applyGAPAdjustment(basePaceM_s, averageGrade);
+            const adjustedSpeed = this.applyGAPAdjustment(basePaceM_s, averageGrade, currentDistance, segmentEnd);
 
             // Calculate time for this segment
             const segmentTime = actualSegmentLength / adjustedSpeed;
@@ -135,9 +140,11 @@ class GoalPaceSolver {
      * Apply GAP adjustment to convert base pace to actual pace for given grade
      * @param {number} basePaceM_s - Base flat-ground pace in m/s
      * @param {number} grade - Grade as decimal (0.05 = 5%)
+     * @param {number} segmentStart - Optional: start distance of segment for tracking (meters)
+     * @param {number} segmentEnd - Optional: end distance of segment for tracking (meters)
      * @returns {number} - Adjusted speed in m/s
      */
-    applyGAPAdjustment(basePaceM_s, grade) {
+    applyGAPAdjustment(basePaceM_s, grade, segmentStart = null, segmentEnd = null) {
         // Use the existing GAP calculation functions from scripts.js
 
         // Calculate expected energetic cost for flat ground at base pace
@@ -181,7 +188,60 @@ class GoalPaceSolver {
             return basePaceM_s * (1 - gradePenalty);
         }
 
+        // Apply steep downhill speed limitations
+        // Beyond ~8-10% decline, runners can't achieve the theoretical metabolically equivalent pace
+        // due to safety concerns and biomechanical limitations
+        if (grade < -0.08) {
+            const originalSpeed = actualSpeed;
+            actualSpeed = this.applyDownhillSpeedCap(actualSpeed, basePaceM_s, grade);
+
+            // Track this adjustment if segment boundaries are provided and speed was actually capped
+            if (segmentStart !== null && segmentEnd !== null && actualSpeed < originalSpeed) {
+                this.downhillAdjustments.push({
+                    startDistance: segmentStart,
+                    endDistance: segmentEnd,
+                    grade: grade,
+                    theoreticalSpeed: originalSpeed,
+                    actualSpeed: actualSpeed,
+                    speedReduction: ((originalSpeed - actualSpeed) / originalSpeed) * 100
+                });
+            }
+        }
+
         return actualSpeed;
+    }
+
+    /**
+     * Apply speed cap for steep downhills where theoretical GAP cannot be safely achieved
+     * @param {number} theoreticalSpeed - The speed calculated by pure GAP theory
+     * @param {number} basePaceM_s - Base flat-ground pace in m/s
+     * @param {number} grade - Grade as decimal (negative for downhill)
+     * @returns {number} - Speed capped for safety on steep downhills
+     */
+    applyDownhillSpeedCap(theoreticalSpeed, basePaceM_s, grade) {
+        // Progressive limitation for downhills steeper than -8%
+        const steepnessThreshold = -0.08; // -8% grade
+        const maxSteepness = -0.25; // -25% grade where we apply maximum limitation
+
+        if (grade >= steepnessThreshold) {
+            return theoreticalSpeed; // No limitation needed
+        }
+
+        // Calculate limitation factor based on steepness
+        // At -8%: no limitation (factor = 1.0)
+        // At -25% and beyond: maximum limitation (factor approaches minimum)
+        const steepnessFactor = Math.max(0, (grade - steepnessThreshold) / (maxSteepness - steepnessThreshold));
+        const limitationFactor = 1.0 - (steepnessFactor * 0.6); // Max 60% speed reduction
+
+        // Calculate maximum safe speed as a multiple of base pace
+        // Even on steep downhills, don't allow more than 50% speed increase over base pace
+        const maxSafeSpeed = basePaceM_s * 1.5;
+
+        // Apply the more restrictive of the two limitations
+        const cappedSpeed = Math.min(theoreticalSpeed * limitationFactor, maxSafeSpeed);
+
+        // Ensure we don't go slower than base pace (that would be silly)
+        return Math.max(cappedSpeed, basePaceM_s);
     }
 
     /**

@@ -113,7 +113,8 @@ class LapCalculator {
                 elevationLoss: elevationLoss,
                 averageGrade: averageGrade,
                 averagePace: this.calculateAveragePace(lapDistance, lapTime),
-                effortLevel: this.calculateEffortLevel(averageGrade)
+                effortLevel: this.calculateEffortLevel(averageGrade),
+                hasDownhillSpeedCap: this.checkForDownhillSpeedCap(lapStart.distance, lapEnd.distance)
             };
 
             splits.push(split);
@@ -145,7 +146,7 @@ class LapCalculator {
             const averageGrade = gpxParser.getAverageGrade(currentDistance, segmentEnd);
 
             // Apply GAP adjustment
-            const adjustedSpeed = this.solver.applyGAPAdjustment(basePaceM_s, averageGrade);
+            const adjustedSpeed = this.solver.applyGAPAdjustment(basePaceM_s, averageGrade, currentDistance, segmentEnd);
 
             // Calculate time for this segment
             const segmentTime = actualSegmentLength / adjustedSpeed;
@@ -233,6 +234,23 @@ class LapCalculator {
         if (gradePercent > -2) return 'Easy';
         if (gradePercent > -5) return 'Fast';
         return 'Very Fast';
+    }
+
+    /**
+     * Check if a lap segment contains any downhill speed cap adjustments
+     * @param {number} startDistance - Start distance of the lap
+     * @param {number} endDistance - End distance of the lap
+     * @returns {boolean} - True if the lap contains downhill speed cap adjustments
+     */
+    checkForDownhillSpeedCap(startDistance, endDistance) {
+        if (!this.solver.downhillAdjustments || this.solver.downhillAdjustments.length === 0) {
+            return false;
+        }
+
+        // Check if any downhill adjustments overlap with this lap
+        return this.solver.downhillAdjustments.some(adjustment => {
+            return (adjustment.startDistance < endDistance && adjustment.endDistance > startDistance);
+        });
     }
 
     /**
