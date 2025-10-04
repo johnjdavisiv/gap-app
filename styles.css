@@ -58,6 +58,14 @@ p {
 }
 
 
+.separator-thick {
+    margin: 16px auto;
+    width: 60px;
+    height: 4px;
+    background-color: #007acc;
+    border: none;
+    border-radius: 2px;
+}
 
 header {
     width: 100%;
@@ -687,6 +695,137 @@ table {
 }
 
 
+/* Hellobar for MEE */
+
+
+.rw-link {
+    color:#2563eb;
+    text-align: center;
+    font-weight: bold;;
+}
+
+.mee-banner{
+    width: 100%;
+    min-height: 72px;
+    padding: 8px 16px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;  /* Changed from center */
+    font-weight: 600;
+    border-radius: 0;
+}
+
+/* Remove the generic .mee-banner div rule and replace with specific classes */
+
+.banner-left {
+    flex: 0 0 auto;  /* Don't grow, don't shrink, fit content */
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;  /* Stick to left */
+}
+
+.banner-middle {
+    flex: 1;  /* Grow to fill available space */
+    display: flex;
+    align-items: center;
+    justify-content: center;  /* Center the text */
+    padding: 0 40px 0 40px;  /* Add some breathing room */
+}
+
+.banner-right {
+    flex: 0 0 auto;  /* Don't grow, don't shrink, fit content */
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;  /* Stick to right */
+}
+
+#mee-banner-close{
+    background: none;
+    padding: 0 5px;
+    color: white;
+    font-size: 1.5rem;
+    border: none;
+    border-radius: 0%;
+    cursor: pointer;
+}
+
+#mee-banner-close:hover{
+    color:black;
+}
+
+
+.hello-bar--aqua-drift {
+    background:
+    linear-gradient(135deg,
+    #66f1ff 0%,
+    #19c4f2 28%,
+    #0a86d8 62%,
+    #0a5cc5 100%);
+}
+
+.cta-button {
+    background: linear-gradient(135deg, #00A8E8, #00C896);
+    color:  #FFFFFF;
+    padding: 0.8rem 1.1rem;
+    border: none;
+    border-radius: 50px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none;
+    display: inline-block;
+    box-shadow: 0 4px 15px rgba(0, 168, 232, 0.3);
+    white-space: nowrap;  /* Changed from text-wrap */
+}
+
+.cta-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 168, 232, 0.4);
+}
+
+
+.hello-link{
+    text-decoration: none;
+    font-style:italic;
+    color:white;
+}
+
+.hello-link:hover{
+    color:#f472b6;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Mobile swap */
+.banner-text-full {
+    display: inline;
+}
+
+.banner-text-short {
+    display: none;
+}
+
+/* On mobile, swap them */
+@media (max-width: 768px) {
+    .banner-text-full {
+        display: none;
+    }
+    
+    .banner-text-short {
+        display: inline;
+    }
+    
+    .banner-middle {
+        padding: 0 15px;  /* Tighter padding on mobile */
+    }
+    
+    .mee-banner {
+        padding: 8px 8px;  /* Tighter overall padding */
+    }
+}
 
 
 /* Hover only on mice */
