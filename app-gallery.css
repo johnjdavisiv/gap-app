@@ -1,0 +1,187 @@
+/* app-gallery.css — scoped under .rw-app-gallery to avoid clashing with host app styles. */
+
+.rw-app-gallery {
+  --rw-gallery-accent: #007bff;
+  --rw-gallery-text: #333;
+  --rw-gallery-card-bg: #fff;
+  --rw-gallery-card-border: #333;
+  --rw-gallery-card-width: 150px;
+  --rw-gallery-card-gap: 0.75em;
+  --rw-gallery-strip-padding: 0.5em;
+
+  box-sizing: border-box;
+  width: 100%;
+  margin: 1.5em 0;
+  font-family: inherit;
+  color: var(--rw-gallery-text);
+}
+
+.rw-app-gallery *,
+.rw-app-gallery *::before,
+.rw-app-gallery *::after {
+  box-sizing: border-box;
+}
+
+.rw-app-gallery__heading {
+  font-size: 1.25em;
+  font-weight: bold;
+  margin: 0 0 0.75em 0;
+  padding: 0 0.25em;
+  text-align: center;
+}
+
+.rw-app-gallery__viewport {
+  position: relative;
+}
+
+.rw-app-gallery__strip {
+  display: flex;
+  gap: var(--rw-gallery-card-gap);
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  padding: 0.5em var(--rw-gallery-strip-padding);
+
+  /* Hide the native scrollbar — arrows + swipe handle navigation. */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.rw-app-gallery__strip::-webkit-scrollbar {
+  display: none;
+}
+
+.rw-app-gallery__card {
+  flex: 0 0 var(--rw-gallery-card-width);
+  width: var(--rw-gallery-card-width);
+  scroll-snap-align: start;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.4em;
+  padding: 0.9em 0.6em;
+
+  background-color: var(--rw-gallery-card-bg);
+  border: 1px solid var(--rw-gallery-card-border);
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.2);
+
+  color: var(--rw-gallery-text);
+  text-decoration: none;
+  text-align: center;
+
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.rw-app-gallery__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3em;
+  height: 3em;
+  color: var(--rw-gallery-accent);
+}
+
+.rw-app-gallery__icon svg {
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+  display: block;
+}
+
+.rw-app-gallery__title {
+  font-size: 0.95em;
+  font-weight: 600;
+  line-height: 1.2;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: break-word;
+}
+
+/* Arrow buttons — only materialized on precise-pointer devices with hover. */
+.rw-app-gallery__arrow {
+  display: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .rw-app-gallery__arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+
+    /* 5:4 aspect (height:width), bigger than before for visibility. */
+    width: 2.4em;
+    height: 3em;
+    padding: 0;
+
+    background-color: rgba(0, 123, 255, 0.85);
+    border: 1px solid rgba(0, 123, 255, 0.95);
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+
+    color: #fff;
+    cursor: pointer;
+
+    transition: opacity 0.2s ease, background-color 0.2s ease, transform 0.1s ease;
+  }
+
+  .rw-app-gallery__arrow svg {
+    width: 1.8em;
+    height: 1.8em;
+    fill: currentColor;
+  }
+
+  .rw-app-gallery__arrow--left {
+    left: -0.5em;
+  }
+
+  .rw-app-gallery__arrow--right {
+    right: -0.5em;
+  }
+
+  .rw-app-gallery__arrow:hover {
+    background-color: rgba(0, 123, 255, 1);
+  }
+
+  .rw-app-gallery__arrow:active {
+    transform: translateY(-50%) scale(0.95);
+  }
+
+  .rw-app-gallery__arrow:focus-visible {
+    outline: 2px solid var(--rw-gallery-accent);
+    outline-offset: 2px;
+  }
+
+  /* Hide arrows at the corresponding scroll boundary. */
+  .rw-app-gallery__viewport[data-overflow-start="false"] .rw-app-gallery__arrow--left,
+  .rw-app-gallery__viewport[data-overflow-end="false"] .rw-app-gallery__arrow--right {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* Hide both arrows entirely when the strip doesn't overflow. */
+  .rw-app-gallery__viewport[data-overflow="false"] .rw-app-gallery__arrow {
+    display: none;
+  }
+
+  .rw-app-gallery__card:hover {
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1), 0 3px 6px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+  }
+}
+
+.rw-app-gallery__card:focus-visible {
+  outline: 2px solid var(--rw-gallery-accent);
+  outline-offset: 3px;
+}
