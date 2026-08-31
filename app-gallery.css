@@ -181,6 +181,20 @@
   }
 }
 
+/* On narrow windows the host apps shrink <main>'s side padding below the
+   arrows' 0.5em overhang, so the right arrow would poke past the viewport
+   and cause a few px of horizontal page scroll. Sit the arrows flush with
+   the gallery edge instead. (Touch devices never show arrows at all.) */
+@media (hover: hover) and (pointer: fine) and (max-width: 520px) {
+  .rw-app-gallery__arrow--left {
+    left: 0;
+  }
+
+  .rw-app-gallery__arrow--right {
+    right: 0;
+  }
+}
+
 .rw-app-gallery__card:focus-visible {
   outline: 2px solid var(--rw-gallery-accent);
   outline-offset: 3px;
