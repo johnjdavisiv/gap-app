@@ -138,26 +138,24 @@ function getEquivFlatSpeed(W_kg) {
 //
 // ----------------------------------------------
 
-let conv_dec
-
 const convert_dict = {
     // functions to convert m/s to [output unit, as key]
     '/mi':function (m_s){
         // to decimal minutes per mile
-        conv_dec = 1609.344/(m_s*60)
+        const conv_dec = 1609.344/(m_s*60)
         return decimal_pace_to_string(conv_dec);
     },
     '/km':function (m_s){
         // to decimal minutes per mile
-        conv_dec = 1000/(m_s*60)
+        const conv_dec = 1000/(m_s*60)
         return decimal_pace_to_string(conv_dec);
     },
     'mph':function (m_s){
-        conv_dec = m_s*2.23694
+        const conv_dec = m_s*2.23694
         return conv_dec.toFixed(1);
     },
     'km/h':function (m_s){
-        conv_dec = m_s*3.6
+        const conv_dec = m_s*3.6
         return conv_dec.toFixed(1);
     },
     'm/s':function (m_s){
@@ -180,7 +178,7 @@ function decimal_pace_to_string(pace_decimal){
         pace_sec = Math.round(pace_sec);
     }
     //To formatted string
-    res = `${pace_min}:${pace_sec.toString().padStart(2,'0')}` 
+    const res = `${pace_min}:${pace_sec.toString().padStart(2,'0')}`
     return res
 }
 
@@ -344,7 +342,7 @@ d3_up.addEventListener('click', () => {
 });
 
 d3_down.addEventListener('click', () => {
-    increment_sec_digit(d3,10,-1,5); //floor of 5
+    increment_sec_digit(d3,10,-1);
     updateResult();
 });
 
@@ -559,7 +557,7 @@ rise_input.addEventListener("change", (e) => {
 
 
 let run_input = document.querySelector('#run')
-let run_int = parseInt(run_input.value)
+let run_int = parseFloat(run_input.value)
 run_input.addEventListener("change", (e) => {
     run_int = +e.target.value
     updateResult();
@@ -651,7 +649,7 @@ function negateIncline(ignore = null){
         }
         
         
-        uphill_post_text = document.querySelector('#uphill-post-text')
+        const uphill_post_text = document.querySelector('#uphill-post-text')
         
         
         // grade mode selector
@@ -775,7 +773,7 @@ function negateIncline(ignore = null){
         
         // Angle changes
         let angle_text = document.querySelector("#angle-pct")
-        let angle_int = parseInt(incline_text.textContent)
+        let angle_int = parseInt(angle_text.textContent)
         
         // In order left to right...
         const angle_m5 = document.querySelector("#angle-m5")
@@ -1045,7 +1043,13 @@ function negateIncline(ignore = null){
             // Solving effort-based vert speed is super hard actually
             
             // Shooting for this metabolic power, it's W/kg at input m/s onf lat groudn
-            target_W_kg = lookupSpeed(input_m_s, 'energy_j_kg_s')
+            const target_W_kg = lookupSpeed(input_m_s, 'energy_j_kg_s')
+
+            if (Number.isNaN(target_W_kg)) {
+                // input speed is off the edge of the economy table, so no grade can match it
+                input_grade = NaN
+                return NaN
+            }
             
             let W_results = []
             let grade_trials = []
@@ -1100,7 +1104,7 @@ function negateIncline(ignore = null){
             
             input_grade = closestGrade;
             
-            if (pct_diff > 0.05) {
+            if (!(pct_diff <= 0.05)) {
                 closestV = NaN
             }
             
