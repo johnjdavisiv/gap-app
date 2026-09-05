@@ -951,4 +951,32 @@ table {
     display: none;
 }
 
+/* Marathon Excellence book CTA module (shared across RW apps) */
+.book-cta-module {
+    position: relative;
+    margin: 1.5em 0;
+}
 
+.book-cta-module img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+}
+
+.book-cta-module .cta-box {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 4%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Scale with the viewport so the button stays inside the empty
+   strip along the bottom of the banner image at any screen width */
+.book-cta-module .cta-button {
+    padding: clamp(0.55rem, 1.8vw, 1rem) clamp(1rem, 3.5vw, 2rem);
+    font-size: clamp(0.7rem, 2.4vw, 1rem);
+}
