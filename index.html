@@ -140,8 +140,8 @@
             </div>
             <div class="arrow-container hidden" id="angle-input">
                 <div class="arrow-box">
-                    <button class="material-icons pct-button" id="angle-m5" title="-5%"><svg viewBox="0 -960 960 960" aria-hidden="true" focusable="false"><path d="M440-240 200-480l240-240 56 56-183 184 183 184-56 56Zm264 0L464-480l240-240 56 56-183 184 183 184-56 56Z"/></svg></button>
-                    <button class="material-icons pct-button" id="angle-m1" title="-1%"><svg viewBox="0 -960 960 960" aria-hidden="true" focusable="false"><path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z"/></svg></button>
+                    <button class="material-icons pct-button" id="angle-m5" title="-5&deg;"><svg viewBox="0 -960 960 960" aria-hidden="true" focusable="false"><path d="M440-240 200-480l240-240 56 56-183 184 183 184-56 56Zm264 0L464-480l240-240 56 56-183 184 183 184-56 56Z"/></svg></button>
+                    <button class="material-icons pct-button" id="angle-m1" title="-1&deg;"><svg viewBox="0 -960 960 960" aria-hidden="true" focusable="false"><path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z"/></svg></button>
                 </div>
                 <div class="incline-text">
                     <span class="incline-digits digit" id="angle-pct">
@@ -155,8 +155,8 @@
                     </span>
                 </div>
                 <div class="arrow-box">
-                    <button class="material-icons pct-button" id="angle-p1" title="+1%"><svg viewBox="0 -960 960 960" aria-hidden="true" focusable="false"><path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z"/></svg></button>
-                    <button class="material-icons pct-button" id="angle-p5" title="+5%"><svg viewBox="0 -960 960 960" aria-hidden="true" focusable="false"><path d="M383-480 200-664l56-56 240 240-240 240-56-56 183-184Zm264 0L464-664l56-56 240 240-240 240-56-56 183-184Z"/></svg></button>
+                    <button class="material-icons pct-button" id="angle-p1" title="+1&deg;"><svg viewBox="0 -960 960 960" aria-hidden="true" focusable="false"><path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z"/></svg></button>
+                    <button class="material-icons pct-button" id="angle-p5" title="+5&deg;"><svg viewBox="0 -960 960 960" aria-hidden="true" focusable="false"><path d="M383-480 200-664l56-56 240 240-240 240-56-56 183-184Zm264 0L464-664l56-56 240 240-240 240-56-56 183-184Z"/></svg></button>
                 </div>
             </div>
             <div class="hill-outer hidden" id="riserun-input">
@@ -189,13 +189,13 @@
             </div>
             <div class="alert-box hidden">
                 <div class="alert-inner">
-                    <span class='bulb-icon'><a href="#vert-speed-effort">!</a></span>
+                    <span class='bulb-icon'><a href="#vert-speed-info">!</a></span>
                     <span class='alert-text'>Effort-based GAP using vert speed can behave unpredictably!</span><span class='dummy'></span>
                 </div>
             </div>
             <div class="info-box hidden">
                 <div class="info-inner">
-                    <a class = "i-note" id="info-i" href="#vert-speed-effort">i</a>
+                    <a class = "i-note" id="info-i" href="#vert-speed-info">i</a>
                     <span class='info-text'>This downhill might be too steep to gain the full energetic benefit</span>
                     <span class='dummy'></span>
                 </div>
@@ -205,7 +205,7 @@
                     <div class="input-row">
                         <div class="slug">
                             <input class="hill-input vert-input" id="vert-speed-input" type="number" inputmode="numeric" step="1" value="1000">
-                            <label for="vert_speed" class="rise-unit" id="vert-unit">feet per hour</label>
+                            <label for="vert-speed-input" class="rise-unit" id="vert-unit">feet per hour</label>
                             <span class="rise-text" id="vert-speed-post-text">&nbsp;gain</span>
                         </div>
                     </div>
@@ -319,7 +319,7 @@
                     <p>Both the Minetti and the Black data are measured in joules of energy per kilogram of body mass per meter of distance covered (J/kg/m) so they are already normalized to body mass, which is why you do not need to input your weight into the calculator. Converting this metabolic cost of transport to metabolic power is easy; you just multiply cost per meter (J/kg/m) by running speed (m/s) to get energy output per unit time, a.k.a metabolic power: J/kg/s or equivalently W/kg.</p>
                     <p>The Black et al. data contains energy expenditure data (during flat running on a treadmill) from 24 elite and 68 recreational runners. These data, shown below, allow the calculator to incorporate the effects of speed on running economy.<sup id="ft-2" class="footnote-super"><a href="#ft-2-note">[2]</a></sup></p>
                     <img src="images/01 - Energetic cost of running per mile.png" class="explainer-image">
-                    <p>In the plot below, I’ve adjusted the Y-scales of both plots so they are the same, which helps drive home the point that steep grades, the metabolic cost of running is totally dominated by the vertical gain.<sup id="ft-3" class="footnote-super"><a href="#ft-3-note">[3]</a></sup></p></p>
+                    <p>In the plot below, I’ve adjusted the Y-scales of both plots so they are the same, which helps drive home the point that steep grades, the metabolic cost of running is totally dominated by the vertical gain.<sup id="ft-3" class="footnote-super"><a href="#ft-3-note">[3]</a></sup></p>
                     <img src="images/03 - Inclines vs speed - energetic cost of running.png" class="explainer-image">
                     <h3>Calculating grade-adjusted pace</h3>
                     <p>The GAP calculation process (in forward mode, i.e. converting actual pace on a hill to its flat-ground equivalent) works as follows:<sup id="ft-4" class="footnote-super"><a href="#ft-4-note">[4]</a></sup></p>

@@ -557,7 +557,18 @@ rise_input.addEventListener("change", (e) => {
 let run_input = document.querySelector('#run')
 let run_int = parseFloat(run_input.value)
 run_input.addEventListener("change", (e) => {
-    run_int = +e.target.value
+    let new_value = +e.target.value
+    // A negative run is a direction, not a distance. Everywhere else in the app
+    // the sign lives in the uphill/downhill state (and in rise/vert speed), and
+    // the run is a magnitude, so read a typed minus sign as "flip me" the same
+    // way #rise does, then keep the box positive.
+    if (new_value < 0) {
+        run_int = Math.abs(new_value)
+        run_input.value = run_int
+        negateIncline()
+    } else {
+        run_int = new_value
+    }
     updateResult();
 });
 
