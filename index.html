@@ -3,11 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Free grade-adjusted pace (GAP) calculator: find the flat-ground equivalent of any uphill or downhill pace, or the pace to run on a hill for the same effort, from grade, angle, rise and run, or vertical speed.">
+    <link rel="canonical" href="https://apps.runningwritings.com/gap-calculator/">
+    <meta property="og:title" content="Grade-adjusted pace (GAP) calculator for runners">
+    <meta property="og:description" content="Free grade-adjusted pace (GAP) calculator: find the flat-ground equivalent of any uphill or downhill pace, or the pace to run on a hill for the same effort, from grade, angle, rise and run, or vertical speed.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://apps.runningwritings.com/gap-calculator/">
+    <meta property="og:image" content="https://apps.runningwritings.com/gap-calculator/images/social-card-placeholder-1200x630.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Grade-adjusted pace (GAP) calculator for runners">
+    <meta name="twitter:description" content="Free grade-adjusted pace (GAP) calculator: find the flat-ground equivalent of any uphill or downhill pace, or the pace to run on a hill for the same effort, from grade, angle, rise and run, or vertical speed.">
+    <meta name="twitter:image" content="https://apps.runningwritings.com/gap-calculator/images/social-card-placeholder-1200x630.png">
     <title>Grade-Adjusted Pace (GAP) Calculator for Uphills and Downhills - from Running Writings</title>
     <link rel="icon" href="images/RW-favicon.png" type="image/png">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="preload" href="fonts/roboto-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="fonts/pt-mono-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" type="text/css" href="styles.css?v=1.1.0">
     <link rel="stylesheet" href="app-gallery.css?v=22e5443b">
     <script src="rw-storage.js?v=1.0.0" defer></script>
@@ -43,38 +55,38 @@
                 <div class="left-dummy"></div>
                 <div class="clock" id="pace-dials">
                     <div class="digitbox">
-                        <button class="material-icons svg-arrow" id="d1-up">expand_less</button>
+                        <button class="material-icons svg-arrow" id="d1-up"><svg viewBox="0 -960 960 960" aria-hidden="true" focusable="false"><path d="m296-345-56-56 240-240 240 240-56 56-184-184-184 184Z"/></svg></button>
                         <div class="digit" id="d1">7</div>
-                        <button class="material-icons svg-arrow" id="d1-down">expand_more</button>
+                        <button class="material-icons svg-arrow" id="d1-down"><svg viewBox="0 -960 960 960" aria-hidden="true" focusable="false"><path d="M480-345 240-585l56-56 184 184 184-184 56 56-240 240Z"/></svg></button>
                     </div>
                     <div class="digitbox colon">
                         <span class="digit">:</span>
                     </div>
                     <div class="digitbox">
-                        <button class="material-icons svg-arrow" id="d2-up">expand_less</button>
+                        <button class="material-icons svg-arrow" id="d2-up"><svg viewBox="0 -960 960 960" aria-hidden="true" focusable="false"><path d="m296-345-56-56 240-240 240 240-56 56-184-184-184 184Z"/></svg></button>
                         <div class="digit" id="d2">0</div>
-                        <button class="material-icons svg-arrow" id="d2-down">expand_more</button>
+                        <button class="material-icons svg-arrow" id="d2-down"><svg viewBox="0 -960 960 960" aria-hidden="true" focusable="false"><path d="M480-345 240-585l56-56 184 184 184-184 56 56-240 240Z"/></svg></button>
                     </div>
                     <div class="digitbox">
-                        <button class="material-icons svg-arrow" id="d3-up">expand_less</button>
+                        <button class="material-icons svg-arrow" id="d3-up"><svg viewBox="0 -960 960 960" aria-hidden="true" focusable="false"><path d="m296-345-56-56 240-240 240 240-56 56-184-184-184 184Z"/></svg></button>
                         <div class="digit" id="d3">0</div>
-                        <button class="material-icons svg-arrow" id="d3-down">expand_more</button>
+                        <button class="material-icons svg-arrow" id="d3-down"><svg viewBox="0 -960 960 960" aria-hidden="true" focusable="false"><path d="M480-345 240-585l56-56 184 184 184-184 56 56-240 240Z"/></svg></button>
                     </div>
                     <div class="unit-text" id="pace-units">/mi</div>
                 </div>
                 <div class="clock hidden" id="speed-dials">
                     <div class="digitbox">
-                        <button class="material-icons svg-arrow" id="s1-up">expand_less</button>
+                        <button class="material-icons svg-arrow" id="s1-up"><svg viewBox="0 -960 960 960" aria-hidden="true" focusable="false"><path d="m296-345-56-56 240-240 240 240-56 56-184-184-184 184Z"/></svg></button>
                         <div class="digit" id="s1">6</div>
-                        <button class="material-icons svg-arrow" id="s1-down">expand_more</button>
+                        <button class="material-icons svg-arrow" id="s1-down"><svg viewBox="0 -960 960 960" aria-hidden="true" focusable="false"><path d="M480-345 240-585l56-56 184 184 184-184 56 56-240 240Z"/></svg></button>
                     </div>
                     <div class="digitbox colon">
                         <span class="digit">.</span>
                     </div>
                     <div class="digitbox">
-                        <button class="material-icons svg-arrow" id="s2-up">expand_less</button>
+                        <button class="material-icons svg-arrow" id="s2-up"><svg viewBox="0 -960 960 960" aria-hidden="true" focusable="false"><path d="m296-345-56-56 240-240 240 240-56 56-184-184-184 184Z"/></svg></button>
                         <div class="digit" id="s2">0</div>
-                        <button class="material-icons svg-arrow" id="s2-down">expand_more</button>
+                        <button class="material-icons svg-arrow" id="s2-down"><svg viewBox="0 -960 960 960" aria-hidden="true" focusable="false"><path d="M480-345 240-585l56-56 184 184 184-184 56 56-240 240Z"/></svg></button>
                     </div>
                     <div class="unit-text" id="speed-units">mph</div>
                 </div>
@@ -98,9 +110,7 @@
             </div>
             <div class="hill-indicator">
                 <div class="input-row up-down-row">
-                    <button class="material-symbols-outlined hill-button" title="Uphill or downhill">
-                        elevation
-                    </button>
+                    <button class="material-symbols-outlined hill-button" title="Uphill or downhill"><svg viewBox="0 -960 960 960" aria-hidden="true" focusable="false"><path d="m82-120 258-360h202l298-348v708H82Zm70-233-64-46 172-241h202l188-219 60 52-212 247H300L152-353Zm86 153h522v-412L578-400H380L238-200Zm522 0Z"/></svg></button>
                     <div class="slug">
                         <span class="hill-unit" id="uphill-or-downhill">uphill</span>
                         <span class="hill-text" id="uphill-post-text">&nbsp;with a</span>
@@ -109,8 +119,8 @@
             </div>
             <div class="arrow-container" id="grade-input">
                 <div class="arrow-box">
-                    <button class="material-icons pct-button" id="grade-m5" title="-5%">keyboard_double_arrow_left</button>
-                    <button class="material-icons pct-button" id="grade-m1" title="-1%">keyboard_arrow_left</button>
+                    <button class="material-icons pct-button" id="grade-m5" title="-5%"><svg viewBox="0 -960 960 960" aria-hidden="true" focusable="false"><path d="M440-240 200-480l240-240 56 56-183 184 183 184-56 56Zm264 0L464-480l240-240 56 56-183 184 183 184-56 56Z"/></svg></button>
+                    <button class="material-icons pct-button" id="grade-m1" title="-1%"><svg viewBox="0 -960 960 960" aria-hidden="true" focusable="false"><path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z"/></svg></button>
                 </div>
                 <div class="incline-text">
                     <span class="incline-digits digit" id="grade-pct">
@@ -124,14 +134,14 @@
                     </span>
                 </div>
                 <div class="arrow-box">
-                    <button class="material-icons pct-button" id="grade-p1" title="+1%">keyboard_arrow_right</button>
-                    <button class="material-icons pct-button" id="grade-p5" title="+5%">keyboard_double_arrow_right</button>
+                    <button class="material-icons pct-button" id="grade-p1" title="+1%"><svg viewBox="0 -960 960 960" aria-hidden="true" focusable="false"><path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z"/></svg></button>
+                    <button class="material-icons pct-button" id="grade-p5" title="+5%"><svg viewBox="0 -960 960 960" aria-hidden="true" focusable="false"><path d="M383-480 200-664l56-56 240 240-240 240-56-56 183-184Zm264 0L464-664l56-56 240 240-240 240-56-56 183-184Z"/></svg></button>
                 </div>
             </div>
             <div class="arrow-container hidden" id="angle-input">
                 <div class="arrow-box">
-                    <button class="material-icons pct-button" id="angle-m5" title="-5%">keyboard_double_arrow_left</button>
-                    <button class="material-icons pct-button" id="angle-m1" title="-1%">keyboard_arrow_left</button>
+                    <button class="material-icons pct-button" id="angle-m5" title="-5%"><svg viewBox="0 -960 960 960" aria-hidden="true" focusable="false"><path d="M440-240 200-480l240-240 56 56-183 184 183 184-56 56Zm264 0L464-480l240-240 56 56-183 184 183 184-56 56Z"/></svg></button>
+                    <button class="material-icons pct-button" id="angle-m1" title="-1%"><svg viewBox="0 -960 960 960" aria-hidden="true" focusable="false"><path d="M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z"/></svg></button>
                 </div>
                 <div class="incline-text">
                     <span class="incline-digits digit" id="angle-pct">
@@ -145,8 +155,8 @@
                     </span>
                 </div>
                 <div class="arrow-box">
-                    <button class="material-icons pct-button" id="angle-p1" title="+1%">keyboard_arrow_right</button>
-                    <button class="material-icons pct-button" id="angle-p5" title="+5%">keyboard_double_arrow_right</button>
+                    <button class="material-icons pct-button" id="angle-p1" title="+1%"><svg viewBox="0 -960 960 960" aria-hidden="true" focusable="false"><path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z"/></svg></button>
+                    <button class="material-icons pct-button" id="angle-p5" title="+5%"><svg viewBox="0 -960 960 960" aria-hidden="true" focusable="false"><path d="M383-480 200-664l56-56 240 240-240 240-56-56 183-184Zm264 0L464-664l56-56 240 240-240 240-56-56 183-184Z"/></svg></button>
                 </div>
             </div>
             <div class="hill-outer hidden" id="riserun-input">
@@ -244,7 +254,7 @@
                 <span id="post-result-text">on flat ground</span>
             </div>
             <div class="reset-box">
-                <button class="material-icons flip-button" id="reset-button" title="Restore defaults">history</button>
+                <button class="material-icons flip-button" id="reset-button" title="Restore defaults"><svg viewBox="0 -960 960 960" aria-hidden="true" focusable="false"><path d="M480-120q-138 0-240.5-91.5T122-440h82q14 104 92.5 172T480-200q117 0 198.5-81.5T760-480q0-117-81.5-198.5T480-760q-69 0-129 32t-101 88h110v80H120v-240h80v94q51-64 124.5-99T480-840q75 0 140.5 28.5t114 77q48.5 48.5 77 114T840-480q0 75-28.5 140.5t-77 114q-48.5 48.5-114 77T480-120Zm112-192L440-464v-216h80v184l128 128-56 56Z"/></svg></button>
                 <span class="reset-text">Restore defaults</span>
                 <a href="#calculator-settings" class="i-note">?</a>
             </div>
@@ -260,11 +270,11 @@
         <hr class="separator-thick">
         <div class="rw-app-gallery" data-current="gap-calculator"></div>
         <div class="explainer-text">
-            <h2 id="how-to-use">How to use<a class="material-icons up" href="#top">arrow_upward</a></h2>
+            <h2 id="how-to-use">How to use<a class="material-icons up" href="#top"><svg viewBox="0 -960 960 960" aria-hidden="true" focusable="false"><path d="M440-160v-487L216-423l-56-57 320-320 320 320-56 57-224-224v487h-80Z"/></svg></a></h2>
             <p>This calculator allows you to estimate the effective difficulty of uphills and downhills for road running, trail/ultra running, fell running, skyrunning, orienteering, and incline treadmill training. The grade-adjusted pace (GAP) represents an equivalent flat-ground pace for a given incline or decline.</p>
             <p>This calculator is based on energetic expenditure data from peer-reviewed scientific research on the energetic costs of uphill and downhill running.</p>
             <p>You only need to input two things: your running pace (or speed), and the steepness of the hill, which you can input as a grade, slope, rise over run, or vertical speed.</p>
-            <h3 id="pace-vs-effort">Hill pace and flat-ground effort (forward and reverse GAP)<a class="material-icons up" href="#top">arrow_upward</a></h3>
+            <h3 id="pace-vs-effort">Hill pace and flat-ground effort (forward and reverse GAP)<a class="material-icons up" href="#top"><svg viewBox="0 -960 960 960" aria-hidden="true" focusable="false"><path d="M440-160v-487L216-423l-56-57 320-320 320 320-56 57-224-224v487h-80Z"/></svg></a></h3>
             <p>This calculator has two modes to deal with the two situations where grade adjustments to pace are useful.</p>
             <p>Forward GAP states grade adjustments as follows:</p>
             <div class="bq-text">Running at 7:00/mi pace on an uphill with a 5% grade is the same effort as 5:35/mi on flat ground</div>
@@ -299,7 +309,7 @@
                     <p>On average, treadmill running is pretty comparable to “real” running outdoors in terms of the biomechanics. Treadmills do lack air resistance, which makes treadmill running a bit easier than outdoor running at fast speeds (below circa 7:00/mi) for a given speed and incline.</p>
                     <p>However, air resistance does not have much of an independent effect on GAP on the treadmill vs. GAP outdoors (see below). Some people advocate using a 1% incline on the treadmill to counter the lack of air resistance, <a href="https://runningwritings.com/2023/01/treadmill-workouts-guide.html">but I do not recommend it in most cases</a>.</p>
                     <p>Do be aware that different treadmill models can vary quite a lot in terms of their deck stiffness, which can affect the cost of running significantly. Not all treadmills are correctly calibrated either (both with regards to their belt speed and their incline setting).</p>
-                    <h2 id="how-it-works">How running GAP calculations work<a class="material-icons up" href="#top">arrow_upward</a></h2>
+                    <h2 id="how-it-works">How running GAP calculations work<a class="material-icons up" href="#top"><svg viewBox="0 -960 960 960" aria-hidden="true" focusable="false"><path d="M440-160v-487L216-423l-56-57 320-320 320 320-56 57-224-224v487h-80Z"/></svg></a></h2>
                     <p>This GAP calculator estimates the effects of uphills and downhills on your running speed, assuming you are maintaining the same effort level. </p>
                     <p>The math behind these GAP calculations is based on data from two scientific papers: <a href="https://pubmed.ncbi.nlm.nih.gov/12183501/">Minetti et al. 2002</a> and <a href="https://pubmed.ncbi.nlm.nih.gov/28459289/">Black et al. 2018.</a></p>
                     <p>The Minetti et al. data contains energetic expenditure data from ten male trail runners doing uphill and downhill running at grades from 45% to -45% on a treadmill.</p>
@@ -339,7 +349,7 @@
                         <p>As noted earlier, the data used to develop this GAP calculator already have energy expenditure normalized to body mass, so you do not need to enter your weight into the calculator. However, the data used to calculate energy expenditure data on inclines and declines come from elite mountain and fell runners, who were presumably fairly lean.</p>
                         <p>Merely being heavier is not a guarantee that you’ll struggle on hills—if your extra body mass is in the form of lower-leg muscle mass, your added metabolic power output capabilities can offset the extra mechanical power required to ascend a hill (this is actually why physiologists normalize energy expenditure to body mass).</p>
                         <p>However, extra body mass on your upper body—whether in the form of fat, muscle, or a backpack—will always make uphills more challenging. Runners with a lot of extra weight in their upper body may find that the GAP predictions for steep uphills are too optimistic, i.e. the calculator predicts that you can run faster up a hill than you actually can.</p>
-                        <h2>Is GAP accurate? Some test cases<a class="material-icons up" href="#top">arrow_upward</a></h2>
+                        <h2>Is GAP accurate? Some test cases<a class="material-icons up" href="#top"><svg viewBox="0 -960 960 960" aria-hidden="true" focusable="false"><path d="M440-160v-487L216-423l-56-57 320-320 320 320-56 57-224-224v487h-80Z"/></svg></a></h2>
                         <p>There are a number of limitations to GAP calculations detailed below, but as a quick sanity check, it’s nice to run a few examples through the GAP calculator and see how they shake out.</p>
                         <h3>Vertical kilometer: Chamonix’s VK race</h3>
                         <p>The “vertical kilometer” or VK is a skyrunning event that involves gaining 1000 meters of elevation, typically over a horizontal distance of no longer than 5k. One famous
@@ -378,35 +388,35 @@
                             
                             <p>Keep in mind that this race is in August, which is not when a collegiate miler is going to be in peak shape. Likely they’re hopping into a road mile for fun as they’re gearing up for cross country.</p>
                             <p>Again, the GAP is a remarkably good ballpark estimate for the athletes’ fitness levels.</p>
-                            <h2>Limitations<a class="material-icons up" href="#top">arrow_upward</a></h2>
+                            <h2>Limitations<a class="material-icons up" href="#top"><svg viewBox="0 -960 960 960" aria-hidden="true" focusable="false"><path d="M440-160v-487L216-423l-56-57 320-320 320 320-56 57-224-224v487h-80Z"/></svg></a></h2>
                             <p>This calculator only gives an
                                 <em>estimate
                                 </em>of grade-adjusted pace. There are a number of limitations you should keep in mind when using this GAP calculator’s pace estimates for planning and analyzing workouts and competitions.</p>
-                                <h3>This calculator relies on a fairly small dataset<a class="material-icons up" href="#top">arrow_upward</a></h3>
+                                <h3>This calculator relies on a fairly small dataset<a class="material-icons up" href="#top"><svg viewBox="0 -960 960 960" aria-hidden="true" focusable="false"><path d="M440-160v-487L216-423l-56-57 320-320 320 320-56 57-224-224v487h-80Z"/></svg></a></h3>
                                 <p>By far the biggest limitation of this GAP calculator is its reliance on the data from Minetti et al. 2002 for incline and decline energetic costs. That study used only ten subjects, all of whom were male and all of whom were elite mountain and trail runners. Moreover, the polynomial in the Minetti study is from averaged group data, so there’s no way to calculate any estimates of uncertainty for the predicted GAP.</p>
                                 <p>In an ideal world, I would base this calculator off raw data from a much larger study of male and female runners coming from a wider range of ability levels, including both experienced trail runners and pure road runners. Such a dataset would enable better GAP prediction, as well as the construction of uncertainty intervals around the predicted GAP—for example, instead of predicting a GAP of 5:55/mi, you could get a best estimate of 5:55, plus a 90% prediction interval of 5:45–6:05, meaning 90% of runners would experience an equivalent effort within that range on that specific hill.</p>
                                 <p>Such a dataset would also allow the calculator to account for whether hill-climbing ability is affected by experience level, mileage, body weight, and so on. You could even model energy utilization (carbs vs. fat) at different inclines and declines, which would be useful for planning fueling for long trail races.</p>
                                 <p>It would actually be pretty easy to do this study from an equipment standpoint—all you need is a metabolic cart and a high-incline treadmill. Almost any university with a physiology department could do it. The main challenges would be in the study design, and data analysis.<sup id="ft-5" class="footnote-super"><a href="#ft-5-note">[5]</a></sup></p>
                                 <p>Nevertheless, these challenges are surmountable with the right study design and data analysis strategy. Email me if you are an academic who wants to chat about doing this kind of study and making the data publicly available; I’d be happy to help (I have done studies with similar levels of complexity as part of my PhD work).</p>
-                                <h3 id="steep-downhills">It is hard to take advantage of steep downhills<a class="material-icons up" href="#top">arrow_upward</a></h3>
+                                <h3 id="steep-downhills">It is hard to take advantage of steep downhills<a class="material-icons up" href="#top"><svg viewBox="0 -960 960 960" aria-hidden="true" focusable="false"><path d="M440-160v-487L216-423l-56-57 320-320 320 320-56 57-224-224v487h-80Z"/></svg></a></h3>
                                 <p>Virtually no one can take full advantage of the energetic savings offered by steep downhills. Even the original Minetti et al. paper notes that there’s quite a discrepancy between predicted times for net-downhill mountain races and actual times.</p>
                                 <p>In practice, it’s likely that steep downhills (especially on trails) are too dangerous and too damaging to take at “full speed”—your body prioritizes avoiding falls and avoiding excessive muscle damage. Accordingly, this GAP calculator features a pop-up warning for declines greater than -8% that will warn you that the predicted GAP is likely going to be faster than you can actually manage in the real world.</p>
-                                <h3>Running economy deteriorates on long downhills<a class="material-icons up" href="#top">arrow_upward</a></h3>
+                                <h3>Running economy deteriorates on long downhills<a class="material-icons up" href="#top"><svg viewBox="0 -960 960 960" aria-hidden="true" focusable="false"><path d="M440-160v-487L216-423l-56-57 320-320 320 320-56 57-224-224v487h-80Z"/></svg></a></h3>
                                 <p>If you do a long race with a lot of downhills (even mild ones) and haven’t trained for downhills, your muscles will sustain enough damage to increase the metabolic cost of running
                                     <a href="https://www.tandfonline.com/doi/abs/10.1080/02640410600718228">by 3–7%</a>.</p>
                                     <p>At races like Boston, and more extreme examples like the various REVEL downhill marathons, this muscle damage will prevent you from being able to achieve the theoretical GAP, because your flat-ground effort is no longer the same.</p>
-                                    <h3 id='walk-vs-run'>Walking can be more efficient than running on steep hills<a class="material-icons up" href="#top">arrow_upward</a></h3>
+                                    <h3 id='walk-vs-run'>Walking can be more efficient than running on steep hills<a class="material-icons up" href="#top"><svg viewBox="0 -960 960 960" aria-hidden="true" focusable="false"><path d="M440-160v-487L216-423l-56-57 320-320 320 320-56 57-224-224v487h-80Z"/></svg></a></h3>
                                     <p>On grades steeper than about 20-25%, it is often more efficient to walk instead of run, as shown in <a href='https://journals.physiology.org/doi/pdf/10.1152/japplphysiol.00546.2015'>this 2016 study</a>. In practice, elite mountain, trail, and fell runners typically use a mixture of running and walking on extremely steep slopes to spread out the stress on their muscles—walking fast on steep ascents tends to quickly fatigue your calves, while running tends to fatigue your quads.</p>
-                                    <h3>Using poles during steep hill ascents<a class="material-icons up" href="#top">arrow_upward</a></h3>
+                                    <h3>Using poles during steep hill ascents<a class="material-icons up" href="#top"><svg viewBox="0 -960 960 960" aria-hidden="true" focusable="false"><path d="M440-160v-487L216-423l-56-57 320-320 320 320-56 57-224-224v487h-80Z"/></svg></a></h3>
                                     <p>The trail runners in the Minetti et al. study did not use poles during their ascents, so this calculator implicitly assumes you are not using poles.</p>
                                     <p><a href="https://link.springer.com/article/10.1007/s00421-019-04145-2">More recent research</a> on using poles suggests that poles <a href="https://link.springer.com/article/10.1007/s00421-023-05254-9">do not have much effect</a> on the overall metabolic cost of ascending steep hills, but they likely do “save your legs” by offloading some force (and some metabolic cost) to your upper body. In practice, trail runners tend to feel less fatigued and go faster when using poles for very steep ascents. For what it’s worth, many vertical kilometer (VK) world records are set using poles.</p>
-                                    <h3>Skill level will affect energetic cost on steep hills<a class="material-icons up" href="#top">arrow_upward</a></h3>
+                                    <h3>Skill level will affect energetic cost on steep hills<a class="material-icons up" href="#top"><svg viewBox="0 -960 960 960" aria-hidden="true" focusable="false"><path d="M440-160v-487L216-423l-56-57 320-320 320 320-56 57-224-224v487h-80Z"/></svg></a></h3>
                                     <p>The Minetti study used elite mountain runners with extensive experience running on steep inclines and declines. Flatlanders who have little experience with running on steep hills are likely to fare worse than these elite runners, so the GAP predicted for steep climbs and descents may be too optimistic if you are not an experienced trail, fell, or mountain runner.</p>
                                     <p>Likewise, I suspect that some of the very best uphill runners in the world are the best precisely because they can run uphills more efficiently than the average trail or fell runner. As a result, their effort-based GAPs from extremely steep climbs will overestimate flat-land performance.</p>
-                                    <h3>Footing and terrain affect the energetic cost of running<a class="material-icons up" href="#top">arrow_upward</a></h3>
+                                    <h3>Footing and terrain affect the energetic cost of running<a class="material-icons up" href="#top"><svg viewBox="0 -960 960 960" aria-hidden="true" focusable="false"><path d="M440-160v-487L216-423l-56-57 320-320 320 320-56 57-224-224v487h-80Z"/></svg></a></h3>
                                     <p>As noted earlier, both the Minetti and Black datasets were collected on treadmills. Real trail, ultra, mountain, skyrunning, and fell races have very rough terrain that can increase the metabolic cost of running compared to an equivalent incline with good footing.</p>
                                     <p>Likewise, the downhills in these types of events are also very technical, which makes it hard (not to mention risky) to take full advantage of downhill energetic savings. So, GAP predictions will be too optimistic for very rough terrain. This problem likely gets a bit less severe on very steep inclines, since the elevation gain starts to dominate the total energetic cost.</p>
-                                    <h3>GAP calculations do not account for air resistance<a class="material-icons up" href="#top">arrow_upward</a></h3>
+                                    <h3>GAP calculations do not account for air resistance<a class="material-icons up" href="#top"><svg viewBox="0 -960 960 960" aria-hidden="true" focusable="false"><path d="M440-160v-487L216-423l-56-57 320-320 320 320-56 57-224-224v487h-80Z"/></svg></a></h3>
                                     <p>This calculator does not take changes in air resistance into account when calculating your GAP. For moderate hills and slower speeds, the effects of air resistance are pretty much negligible.</p>
                                     <p>However, if you run very fast on a very steep hill, the predicted grade-adjusted pace will be a bit too pessimistic—in this situation, the force from air resistance will drop considerably on the hill, because your actual overground velocity is significantly lower than on flat ground. Air resistance forces are proportional to the square of your running velocity, which is why these effects only become relevant at very high speeds.</p>
                                     <p>In general, though, changes in air resistance for moderate speeds and moderate inclines will be so slight that it’s not worth worrying about. Indeed, for GAP calculations it’s not even the
@@ -414,16 +424,16 @@
                                         amount of air resistance that matters; it’s the magnitude of the
                                         <em>change
                                         </em>in air resistance when going from flat ground to inclines or declines. So the effects of air resistance on GAP are negligible even for fast speeds, as long as they’re on mild to moderate hills.</p>
-                                        <h3>GAP calculations do not account for altitude<a class="material-icons up" href="#top">arrow_upward</a></h3>
+                                        <h3>GAP calculations do not account for altitude<a class="material-icons up" href="#top"><svg viewBox="0 -960 960 960" aria-hidden="true" focusable="false"><path d="M440-160v-487L216-423l-56-57 320-320 320 320-56 57-224-224v487h-80Z"/></svg></a></h3>
                                         <p>Often, if you are ascending or descending extremely steep hills, you are at altitude. This GAP calculator does not account for the effects of altitude on performance, something we saw in our analysis of the Pikes Peak Ascent earlier.</p>
                                         <p>Compensating for altitude is fundamentally different from calculating metabolic costs on inclines—at high altitudes, the true metabolic cost of running does not change. What changes is your effective fitness level! Since you cannot extract as much oxygen from the air, your effective VO2max and maximum metabolic steady-state decline, meaning you are no longer able to sustain the same metabolic power for a given duration.</p>
-                                        <h2 id="errors">Errors<a class="material-icons up" href="#top">arrow_upward</a></h2>
+                                        <h2 id="errors">Errors<a class="material-icons up" href="#top"><svg viewBox="0 -960 960 960" aria-hidden="true" focusable="false"><path d="M440-160v-487L216-423l-56-57 320-320 320 320-56 57-224-224v487h-80Z"/></svg></a></h2>
                                         <p>If your calculated gap is “🤔,” that means you’ve triggered an error.</p>
                                         <p>The most likely cause is GAP paces that end up above 10 meters per second (which is world-caliber sprinting speed). Some hills are so steep that a theoretically “equivalent” pace is, in practice, totally impossible on flat ground.</p>
                                         <p>You can also trigger errors by attempting to calculate mathematically impossible vertical speeds. Any given vertical speed has a minimum required metabolic power that corresponds to lifting your body weight against gravity at the specified vertical ascent rate..</p>
                                         <p>So, even if your horizontal velocity is zero on the hill, there is a lower limit on the flat-ground metabolic power that equates to a given vertical speed. If you attempt to calculate GAP for a flat-ground effort level that falls below this metabolic power, the result will be “🤔.” See this footnote for more details</p>
                                         <p>If you are getting errors and you don’t know why, it might be a bug in the code. Please email me if this happens to you!</p>
-                                        <h2>Examples of different running hill grades<a class="material-icons up" href="#top">arrow_upward</a></h2>
+                                        <h2>Examples of different running hill grades<a class="material-icons up" href="#top"><svg viewBox="0 -960 960 960" aria-hidden="true" focusable="false"><path d="M440-160v-487L216-423l-56-57 320-320 320 320-56 57-224-224v487h-80Z"/></svg></a></h2>
                                         <p>As a reference point, here are some examples of different uphill and downhill grades, as a percent gradient, from a variety of famous road and trail routes.</p>
                                         <table class="famous-hills">
                                             <thead>
@@ -496,18 +506,18 @@
                                             </tbody>
                                         </table>
                                         
-                                        <h2 id="calculator-settings">Calculator settings<a class="material-icons up" href="#top">arrow_upward</a></h2>
-                                        <p>This calculator will remember your settings—your pace or speed, the hill steepness and how you entered it, and your unit choices—in your browser's local storage. So, when you come back to the calculator later, you'll be able to pick up where you left off. You can reset all settings to their defaults using the <span class="material-icons inline-icon">history</span> button, or turn the memory off entirely with the “Remember settings” switch.</p>
+                                        <h2 id="calculator-settings">Calculator settings<a class="material-icons up" href="#top"><svg viewBox="0 -960 960 960" aria-hidden="true" focusable="false"><path d="M440-160v-487L216-423l-56-57 320-320 320 320-56 57-224-224v487h-80Z"/></svg></a></h2>
+                                        <p>This calculator will remember your settings—your pace or speed, the hill steepness and how you entered it, and your unit choices—in your browser's local storage. So, when you come back to the calculator later, you'll be able to pick up where you left off. You can reset all settings to their defaults using the <span class="material-icons inline-icon"><svg viewBox="0 -960 960 960" aria-hidden="true" focusable="false"><path d="M480-120q-138 0-240.5-91.5T122-440h82q14 104 92.5 172T480-200q117 0 198.5-81.5T760-480q0-117-81.5-198.5T480-760q-69 0-129 32t-101 88h110v80H120v-240h80v94q51-64 124.5-99T480-840q75 0 140.5 28.5t114 77q48.5 48.5 77 114T840-480q0 75-28.5 140.5t-77 114q-48.5 48.5-114 77T480-120Zm112-192L440-464v-216h80v184l128 128-56 56Z"/></svg></span> button, or turn the memory off entirely with the “Remember settings” switch.</p>
 
-                                        <h2  id="get-updates">Get updates<a class="material-icons up" href="#top">arrow_upward</a></h2>
+                                        <h2  id="get-updates">Get updates<a class="material-icons up" href="#top"><svg viewBox="0 -960 960 960" aria-hidden="true" focusable="false"><path d="M440-160v-487L216-423l-56-57 320-320 320 320-56 57-224-224v487h-80Z"/></svg></a></h2>
                                         <p>If you want to find out when I update this app, or get notified when I build new apps and publish new running research on my website, sign up for my email list with this form!</p>
                                         <div class="newsletter-block">
                                             <script async src="https://eomail6.com/form/187bb3d4-92e9-11ed-8dcb-9536633250ee.js" data-form="187bb3d4-92e9-11ed-8dcb-9536633250ee"></script>
                                         </div>
-                                        <h2 id="contact">Contact<a class="material-icons up" href="#top">arrow_upward</a></h2>
+                                        <h2 id="contact">Contact<a class="material-icons up" href="#top"><svg viewBox="0 -960 960 960" aria-hidden="true" focusable="false"><path d="M440-160v-487L216-423l-56-57 320-320 320 320-56 57-224-224v487h-80Z"/></svg></a></h2>
                                         <p>If you've got feedback, want to see a new feature, found a bug, or just want to chat, please reach out! I read every email I receive, and I do my best to respond. You can reach me at <a class="email" href="mailto:john@runningwritings.com">john@runningwritings.com</a>.</p>
                                         <p>I'm also on <a href="https://x.com/JDruns">X</a>, but the best way to follow my work is definitely my <strong><a href="https://runningwritings.eo.page/news-and-notes-signup">email list!</a></strong></p>
-                                        <h2 id="support">Support my work<a class="material-icons up" href="#top">arrow_upward</a></h2>
+                                        <h2 id="support">Support my work<a class="material-icons up" href="#top"><svg viewBox="0 -960 960 960" aria-hidden="true" focusable="false"><path d="M440-160v-487L216-423l-56-57 320-320 320 320-56 57-224-224v487h-80Z"/></svg></a></h2>
                                         <p>If you're training for the marathon, be sure to check out my new book, <strong><a href="https://amzn.to/43mIH2B" class="plausible-event-name=Body+Book+Click">Marathon Excellence for Everyone</a></strong>. It covers the modern approach to marathon training, including training plans, racing strategies, and the latest science on training.</p>
                                         <p>If you live outside of the United States, there is also a <strong><a href="https://amzn.to/3LzimIB" class="plausible-event-name=Body+Book+Click">Metric Edition of Marathon Excellence</a></strong> available, with all workouts and paces in kilometers!</p>
                                         <div class="book-cta-module">
@@ -518,7 +528,7 @@
                                         </div>
                                         <p>If you want to learn more about the science of running, you can also check out my first book, <a href="https://amzn.to/46W0CxV" class="plausible-event-name=Body+Book+Click"><strong>Modern Training and Physiology</strong></a> - it covers a scientific approach to training for events from 800m to the 10k. It's available on Amazon as both an eBook and paperback.</p>
                                         <p>This app is 100% free and <a href="https://github.com/johnjdavisiv/gap-app">open-source</a>. If you find it useful, you can share it with your friends or post about it on social media. I also offer <strong><a href="https://runningwritings.com/coaching-and-consulting?utm_source=rw_apps&utm_medium=webapp&utm_campaign=gap_coaching" class="plausible-event-name=Coaching+Click">coaching services</a></strong> for those interested.</p>
-                                        <h2 id="footnotes">Footnotes<a class="material-icons up" href="#top">arrow_upward</a></h2>
+                                        <h2 id="footnotes">Footnotes<a class="material-icons up" href="#top"><svg viewBox="0 -960 960 960" aria-hidden="true" focusable="false"><path d="M440-160v-487L216-423l-56-57 320-320 320 320-56 57-224-224v487h-80Z"/></svg></a></h2>
                                         <ol>
                                             <li id="ft-1-note"><p>Effort-based GAP calculations are an extremely thorny problem if you do not know your true running speed and you do not know the grade you are running on. There are three reasons why this is a difficult problem.</p>
                                                 <p>The first reason is that your vertical speed is a function of both the grade you are ascending (or descending) and your *actual* horizontal speed, not your flat-ground effort level.</p>
@@ -536,10 +546,10 @@
                                     </main>
                                     <footer>
                                         Made by <a class="author-link" href="https://runningwritings.com">John Davis</a>
-                                        <a href="https://github.com/johnjdavisiv/gap-app" target="_blank"><i class="fa fa-github github-icon"></i></a>
+                                        <a href="https://github.com/johnjdavisiv/gap-app" target="_blank"><svg class="github-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
                                     </footer>
                     <script async src="https://eomail6.com/form/1c0d1c8c-8b6f-11f0-af9a-af63b4293a21.js" data-form="1c0d1c8c-8b6f-11f0-af9a-af63b4293a21"></script>
                                 </body>
                                 </html>
                                 
-                                </html>
+                                
