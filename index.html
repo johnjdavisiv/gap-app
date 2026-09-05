@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="styles.css?v=1.1.0">
     <link rel="stylesheet" href="app-gallery.css?v=22e5443b">
+    <script src="rw-storage.js?v=1.0.0" defer></script>
     <script src="scripts.js?v=1.1.0" defer></script>
     <script src="apps.js?v=22e5443b" defer></script>
     <script src="app-gallery.js?v=22e5443b" defer></script>
@@ -242,7 +243,19 @@
             <div class="spacer">
                 <span id="post-result-text">on flat ground</span>
             </div>
-            
+            <div class="reset-box">
+                <button class="material-icons flip-button" id="reset-button" title="Restore defaults">history</button>
+                <span class="reset-text">Restore defaults</span>
+                <a href="#calculator-settings" class="i-note">?</a>
+            </div>
+            <div class="remember-box">
+                <span class="remember-text">Remember settings</span>
+                <label class="switch">
+                    <input type="checkbox" id="remember-toggle" checked>
+                    <span class="slider round"></span>
+                </label>
+            </div>
+
         </div>
         <hr class="separator-thick">
         <div class="rw-app-gallery" data-current="gap-calculator"></div>
@@ -483,6 +496,9 @@
                                             </tbody>
                                         </table>
                                         
+                                        <h2 id="calculator-settings">Calculator settings<a class="material-icons up" href="#top">arrow_upward</a></h2>
+                                        <p>This calculator will remember your settings—your pace or speed, the hill steepness and how you entered it, and your unit choices—in your browser's local storage. So, when you come back to the calculator later, you'll be able to pick up where you left off. You can reset all settings to their defaults using the <span class="material-icons inline-icon">history</span> button, or turn the memory off entirely with the “Remember settings” switch.</p>
+
                                         <h2  id="get-updates">Get updates<a class="material-icons up" href="#top">arrow_upward</a></h2>
                                         <p>If you want to find out when I update this app, or get notified when I build new apps and publish new running research on my website, sign up for my email list with this form!</p>
                                         <div class="newsletter-block">

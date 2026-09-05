@@ -1,8 +1,5 @@
-document.addEventListener('DOMContentLoaded', (event) => {
-    // console.clear();
-    // console.log('Script loaded')
-    updateResult();
-});
+// The first render happens in initializeCalculator() at the bottom of this file:
+// it restores any saved state and then calls updateResult() itself.
 
 
 // TODO
@@ -284,10 +281,11 @@ function updateResult(){
         
         updateOutput(v_guess);
     }
-    
+
     showAlerts();
-    
-    
+
+    // Every input change funnels through here, so this is where state is saved
+    saveState();
 }
 
 // Set up appearing alerts for various "bad" situations 
@@ -900,7 +898,9 @@ function negateIncline(ignore = null){
         let pace_or_effort_text = document.querySelector('#pace-or-effort');
         let result_pre_text = document.querySelector('#result-pre')
         let post_results_text = document.querySelector('#post-result-text')
-        const checkbox = document.querySelector('.switch input[type="checkbox"]');
+        // Scoped to #pace-post: the "Remember settings" box at the bottom of the
+        // app is also a .switch, and an unscoped selector would be order-dependent
+        const checkbox = document.querySelector('#pace-post .switch input[type="checkbox"]');
         
         let result_pace_speed_text = document.querySelector('#result-speed-or-pace')
         let result_of_text = document.querySelector('#results-of')
@@ -1172,3 +1172,232 @@ function negateIncline(ignore = null){
             });
         });
         
+        // ============================================================
+        // STATE PERSISTENCE (localStorage) + RESTORE DEFAULTS
+        // ============================================================
+        // Same pattern as the CV / LT1 / race-pace calculators: every recompute
+        // writes the current inputs to localStorage through rw-storage.js; on load
+        // the record is validated and replayed through the normal setter functions,
+        // so the UI and the state variables stay in sync. Restore defaults drops
+        // the record and replays the defaults.
+
+        const APP_ID = 'gap-calculator';   // localStorage key rw.gap-calculator.v1 (rw-storage.js)
+        let remember_settings = true;
+        // No legacy cookie for this app - it only ever stored the hello-bar dismissal.
+
+        const DEFAULT_STATE = {
+            version: 1,
+            pace_dials: { d1: 7, d2: 0, d3: 0 },   // 7:00
+            speed_dials: { s1: 6, s2: 0 },         // 6.0
+            input_unit: '/mi',
+            output_unit: '/mi',
+            calc_mode: 'pace',                     // 'pace' (switch on) or 'effort' (reverse GAP)
+            direction: 'uphill',
+            hill_input: 'grade',                   // .hill-toggle label: grade | degrees | rise/run | vert speed
+            grade: 5,
+            angle: 5,
+            rise: { value: 100, unit: 'feet' },
+            run: { value: '1.0', unit: 'mi' },   // kept as text so the box still reads "1.0"
+            vert: { value: 1000, unit: 'ft/hr' }
+        };
+
+        // #d2 / #d3 / #s2 have no module-level variable of their own (the rest of the
+        // app leans on the id-as-global binding), so grab them here.
+        const d2_digit = document.querySelector('#d2');
+        const d3_digit = document.querySelector('#d3');
+        const s2_digit = document.querySelector('#s2');
+        const rise_post_text_el = document.querySelector('#rise-post-text');
+        const vert_post_text_el = document.querySelector('#vert-speed-post-text');
+
+        const activeText = (buttons) => {
+            let txt = null;
+            buttons.forEach(btn => { if (btn.classList.contains('active')) txt = btn.textContent.trim(); });
+            return txt;
+        }
+
+        function getStateObject() {
+            return {
+                version: 1,
+                pace_dials: {
+                    d1: parseInt(d1.textContent) || 0,
+                    d2: parseInt(d2_digit.textContent) || 0,
+                    d3: parseInt(d3_digit.textContent) || 0
+                },
+                speed_dials: {
+                    s1: parseInt(s1.textContent) || 0,
+                    s2: parseInt(s2_digit.textContent) || 0
+                },
+                input_unit: activeText(pace_buttons) || DEFAULT_STATE.input_unit,
+                output_unit: activeText(output_buttons) || DEFAULT_STATE.output_unit,
+                calc_mode: checkbox.checked ? 'pace' : 'effort',
+                direction: uphill_or_downhill,
+                hill_input: activeText(hill_buttons) || DEFAULT_STATE.hill_input,
+                grade: pct_int,
+                angle: angle_int,
+                rise: { value: rise_int, unit: activeText(rise_unit_buttons) || DEFAULT_STATE.rise.unit },
+                // the run box is the one field with a fractional default, so keep its text verbatim
+                run: { value: run_input.value, unit: activeText(run_unit_buttons) || DEFAULT_STATE.run.unit },
+                vert: { value: vert_speed_int, unit: activeText(vert_buttons) || DEFAULT_STATE.vert.unit }
+            };
+        }
+
+        function saveState() {
+            RWStorage.save(APP_ID, getStateObject(), remember_settings);
+        }
+
+        function loadSavedState() {
+            // Shared localStorage layer (rw-storage.js).
+            const saved = RWStorage.load(APP_ID);
+            remember_settings = saved.remember;
+            const remember_toggle_el = document.getElementById('remember-toggle');
+            if (remember_toggle_el) remember_toggle_el.checked = remember_settings;
+            if (!saved.state) return null;
+            try {
+                const state = saved.state;
+                // Version check for future migrations
+                if (!state || state.version !== 1) return null;
+                // localStorage is user-editable, so check the shape before applyState() trusts it
+                if (!state.pace_dials || typeof state.pace_dials !== 'object') return null;
+                if (!state.speed_dials || typeof state.speed_dials !== 'object') return null;
+                if (!state.rise || typeof state.rise !== 'object') return null;
+                if (!state.run || typeof state.run !== 'object') return null;
+                if (!state.vert || typeof state.vert !== 'object') return null;
+                return state;
+            } catch (e) {
+                return null;
+            }
+        }
+
+        // Activate the button in a group whose label matches `text`, routing through the
+        // group's setter so dependent labels stay in sync. Returns false if no match.
+        function activateButtonByText(buttons, text, setter) {
+            let matched = null;
+            buttons.forEach(btn => { if (btn.textContent.trim() === text) matched = btn; });
+            if (!matched) return false;
+            buttons.forEach(btn => btn.classList.remove('active'));
+            matched.classList.add('active');
+            setter(matched);
+            return true;
+        }
+
+        const clampInt = (x, lo, hi, fallback) => {
+            const v = parseInt(x);
+            return Number.isFinite(v) ? Math.min(Math.max(v, lo), hi) : fallback;
+        }
+
+        const finiteOr = (x, fallback) => {
+            const v = parseFloat(x);
+            return Number.isFinite(v) ? v : fallback;
+        }
+
+        const positiveOr = (x, fallback) => {
+            const v = parseFloat(x);
+            return Number.isFinite(v) && v > 0 ? v : fallback;
+        }
+
+        // Set the uphill/downhill display directly. negateIncline() is a *toggle*
+        // that also flips every stored steepness value, so a restore cannot use it.
+        function setHillDirection(direction) {
+            const down = direction === 'downhill';
+            uphill_or_downhill = down ? 'downhill' : 'uphill';
+            hill_text.textContent = uphill_or_downhill;
+            hill_indicator.classList.toggle('mirrored', down);
+            pace_post.textContent = down ? 'on a' : 'on an';
+            rise_post_text_el.innerHTML = down ? '&nbsp;of loss' : '&nbsp;of gain';
+            vert_post_text_el.innerHTML = down ? '&nbsp;loss' : '&nbsp;gain';
+        }
+
+        function applyState(state) {
+            const d = DEFAULT_STATE;
+
+            // 1. Pace vs. effort switch (updateResult() reads it via flip_pace_effort_text())
+            checkbox.checked = state.calc_mode !== 'effort';
+
+            // 2. Uphill / downhill. Every steepness value carries the matching sign,
+            //    which is the invariant the increment_* handlers maintain.
+            const direction = state.direction === 'downhill' ? 'downhill' : 'uphill';
+            setHillDirection(direction);
+            const signed = (x) => direction === 'downhill' ? -Math.abs(x) : Math.abs(x);
+
+            // 3. Dials, clamped to the ranges the arrows allow
+            d1.textContent = clampInt(state.pace_dials.d1, 0, 60, d.pace_dials.d1);
+            d2_digit.textContent = clampInt(state.pace_dials.d2, 0, 5, d.pace_dials.d2);
+            d3_digit.textContent = clampInt(state.pace_dials.d3, 0, 9, d.pace_dials.d3);
+            s1.textContent = clampInt(state.speed_dials.s1, 0, 60, d.speed_dials.s1);
+            s2_digit.textContent = clampInt(state.speed_dials.s2, 0, 9, d.speed_dials.s2);
+
+            // 4. Input unit (also picks the pace vs. speed dial set) and output unit
+            if (!activateButtonByText(pace_buttons, state.input_unit, setPaceText)) {
+                activateButtonByText(pace_buttons, d.input_unit, setPaceText);
+            }
+            if (!activateButtonByText(output_buttons, state.output_unit, setOutputText)) {
+                activateButtonByText(output_buttons, d.output_unit, setOutputText);
+            }
+
+            // 5. Steepness values for all four input modes
+            pct_int = signed(clampInt(state.grade, -50, 50, d.grade));
+            incline_text.textContent = pct_int;
+
+            angle_int = signed(clampInt(state.angle, -27, 27, d.angle));
+            angle_text.textContent = angle_int;
+
+            rise_int = signed(finiteOr(state.rise.value, d.rise.value));
+            rise_input.value = rise_int;
+            // The run box is written back as text so "1.0" (and anything else the
+            // user typed) survives a reload verbatim; the number drives the math.
+            const run_value = positiveOr(state.run.value, NaN);
+            const run_ok = Number.isFinite(run_value);
+            run_int = run_ok ? run_value : parseFloat(d.run.value);
+            run_input.value = run_ok ? String(state.run.value).trim() : d.run.value;
+            if (!activateButtonByText(rise_unit_buttons, state.rise.unit, setRiseText)) {
+                activateButtonByText(rise_unit_buttons, d.rise.unit, setRiseText);
+            }
+            if (!activateButtonByText(run_unit_buttons, state.run.unit, setRunText)) {
+                activateButtonByText(run_unit_buttons, d.run.unit, setRunText);
+            }
+
+            vert_speed_int = signed(finiteOr(state.vert.value, d.vert.value));
+            vert_speed_input.value = vert_speed_int;
+            if (!activateButtonByText(vert_buttons, state.vert.unit, setVertText)) {
+                activateButtonByText(vert_buttons, d.vert.unit, setVertText);
+            }
+
+            // 6. Hill input mode last: setHillInput() reveals the matching panel
+            if (!activateButtonByText(hill_buttons, state.hill_input, setHillInput)) {
+                activateButtonByText(hill_buttons, d.hill_input, setHillInput);
+            }
+
+            // 7. Recompute (this also re-saves)
+            updateResult();
+        }
+
+        // --- Reset button ---
+        const reset_button = document.getElementById('reset-button');
+        reset_button.addEventListener('click', () => {
+            RWStorage.clear(APP_ID);
+            applyState(DEFAULT_STATE);
+        });
+
+        // --- Remember-settings toggle ---
+        const remember_toggle = document.getElementById('remember-toggle');
+        remember_toggle.addEventListener('change', () => {
+            remember_settings = remember_toggle.checked;
+            saveState();  // with the flag off this drops the stored state and keeps only the preference
+        });
+
+        // ---- Initialization ----
+        function initializeCalculator() {
+            const savedState = loadSavedState();
+            try {
+                applyState(savedState || DEFAULT_STATE);
+            } catch (e) {
+                RWStorage.clear(APP_ID);
+                applyState(DEFAULT_STATE);
+            }
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializeCalculator);
+        } else {
+            initializeCalculator();
+        }
