@@ -1,0 +1,30 @@
+{
+  "name": "gap-app",
+  "private": true,
+  "scripts": {
+    "build": "node tools/stamp.mjs && node tools/build-dist.mjs",
+    "build:dev": "node tools/build-dist.mjs --allow-dev",
+    "stamp": "node tools/stamp.mjs"
+  },
+  "rwBuild": {
+    "files": [
+      "index.html",
+      "styles.css",
+      "scripts.js",
+      "rw-storage.js",
+      "apps.js",
+      "app-gallery.js",
+      "app-gallery.css"
+    ],
+    "assetDirs": [
+      "fonts",
+      "images"
+    ],
+    "stamp": [
+      "styles.css",
+      "scripts.js",
+      "rw-storage.js"
+    ],
+    "deploy": "public_html/gap-calculator/"
+  }
+}

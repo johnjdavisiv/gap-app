@@ -56,6 +56,13 @@
       iconSvg: '<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M577.5-537.5Q560-555 560-580q0-17 9.5-34.5t20.5-32q11-14.5 20.5-24l9.5-9.5 9.5 9.5q9.5 9.5 20.5 24t20.5 32Q680-597 680-580q0 25-17.5 42.5T620-520q-25 0-42.5-17.5Zm160-120Q720-675 720-700q0-17 9.5-34.5t20.5-32q11-14.5 20.5-24l9.5-9.5 9.5 9.5q9.5 9.5 20.5 24t20.5 32Q840-717 840-700q0 25-17.5 42.5T780-640q-25 0-42.5-17.5Zm0 240Q720-435 720-460q0-17 9.5-34.5t20.5-32q11-14.5 20.5-24l9.5-9.5 9.5 9.5q9.5 9.5 20.5 24t20.5 32Q840-477 840-460q0 25-17.5 42.5T780-400q-25 0-42.5-17.5Zm-519 239Q160-237 160-320q0-48 21-89.5t59-70.5v-240q0-50 35-85t85-35q50 0 85 35t35 85v240q38 29 59 70.5t21 89.5q0 83-58.5 141.5T360-120q-83 0-141.5-58.5ZM240-320h240q0-29-12.5-54T432-416l-32-24v-280q0-17-11.5-28.5T360-760q-17 0-28.5 11.5T320-720v280l-32 24q-23 17-35.5 42T240-320Z"/></svg>',
     },
     {
+      id: 'altitude-adjusted-pace',
+      title: 'Altitude-adjusted pace',
+      href: 'https://apps.runningwritings.com/altitude-adjusted-pace/',
+      icon: 'altitude',
+      iconSvg: '<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M720-480v-168l-64 64-56-56 160-160 160 160-56 57-64-64v167h-80ZM40-80l240-320 180 240h300L560-426 460-294l-50-66 150-200L920-80H40Zm420-80Z"/></svg>',
+    },
+    {
       id: 'cv-threshold-calculator',
       title: 'CV / Threshold / VO2max',
       href: 'https://apps.runningwritings.com/cv-threshold-calculator/',
