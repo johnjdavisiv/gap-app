@@ -46,6 +46,14 @@
 
     a.appendChild(iconWrap);
     a.appendChild(title);
+
+    // Optional badge (apps.js `badge`, e.g. 'Experimental'): a small pill in the card's top-right corner.
+    if (app.badge) {
+      const badge = document.createElement('span');
+      badge.className = 'rw-app-gallery__badge';
+      badge.textContent = app.badge;
+      a.appendChild(badge);
+    }
     return a;
   }
 

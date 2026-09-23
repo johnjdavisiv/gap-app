@@ -54,6 +54,7 @@
 }
 
 .rw-app-gallery__card {
+  position: relative;   /* anchors the optional badge */
   flex: 0 0 var(--rw-gallery-card-width);
   width: var(--rw-gallery-card-width);
   scroll-snap-align: start;
@@ -102,6 +103,24 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
   word-break: break-word;
+}
+
+/* Optional badge on a card (apps.js `badge`, e.g. "Experimental"): a small pill overlapping the top-right corner. */
+.rw-app-gallery__badge {
+  position: absolute;
+  top: -0.6em;
+  right: -0.4em;
+  font-size: 0.7em;
+  font-weight: 700;
+  line-height: 1.2;
+  padding: 0.25em 0.7em 0.3em 0.7em;
+  border: 0;
+  border-radius: 999px;
+  background-color: var(--rw-gallery-accent);
+  background-image: linear-gradient(135deg, #0056b3, #2196f3);   /* dark-to-light RW blue, white text (John, 2026-09-22) */
+  color: #fff;
+  white-space: nowrap;
+  pointer-events: none;
 }
 
 /* Arrow buttons — only materialized on precise-pointer devices with hover. */

@@ -10,6 +10,7 @@
 // SVGs are from Material Symbols Outlined:
 //   https://fonts.gstatic.com/s/i/short-term/release/materialsymbolsoutlined/<name>/default/24px.svg
 // Paths inherit color via `fill: currentColor` (set in app-gallery.css).
+// Optional per-app `badge` (a short word, e.g. 'Experimental') is drawn by app-gallery.js as a pill on the card.
 
 (function (root) {
   root.RW_APPS = [
@@ -89,6 +90,14 @@
       href: 'https://apps.runningwritings.com/lt1-zone2-calculator/',
       icon: 'monitor_heart',
       iconSvg: '<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M80-600v-120q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v120h-80v-120H160v120H80Zm80 440q-33 0-56.5-23.5T80-240v-120h80v120h640v-120h80v120q0 33-23.5 56.5T800-160H160Zm240-120q11 0 21-5.5t15-16.5l124-248 44 88q5 11 15 16.5t21 5.5h240v-80H665l-69-138q-5-11-15-15.5t-21-4.5q-11 0-21 4.5T524-658L400-410l-44-88q-5-11-15-16.5t-21-5.5H80v80h215l69 138q5 11 15 16.5t21 5.5Zm80-200Z"/></svg>',
+    },
+    {
+      id: 'cross-country-heat-adjustments',
+      title: 'Heat-adjusted XC pace',
+      href: 'https://apps.runningwritings.com/cross-country-heat-adjustments/',
+      icon: 'xc-heat',   // custom: "xc" in Roboto Bold + the dew_point thermometer (xc-heat-calculator/tools/make_logo.py)
+      iconSvg: '<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M126.8 -653.2 180.2 -554.9 235.2 -653.2H326.9L235.5 -495.2L331.1 -330H239.1L180.8 -434L122.6 -330H30.6L126.2 -495.2L34.8 -653.2Z M502.3 -391.2Q518.1 -391.2 530.3 -397.4Q542.6 -403.5 549.6 -414.7Q556.6 -425.9 556.9 -441.1H637.9Q637.6 -407.1 619.6 -380.6Q601.7 -354.2 571.6 -339.1Q541.4 -324 504 -324Q466.4 -324 438.5 -336.6Q410.5 -349.1 392 -371.4Q373.5 -393.6 364.2 -423.3Q355 -453.1 355 -487.1V-495.8Q355 -530.1 364.2 -559.9Q373.5 -589.6 392 -611.8Q410.5 -634.1 438.3 -646.6Q466.1 -659.2 503.4 -659.2Q543.2 -659.2 573.2 -644Q603.2 -628.7 620.4 -600.5Q637.6 -572.3 637.9 -533.7H556.9Q556.6 -549.9 550.2 -563Q543.8 -576.1 531.7 -584.1Q519.6 -592 502 -592Q483.1 -592 471.2 -584.1Q459.2 -576.1 452.7 -562.6Q446.1 -549 443.6 -531.8Q441 -514.6 441 -495.8V-487.1Q441 -468.3 443.4 -451Q445.8 -433.7 452.5 -420.2Q459.2 -406.8 471.2 -399Q483.1 -391.2 502.3 -391.2Z M736.8 -485.8C736.8 -523.5 767.3 -554 805 -554C842.7 -554 873.2 -523.5 873.2 -485.8V-265.5C925.8 -234.7 951.2 -172.5 935.3 -113.7C919.3 -54.8 865.9 -14 805 -14C744 -14 690.6 -54.8 674.7 -113.7C658.7 -172.5 684.2 -234.7 736.8 -265.5V-485.8ZM775.1 -485.8V-240.9C729.9 -226.2 702.1 -180.8 709.5 -133.9C717 -86.9 757.5 -52.4 805 -52.4C852.5 -52.4 893 -86.9 900.4 -133.9C907.9 -180.8 880 -226.2 834.8 -240.9V-485.8C834.8 -502.3 821.5 -515.6 805 -515.6C788.5 -515.6 775.1 -502.3 775.1 -485.8ZM775.1 -380.6H834.8V-240.9C880 -226.2 907.9 -180.8 900.4 -133.9C893 -86.9 852.5 -52.4 805 -52.4C757.5 -52.4 717 -86.9 709.5 -133.9C702.1 -180.8 729.9 -226.2 775.1 -240.9V-380.6Z"/></svg>',
+      badge: 'Experimental',   // rendered by app-gallery.js as .rw-app-gallery__badge
     },
   ];
 
