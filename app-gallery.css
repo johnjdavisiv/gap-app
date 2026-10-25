@@ -218,3 +218,135 @@
   outline: 2px solid var(--rw-gallery-accent);
   outline-offset: 3px;
 }
+
+/* ── The iOS-app panel under the card strip (app-gallery.js buildPromo, 2026-10-25) ──
+   Dark gradient card, the five-phone band (a transparent PNG whose bottom fades
+   into the gradient), the pitch, and two pill buttons: "Get the App" (RW blue →
+   violet gradient) and "Learn more" (transparent, white border). */
+.rw-app-promo {
+  box-sizing: border-box;
+  width: 100%;
+  margin: 1.5em 0 0;
+  border-radius: 14px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #0b1226 0%, #10203f 30%, #173a66 55%, #1b2f6e 78%, #0b1226 100%);
+  color: #fff;
+  font-family: inherit;
+}
+
+.rw-app-promo *,
+.rw-app-promo *::before,
+.rw-app-promo *::after {
+  box-sizing: border-box;
+}
+
+.rw-app-promo__heading {
+  font-size: 1.25em;
+  font-weight: bold;
+  margin: 0;
+  padding: 1.1em 1.25em 0.6em;
+  text-align: center;
+  color: #fff;
+}
+
+.rw-app-promo__band {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 1;
+}
+
+.rw-app-promo__body {
+  padding: 0 1.25em 1.3em;
+  text-align: center;
+}
+
+.rw-app-promo__text {
+  margin: -0.25em auto 1.1em;
+  max-width: 36em;
+  line-height: 1.5;
+  color: #e6eaf4;
+  font-size: 0.98em;
+}
+
+.rw-app-promo__text b {
+  color: #fff;
+}
+
+.rw-app-promo__row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75em 1em;
+}
+
+.rw-app-promo__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0.85em 1.7em;
+  border-radius: 999px;
+  border: 2px solid transparent;
+  color: #fff !important;
+  font-weight: 600;
+  font-size: 1.05em;
+  line-height: 1.2;
+  text-decoration: none !important;
+  white-space: nowrap;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease, border-color 0.25s ease;
+}
+
+.rw-app-promo__btn svg {
+  width: 20px;
+  height: 20px;
+  fill: #fff;
+  flex-shrink: 0;
+}
+
+.rw-app-promo__btn:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+.rw-app-promo__btn--primary {
+  background: linear-gradient(135deg, #007bff 0%, #6d28d9 100%);
+  border: 0;
+  padding: calc(0.85em + 2px) calc(1.7em + 2px);   /* same outer size as the bordered secondary */
+  box-shadow: 0 3px 10px rgba(30, 40, 120, 0.28);
+}
+
+.rw-app-promo__btn--primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 14px rgba(30, 40, 120, 0.32);
+}
+
+.rw-app-promo__btn--secondary {
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.55);   /* lab-site's .on-dark .btn-secondary */
+}
+
+.rw-app-promo__btn--secondary:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: #fff;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 480px) {
+  .rw-app-promo {
+    border-radius: 10px;
+  }
+
+  .rw-app-promo__heading {
+    padding: 1em 1em 0.5em;
+  }
+
+  .rw-app-promo__body {
+    padding: 0 1em 1.15em;
+  }
+
+  .rw-app-promo__btn {
+    width: 100%;
+  }
+}

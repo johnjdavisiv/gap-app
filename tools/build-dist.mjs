@@ -37,12 +37,19 @@ const md5 = (p) => crypto.createHash('md5').update(fs.readFileSync(p)).digest('h
 // 1. root files must exist
 for (const f of ROOT_FILES) if (!fs.existsSync(path.join(ROOT, f))) fail(`missing root file ${f}`);
 
-// 2. assets = every <assetDir>/<name>.<ext> token in the shipped root files (names may contain spaces)
+// 2. assets = every <assetDir>/<name>.<ext> token in the shipped root files (names may contain spaces).
+//    A token inside an absolute URL counts only when that URL is this app's own address (rwBuild.deploy under
+//    the hub domain — the canonical favicon / social-card links); one on any other host or path, e.g. the
+//    gallery's hub-hosted band https://apps.runningwritings.com/images/rw-lab-band.png, is not ours to ship.
+const SELF_URL = 'https://apps.runningwritings.com/' + (cfg.deploy || '').replace(/^public_html\/?/, '');
 const assets = new Set();
-const tokenRe = new RegExp(`\\b(?:${ASSET_DIRS.join('|')})/[A-Za-z0-9._ -]*?\\.[A-Za-z0-9]{2,5}(?=["')\\s>]|$)`, 'g');
+const tokenRe = new RegExp(`(https?://[^"'()\\s]*?/)?\\b(?:${ASSET_DIRS.join('|')})/[A-Za-z0-9._ -]*?\\.[A-Za-z0-9]{2,5}(?=["')\\s>]|$)`, 'g');
 for (const f of ROOT_FILES) {
     const text = fs.readFileSync(path.join(ROOT, f), 'utf8');
-    for (const m of text.matchAll(tokenRe)) assets.add(m[0]);
+    for (const m of text.matchAll(tokenRe)) {
+        if (m[1] && m[1] !== SELF_URL) continue;
+        assets.add(m[0].slice((m[1] || '').length));
+    }
 }
 const missing = [...assets].filter((a) => !fs.existsSync(path.join(ROOT, a)));
 if (missing.length) fail(`referenced but not in the repo:\n  ${missing.join('\n  ')}`);

@@ -10,9 +10,32 @@
 //   <script src="./app-gallery.js" defer></script>
 //   ...
 //   <div class="rw-app-gallery" data-current="wind-calculator"></div>
+//
+// Under the card strip it also renders the "Or get all my calculators on iPhone
+// and iPad" panel (the Running Writings Lab iOS app pitch, 2026-10-25): band of
+// five phones hosted once on the hub, the pitch, and Get the App / Learn more.
+// Opt out on a page with data-promo="false".
 
 (function () {
   const HEADING_TEXT = 'Check out my other apps';
+
+  // The iOS-app panel. Copy lives here (John's wording, 2026-10-25); the App Store
+  // link carries its own campaign token (ct=rwlab-gallery) so App Analytics can
+  // tell gallery clicks from the landing page's QR and buttons.
+  const PROMO = {
+    heading: 'Or get all my calculators on iPhone and iPad',
+    bandSrc: 'https://apps.runningwritings.com/images/rw-lab-band.png',
+    bandAlt: 'Five Running Writings Lab calculators on iPhone',
+    textHtml:
+      '<b>Running Writings Lab</b> puts all of my training tools in one place, with features that are only possible in an app: live weather data, haptic inputs, and offline functionality. <b>$9.99</b> one-time purchase. No subscription and no ads.',
+    appStoreHref:
+      'https://apps.apple.com/app/apple-store/id6807671361?pt=129397724&ct=rwlab-gallery&mt=8',
+    appStoreLabel: 'Get the App',
+    learnMoreHref: 'https://lab.runningwritings.com/',
+    learnMoreLabel: 'Learn more',
+  };
+  const APPLE_GLYPH =
+    '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M16.37 12.7c-.02-2.2 1.8-3.26 1.88-3.31-1.03-1.5-2.62-1.71-3.19-1.73-1.36-.14-2.65.8-3.34.8-.69 0-1.75-.78-2.88-.76-1.48.02-2.85.86-3.61 2.19-1.54 2.67-.39 6.63 1.11 8.8.73 1.06 1.6 2.25 2.74 2.21 1.1-.04 1.52-.71 2.85-.71 1.33 0 1.7.71 2.87.69 1.19-.02 1.94-1.08 2.66-2.15.84-1.23 1.19-2.42 1.21-2.48-.03-.01-2.32-.89-2.34-3.55zM14.18 6.22c.61-.74 1.02-1.76.91-2.78-.88.04-1.94.58-2.57 1.32-.56.65-1.06 1.7-.93 2.7.98.08 1.98-.5 2.59-1.24z"/></svg>';
 
   function ready(fn) {
     if (document.readyState === 'loading') {
@@ -74,6 +97,63 @@
       btn.appendChild(svg);
     }
     return btn;
+  }
+
+  function buildPromo() {
+    const section = document.createElement('section');
+    section.className = 'rw-app-promo';
+    section.setAttribute('aria-labelledby', 'rw-app-promo-heading');
+
+    const heading = document.createElement('h2');
+    heading.className = 'rw-app-promo__heading';
+    heading.id = 'rw-app-promo-heading';
+    heading.textContent = PROMO.heading;
+    section.appendChild(heading);
+
+    const band = document.createElement('img');
+    band.className = 'rw-app-promo__band';
+    band.src = PROMO.bandSrc;
+    band.alt = PROMO.bandAlt;
+    band.width = 2000;
+    band.height = 667;
+    band.loading = 'lazy';
+    band.decoding = 'async';
+    section.appendChild(band);
+
+    const body = document.createElement('div');
+    body.className = 'rw-app-promo__body';
+
+    const text = document.createElement('p');
+    text.className = 'rw-app-promo__text';
+    text.innerHTML = PROMO.textHtml;
+    body.appendChild(text);
+
+    const row = document.createElement('div');
+    row.className = 'rw-app-promo__row';
+
+    const primary = document.createElement('a');
+    primary.className = 'rw-app-promo__btn rw-app-promo__btn--primary';
+    primary.href = PROMO.appStoreHref;
+    primary.target = '_blank';
+    primary.rel = 'noopener';
+    const glyph = svgElementFrom(APPLE_GLYPH);
+    if (glyph) primary.appendChild(glyph);
+    const primaryLabel = document.createElement('span');
+    primaryLabel.textContent = PROMO.appStoreLabel;
+    primary.appendChild(primaryLabel);
+    row.appendChild(primary);
+
+    const secondary = document.createElement('a');
+    secondary.className = 'rw-app-promo__btn rw-app-promo__btn--secondary';
+    secondary.href = PROMO.learnMoreHref;
+    secondary.target = '_blank';
+    secondary.rel = 'noopener';
+    secondary.textContent = PROMO.learnMoreLabel;
+    row.appendChild(secondary);
+
+    body.appendChild(row);
+    section.appendChild(body);
+    return section;
   }
 
   function updateOverflowState(viewport, strip) {
@@ -139,6 +219,10 @@
     viewport.appendChild(leftArrow);
     viewport.appendChild(rightArrow);
     root.appendChild(viewport);
+
+    if (root.getAttribute('data-promo') !== 'false') {
+      root.appendChild(buildPromo());
+    }
 
     // Arrow click handlers — scroll by ~one card width.
     leftArrow.addEventListener('click', function () {
