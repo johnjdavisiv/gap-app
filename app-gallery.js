@@ -21,7 +21,10 @@
 
   // The iOS-app panel. Copy lives here (John's wording, 2026-10-25); the App Store
   // link carries its own campaign token (ct=rwlab-gallery) so App Analytics can
-  // tell gallery clicks from the landing page's QR and buttons.
+  // tell gallery clicks from the landing page's QR and buttons. The buttons also
+  // carry Plausible tagged-event classes (every calculator page loads
+  // script.tagged-events.js for apps.runningwritings.com): goals "CTA AppStore
+  // Click" / "CTA LabSite Click" with placement=gallery, same names as lab-site.
   const PROMO = {
     heading: 'Or get all my calculators on iPhone and iPad',
     bandSrc: 'https://apps.runningwritings.com/images/rw-lab-band.png',
@@ -132,7 +135,8 @@
     row.className = 'rw-app-promo__row';
 
     const primary = document.createElement('a');
-    primary.className = 'rw-app-promo__btn rw-app-promo__btn--primary';
+    primary.className =
+      'rw-app-promo__btn rw-app-promo__btn--primary plausible-event-name=CTA+AppStore+Click plausible-event-placement=gallery';
     primary.href = PROMO.appStoreHref;
     primary.target = '_blank';
     primary.rel = 'noopener';
@@ -144,7 +148,8 @@
     row.appendChild(primary);
 
     const secondary = document.createElement('a');
-    secondary.className = 'rw-app-promo__btn rw-app-promo__btn--secondary';
+    secondary.className =
+      'rw-app-promo__btn rw-app-promo__btn--secondary plausible-event-name=CTA+LabSite+Click plausible-event-placement=gallery';
     secondary.href = PROMO.learnMoreHref;
     secondary.target = '_blank';
     secondary.rel = 'noopener';
